@@ -1,0 +1,39 @@
+<svg width="1600" height="2000" viewBox="0 0 1600 2000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="surface" x1="140" y1="60" x2="1480" y2="1940" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2C261F" />
+      <stop offset="0.42" stop-color="#171410" />
+      <stop offset="1" stop-color="#0B0907" />
+    </linearGradient>
+
+    <radialGradient id="goldGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1180 460) rotate(130) scale(860 620)">
+      <stop stop-color="#B08D57" stop-opacity="0.62" />
+      <stop offset="1" stop-color="#B08D57" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="glass" x1="280" y1="360" x2="1280" y2="1620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8EA" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#FFF8EA" stop-opacity="0.02" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="2000" fill="url(#surface)" />
+  <rect width="1600" height="2000" fill="url(#goldGlow)" />
+
+  <g opacity="0.5" stroke="#B08D57" stroke-width="1.5">
+    <path d="M-140 1520C350 1230 760 1170 1380 760" />
+    <path d="M60 1680C540 1380 900 1310 1490 900" />
+    <path d="M-220 1840C300 1510 760 1450 1410 1000" />
+  </g>
+
+  <rect x="250" y="320" width="1100" height="1400" rx="56" fill="url(#glass)" stroke="#B08D57" stroke-opacity="0.22" />
+
+  <line x1="320" y1="640" x2="1280" y2="640" stroke="#B08D57" stroke-opacity="0.2" />
+  <line x1="320" y1="1240" x2="1280" y2="1240" stroke="#B08D57" stroke-opacity="0.16" />
+
+  <circle cx="420" cy="520" r="4" fill="#E9D3AD" fill-opacity="0.75" />
+  <circle cx="520" cy="480" r="3" fill="#E9D3AD" fill-opacity="0.62" />
+  <circle cx="1080" cy="560" r="3" fill="#E9D3AD" fill-opacity="0.58" />
+  <circle cx="980" cy="1540" r="4" fill="#E9D3AD" fill-opacity="0.62" />
+  <circle cx="760" cy="1620" r="3" fill="#E9D3AD" fill-opacity="0.58" />
+</svg>

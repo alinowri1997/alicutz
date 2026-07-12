@@ -1,0 +1,257 @@
+{
+  "Layout": {
+    "skipToContent": "Skip to content",
+    "defaultTitle": "Ali Cutz",
+    "defaultDescription": "Premium private men's grooming in Istanbul with WhatsApp-first booking."
+  },
+  "Navigation": {
+    "logoText": "Ali Cutz",
+    "bookViaWhatsApp": "Book Now",
+    "openNavigationMenu": "Open navigation menu",
+    "closeNavigationMenu": "Close navigation menu",
+    "mobileNavigation": "Mobile navigation",
+    "primaryNavigation": "Primary navigation",
+    "mobilePrimaryNavigation": "Mobile primary navigation",
+    "languageSwitcherLabel": "Language",
+    "items": {
+      "home": "Home",
+      "services": "Services",
+      "about": "About",
+      "instagram": "Instagram",
+      "contact": "Contact"
+    }
+  },
+  "Hero": {
+    "locationPositioningAria": "Location and positioning",
+    "eyebrow": "Premium Men's Grooming | Osmanbey / Bomonti, Istanbul",
+    "title": "Professional men's barber service in Istanbul.",
+    "description": "Focused cuts. Clean fades. Precise beard work. Private appointments for clients who value time, discretion, and consistent quality.",
+    "supportedLanguagesAria": "Supported languages",
+    "serviceModelLabel": "Service Focus",
+    "serviceModelValue": "Private appointments at hotels and residences, with salon service in Osmanbey / Bomonti.",
+    "exploreServices": "View Services",
+    "heroImageAlt": "Luxury ambiance representing Ali Cutz premium grooming experience in Istanbul",
+    "privateAppointmentsLabel": "Private Appointments",
+    "privateAppointmentsDescription": "Preferred by professionals, travelers, and long-stay visitors."
+  },
+  "Statistics": {
+    "eyebrow": "About",
+    "title": "Built on experience. Delivered with consistency.",
+    "description": "9+ years in the craft. 4+ years serving clients professionally in Istanbul.",
+    "listAria": "Ali Cutz service standards",
+    "items": {
+      "serviceArea": {
+        "label": "Experience",
+        "value": "9+ Years",
+        "detail": "4+ years working professionally in Istanbul."
+      },
+      "languages": {
+        "label": "Barber Languages",
+        "value": "TR | EN | DE | FA",
+        "detail": "Clear consultation in Turkish, English, German, and Persian."
+      }
+    }
+  },
+  "Services": {
+    "eyebrow": "Signature Services",
+    "title": "Modern grooming services for men.",
+    "description": "Specialized in fades, beard styling, modern haircuts, and hair coloring.",
+    "privateService": "Private Service",
+    "consultationRequired": "Consultation First",
+    "privateSession": "Private Session",
+    "items": {
+      "haircut": {
+        "title": "Haircut",
+        "description": "Modern haircut designed for your face shape, texture, and routine."
+      },
+      "skinFade": {
+        "title": "Skin Fade",
+        "description": "Clean blend, sharp lines, and smooth transitions."
+      },
+      "beardStyling": {
+        "title": "Beard Styling",
+        "description": "Balanced shape, clean cheek lines, and a stronger profile."
+      },
+      "hairColoring": {
+        "title": "Hair Coloring",
+        "description": "Natural color work and tonal correction with hair-safe products."
+      },
+      "bleaching": {
+        "title": "Bleaching",
+        "description": "Controlled lightening designed for clarity and healthy recovery."
+      },
+      "hairTreatment": {
+        "title": "Hair Treatment",
+        "description": "Targeted scalp and hair treatment to restore strength and shine."
+      },
+      "kidsHaircut": {
+        "title": "Kids Haircut",
+        "description": "Calm, careful haircut service with high hygiene standards."
+      }
+    }
+  },
+  "WhyChoose": {
+    "eyebrow": "Why Choose Us",
+    "title": "Professional service. Modern standards. Reliable results.",
+    "items": {
+      "luxuryExperience": {
+        "title": "Private and Focused",
+        "description": "Appointments are planned around your schedule and privacy."
+      },
+      "medicalGradeHygiene": {
+        "title": "High Hygiene",
+        "description": "Strict tool sanitation and clean workstation standards."
+      },
+      "skilledBarberTeam": {
+        "title": "Experienced Professional",
+        "description": "Consistent barbering method shaped by years of daily practice."
+      },
+      "modernTechniques": {
+        "title": "Modern Technique",
+        "description": "Contemporary fades, beard detailing, and clean finishing."
+      },
+      "touristFriendly": {
+        "title": "Multilingual Communication",
+        "description": "Easy communication for local and international clients."
+      },
+      "privateAppointmentFocus": {
+        "title": "Location Flexibility",
+        "description": "Hotel and residence appointments across Istanbul, plus salon service."
+      }
+    }
+  },
+  "Gallery": {
+    "title": "Selected Work",
+    "subtitle": "Nine selected results from recent appointments.",
+    "viewMore": "View More on Instagram",
+    "featuredAlt": {
+      "1": "Men's skin fade haircut in Istanbul with clean taper and textured top",
+      "2": "Precision beard styling and line-up by a professional men's barber in Istanbul",
+      "3": "Modern men's haircut with natural volume and sharp side blend",
+      "4": "Low fade haircut with detailed contour work and clean neckline",
+      "5": "Contemporary men's haircut and beard shaping for a balanced profile",
+      "6": "Hair coloring result for men with natural tone correction and shine",
+      "7": "Classic short men's haircut with refined scissor finish",
+      "8": "High-contrast fade haircut with sharp temple and side detail",
+      "9": "Professional men's grooming result with clean cut and beard definition"
+    }
+  },
+  "Faq": {
+    "eyebrow": "FAQ",
+    "title": "Before You Book",
+    "items": {
+      "booking": {
+        "question": "How do I book an appointment?",
+        "answer": "Send a WhatsApp message with your preferred date, time, and service. You will get a fast confirmation."
+      },
+      "languages": {
+        "question": "Can I communicate in English, German, Persian, Arabic, or Russian?",
+        "answer": "The barber speaks Turkish, English, German, and Persian. Website content is available in six languages."
+      },
+      "privateAppointments": {
+        "question": "Do you offer appointments at hotels and private residences?",
+        "answer": "Yes. Private appointments at hotels and residences are a core part of our premium service in Istanbul."
+      },
+      "salonLocation": {
+        "question": "Where is the salon located?",
+        "answer": "The salon is in the Osmanbey / Bomonti area, Istanbul. Exact location details are shared after booking via WhatsApp."
+      },
+      "specialties": {
+        "question": "Do you provide beard and skin fade specialist services?",
+        "answer": "Yes. Fades, beard styling, modern haircuts, and hair coloring are core specialties."
+      },
+      "realWork": {
+        "question": "How can I view your real work?",
+        "answer": "Recent real work is published on Instagram. You can view more results there."
+      }
+    }
+  },
+  "Location": {
+    "heading": "Contact",
+    "mapTitle": "Osmanbey Bomonti Istanbul map",
+    "description": "For booking or exact salon location, contact directly on WhatsApp.",
+    "workingHours": "Working Hours",
+    "everyDay": "Every Day",
+    "hoursRange": "09:00 - 22:00",
+    "ctaBookNow": "Book Now",
+    "ctaWhatsApp": "WhatsApp",
+    "ctaInstagram": "Instagram",
+    "ctaGetDirections": "Get Directions",
+    "ctaCallNow": "Call Now"
+  },
+  "HomeFooter": {
+    "brandDescription": "Premium private grooming in Osmanbey / Bomonti, Istanbul.",
+    "navigation": "Navigation",
+    "languages": "Languages",
+    "social": "Social",
+    "copyright": "© {year} Ali Cutz. All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "nav": {
+      "home": "Home",
+      "services": "Services",
+      "about": "About",
+      "instagram": "Instagram",
+      "contact": "Contact"
+    },
+    "languageNames": {
+      "tr": "Turkish",
+      "en": "English",
+      "de": "German",
+      "fa": "Persian",
+      "ar": "Arabic",
+      "ru": "Russian"
+    }
+  },
+  "HomePage": {
+    "metadata": {
+      "title": "Ali Cutz | Professional Men's Barber in Istanbul",
+      "description": "Professional men's barber in Istanbul. 9+ years of experience, specialized in fades, beard styling, modern haircuts, and hair coloring.",
+      "ogTitle": "Ali Cutz | Men's Barber Istanbul",
+      "ogDescription": "Private appointments and salon service in Osmanbey / Bomonti. Book directly on WhatsApp.",
+      "twitterTitle": "Ali Cutz | Men's Barber Istanbul",
+      "twitterDescription": "Modern men's grooming in Istanbul with precise cuts and clean finishes.",
+      "imageAlt": "Ali Cutz premium barber studio visual",
+      "keywords": [
+        "Men's Barber Istanbul",
+        "Private Barber Istanbul",
+        "Haircut Istanbul",
+        "Fade Haircut Istanbul",
+        "English Speaking Barber Istanbul",
+        "German Speaking Barber Istanbul",
+        "Persian Barber Istanbul",
+        "Barber Osmanbey Bomonti"
+      ]
+    },
+    "breadcrumbHome": "Home"
+  },
+  "PrivacyPage": {
+    "metadata": {
+      "title": "Privacy Policy | Ali Cutz",
+      "description": "Privacy policy for Ali Cutz men's barber service in Istanbul."
+    },
+    "title": "Privacy Policy",
+    "body": "Ali Cutz processes customer data only for appointment management, service communication, and service quality improvement in accordance with applicable privacy regulations."
+  },
+  "TermsPage": {
+    "metadata": {
+      "title": "Terms and Conditions | Ali Cutz",
+      "description": "Terms and conditions for Ali Cutz men's barber services in Istanbul."
+    },
+    "title": "Terms and Conditions",
+    "body": "By booking an appointment with Ali Cutz, clients agree to booking, cancellation, and service conduct policies designed to maintain premium service quality for all guests."
+  },
+  "ContactForm": {
+    "nameLabel": "Name",
+    "namePlaceholder": "Your full name",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+90 ...",
+    "serviceLabel": "Service",
+    "servicePlaceholder": "Select a service",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Tell us your preferred date and location",
+    "submit": "Book Now",
+    "success": "Your request has been sent. We will contact you shortly.",
+    "error": "Something went wrong. Please try again."
+  }
+}

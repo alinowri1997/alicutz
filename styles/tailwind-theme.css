@@ -1,0 +1,249 @@
+@theme {
+  /* Colors */
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-border: var(--color-border);
+  --color-text: var(--color-text);
+  --color-muted: var(--color-muted);
+
+  /* Typography */
+  --font-display: var(--font-family-display);
+  --font-sans: var(--font-family-body);
+  --font-mono: var(--font-family-mono);
+
+  --text-display: var(--font-size-display);
+  --text-h1: var(--font-size-h1);
+  --text-h2: var(--font-size-h2);
+  --text-h3: var(--font-size-h3);
+  --text-h4: var(--font-size-h4);
+  --text-h5: var(--font-size-h5);
+  --text-h6: var(--font-size-h6);
+  --text-body: var(--font-size-body);
+  --text-small: var(--font-size-small);
+  --text-caption: var(--font-size-caption);
+
+  /* Spacing and radius */
+  --spacing-0: var(--space-0);
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-7: var(--space-7);
+  --spacing-8: var(--space-8);
+  --spacing-9: var(--space-9);
+  --spacing-10: var(--space-10);
+  --spacing-11: var(--space-11);
+  --spacing-12: var(--space-12);
+  --spacing-14: var(--space-14);
+  --spacing-16: var(--space-16);
+  --spacing-20: var(--space-20);
+  --spacing-24: var(--space-24);
+  --spacing-28: var(--space-28);
+  --spacing-32: var(--space-32);
+
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-full: var(--radius-full);
+
+  /* Shadows */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  /* Animation timing */
+  --ease-standard: var(--easing-standard);
+  --ease-emphasized: var(--easing-emphasized);
+  --ease-exit: var(--easing-exit);
+  --default-transition-duration: var(--duration-base);
+
+  /* Responsive breakpoints */
+  --breakpoint-xs: 30rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+}
+
+@utility container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+  max-width: var(--container-sm);
+
+  @variant sm {
+    max-width: var(--container-md);
+    padding-inline: var(--space-6);
+  }
+
+  @variant md {
+    max-width: var(--container-lg);
+  }
+
+  @variant lg {
+    max-width: var(--container-xl);
+    padding-inline: var(--space-8);
+  }
+
+  @variant xl {
+    max-width: var(--container-2xl);
+  }
+}
+
+@utility type-display {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-display);
+  letter-spacing: var(--letter-spacing-display);
+  font-weight: var(--font-weight-display);
+}
+
+@utility type-h1 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-h1);
+  letter-spacing: var(--letter-spacing-h1);
+  font-weight: var(--font-weight-h1);
+}
+
+@utility type-h2 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-h2);
+  letter-spacing: var(--letter-spacing-h2);
+  font-weight: var(--font-weight-h2);
+}
+
+@utility type-h3 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+  letter-spacing: var(--letter-spacing-h3);
+  font-weight: var(--font-weight-h3);
+}
+
+@utility type-h4 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-h4);
+  letter-spacing: var(--letter-spacing-h4);
+  font-weight: var(--font-weight-h4);
+}
+
+@utility type-h5 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h5);
+  line-height: var(--line-height-h5);
+  letter-spacing: var(--letter-spacing-h5);
+  font-weight: var(--font-weight-h5);
+}
+
+@utility type-h6 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h6);
+  line-height: var(--line-height-h6);
+  letter-spacing: var(--letter-spacing-h6);
+  font-weight: var(--font-weight-h6);
+}
+
+@utility type-body {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+  font-weight: var(--font-weight-body);
+}
+
+@utility type-small {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+  letter-spacing: var(--letter-spacing-small);
+  font-weight: var(--font-weight-small);
+}
+
+@utility type-caption {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  letter-spacing: var(--letter-spacing-caption);
+  font-weight: var(--font-weight-caption);
+  text-transform: uppercase;
+}
+
+@utility btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--button-font-family);
+  font-size: var(--button-font-size);
+  font-weight: var(--button-font-weight);
+  line-height: var(--button-line-height);
+  border-radius: var(--button-radius);
+  padding: var(--button-padding-y) var(--button-padding-x);
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition-property: background-color, border-color, color, box-shadow, transform;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--easing-standard);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
+}
+
+@utility btn-primary {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+  border-color: var(--button-primary-border);
+}
+
+@utility btn-secondary {
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-fg);
+  border-color: var(--button-secondary-border);
+}
+
+@utility btn-accent {
+  background: var(--button-accent-bg);
+  color: var(--button-accent-fg);
+  border-color: var(--button-accent-border);
+}
+
+@utility card-base {
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  border: 1px solid transparent;
+  transition-property: box-shadow, border-color, transform;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--easing-emphasized);
+}
+
+@utility card-default {
+  background: var(--card-default-bg);
+  border-color: var(--card-default-border);
+  box-shadow: var(--card-default-shadow);
+}
+
+@utility card-outline {
+  background: var(--card-outline-bg);
+  border-color: var(--card-outline-border);
+  box-shadow: var(--card-outline-shadow);
+}
+
+@utility card-premium {
+  background: var(--card-premium-bg);
+  border-color: var(--card-premium-border);
+  box-shadow: var(--card-premium-shadow);
+}

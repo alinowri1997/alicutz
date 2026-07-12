@@ -1,0 +1,196 @@
+:root {
+  /* Brand: premium, masculine, minimal */
+  --color-primary: #0b0a09;
+  --color-primary-foreground: #f5efe3;
+  --color-secondary: #171411;
+  --color-secondary-foreground: #efe6d8;
+  --color-accent: #b08d57;
+  --color-accent-foreground: #0d0b08;
+  --color-background: #090807;
+  --color-surface: #141210;
+  --color-border: #2e2923;
+  --color-text: #f5efe3;
+  --color-muted: #b7aa97;
+
+  /* shadcn semantic compatibility */
+  --background: var(--color-background);
+  --foreground: var(--color-text);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-text);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-text);
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+  --secondary: var(--color-secondary);
+  --secondary-foreground: var(--color-secondary-foreground);
+  --muted: #1d1915;
+  --muted-foreground: var(--color-muted);
+  --accent: var(--color-accent);
+  --accent-foreground: var(--color-accent-foreground);
+  --destructive: #8b2a2d;
+  --destructive-foreground: #fff7f7;
+  --border: var(--color-border);
+  --input: var(--color-border);
+  --ring: color-mix(in srgb, var(--color-accent) 70%, black 30%);
+  --radius: var(--radius-lg);
+
+  /* Optional state helpers */
+  --color-success: #1f6b4f;
+  --color-warning: #8a5a16;
+  --color-danger: #8b2a2d;
+
+  /* Typography */
+  --font-family-display: "Playfair Display", "Times New Roman", serif;
+  --font-family-body: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+  --font-family-mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  --font-size-display: clamp(3rem, 7vw, 5.5rem);
+  --line-height-display: 1.05;
+  --letter-spacing-display: -0.03em;
+  --font-weight-display: 600;
+
+  --font-size-h1: clamp(2.25rem, 4.5vw, 3.5rem);
+  --line-height-h1: 1.1;
+  --letter-spacing-h1: -0.02em;
+  --font-weight-h1: 600;
+
+  --font-size-h2: clamp(1.875rem, 3.6vw, 2.75rem);
+  --line-height-h2: 1.15;
+  --letter-spacing-h2: -0.015em;
+  --font-weight-h2: 600;
+
+  --font-size-h3: clamp(1.5rem, 2.8vw, 2.125rem);
+  --line-height-h3: 1.2;
+  --letter-spacing-h3: -0.01em;
+  --font-weight-h3: 600;
+
+  --font-size-h4: clamp(1.25rem, 2.2vw, 1.625rem);
+  --line-height-h4: 1.25;
+  --letter-spacing-h4: -0.005em;
+  --font-weight-h4: 600;
+
+  --font-size-h5: clamp(1.125rem, 1.7vw, 1.375rem);
+  --line-height-h5: 1.35;
+  --letter-spacing-h5: 0;
+  --font-weight-h5: 600;
+
+  --font-size-h6: clamp(1rem, 1.5vw, 1.125rem);
+  --line-height-h6: 1.4;
+  --letter-spacing-h6: 0;
+  --font-weight-h6: 600;
+
+  --font-size-body: 1rem;
+  --line-height-body: 1.65;
+  --letter-spacing-body: 0;
+  --font-weight-body: 400;
+
+  --font-size-small: 0.875rem;
+  --line-height-small: 1.55;
+  --letter-spacing-small: 0.005em;
+  --font-weight-small: 400;
+
+  --font-size-caption: 0.75rem;
+  --line-height-caption: 1.4;
+  --letter-spacing-caption: 0.08em;
+  --font-weight-caption: 500;
+
+  /* Spacing */
+  --space-0: 0rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  --space-11: 2.75rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-28: 7rem;
+  --space-32: 8rem;
+
+  /* Radius */
+  --radius-none: 0;
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-none: none;
+  --shadow-sm: 0 2px 6px rgb(0 0 0 / 0.08);
+  --shadow-md: 0 10px 24px rgb(0 0 0 / 0.12);
+  --shadow-lg: 0 20px 45px rgb(0 0 0 / 0.18);
+  --shadow-focus: 0 0 0 3px rgb(176 141 87 / 0.35);
+
+  /* Animation timing */
+  --duration-instant: 120ms;
+  --duration-fast: 180ms;
+  --duration-base: 260ms;
+  --duration-slow: 420ms;
+  --easing-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --easing-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+  --easing-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Responsive breakpoints */
+  --breakpoint-xs: 30rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+
+  /* Container widths */
+  --container-xs: 36rem;
+  --container-sm: 42rem;
+  --container-md: 48rem;
+  --container-lg: 64rem;
+  --container-xl: 75rem;
+  --container-2xl: 84rem;
+
+  /* Button variants */
+  --button-font-family: var(--font-family-body);
+  --button-font-size: var(--font-size-small);
+  --button-font-weight: 600;
+  --button-line-height: 1;
+  --button-radius: var(--radius-full);
+  --button-padding-y: 0.875rem;
+  --button-padding-x: 1.5rem;
+
+  --button-primary-bg: var(--color-primary);
+  --button-primary-fg: var(--color-primary-foreground);
+  --button-primary-border: var(--color-primary);
+
+  --button-secondary-bg: transparent;
+  --button-secondary-fg: var(--color-text);
+  --button-secondary-border: var(--color-border);
+
+  --button-accent-bg: var(--color-accent);
+  --button-accent-fg: var(--color-accent-foreground);
+  --button-accent-border: var(--color-accent);
+
+  /* Card variants */
+  --card-radius: var(--radius-xl);
+  --card-padding: var(--space-8);
+
+  --card-default-bg: var(--color-surface);
+  --card-default-border: var(--color-border);
+  --card-default-shadow: var(--shadow-sm);
+
+  --card-outline-bg: transparent;
+  --card-outline-border: var(--color-border);
+  --card-outline-shadow: var(--shadow-none);
+
+  --card-premium-bg: linear-gradient(145deg, #1e1a15 0%, #120f0c 100%);
+  --card-premium-border: #5f4e35;
+  --card-premium-shadow: var(--shadow-md);
+}

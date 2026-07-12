@@ -1,0 +1,257 @@
+{
+  "Layout": {
+    "skipToContent": "Icerige gec",
+    "defaultTitle": "Ali Cutz",
+    "defaultDescription": "Istanbul'da WhatsApp odakli rezervasyonla premium ozel erkek bakimi."
+  },
+  "Navigation": {
+    "logoText": "Ali Cutz",
+    "bookViaWhatsApp": "Hemen Randevu",
+    "openNavigationMenu": "Navigasyon menusunu ac",
+    "closeNavigationMenu": "Navigasyon menusunu kapat",
+    "mobileNavigation": "Mobil navigasyon",
+    "primaryNavigation": "Ana navigasyon",
+    "mobilePrimaryNavigation": "Mobil ana navigasyon",
+    "languageSwitcherLabel": "Dil",
+    "items": {
+      "home": "Ana Sayfa",
+      "services": "Hizmetler",
+      "about": "Hakkinda",
+      "instagram": "Instagram",
+      "contact": "Iletisim"
+    }
+  },
+  "Hero": {
+    "locationPositioningAria": "Konum ve konumlandirma",
+    "eyebrow": "Premium Erkek Bakimi | Osmanbey / Bomonti, Istanbul",
+    "title": "Istanbul'da profesyonel erkek berber hizmeti.",
+    "description": "Net kesimler, temiz fade gecisleri ve dengeli sakal tasarimi. Zamanina ve gorunumune onem veren erkekler icin.",
+    "supportedLanguagesAria": "Desteklenen diller",
+    "serviceModelLabel": "Hizmet Modeli",
+    "serviceModelValue": "Otelde ve evde ozel randevu, Osmanbey / Bomonti'de salon hizmeti.",
+    "exploreServices": "Hizmetleri Gor",
+    "heroImageAlt": "Ali Cutz premium bakim deneyimini temsil eden luks atmosfer",
+    "privateAppointmentsLabel": "Ozel Randevular",
+    "privateAppointmentsDescription": "Profesyoneller, turistler ve uzun sureli ziyaretciler tarafindan tercih edilir."
+  },
+  "Statistics": {
+    "eyebrow": "Hakkinda",
+    "title": "Deneyimle sekillenen tutarli berberlik.",
+    "description": "Meslekte 9+ yil. Istanbul'da profesyonel olarak 4+ yil.",
+    "listAria": "Ali Cutz hizmet standartlari",
+    "items": {
+      "serviceArea": {
+        "label": "Deneyim",
+        "value": "9+ Yil",
+        "detail": "Istanbul'da profesyonel hizmet: 4+ yil."
+      },
+      "languages": {
+        "label": "Berberin Dilleri",
+        "value": "TR | EN | DE | FA",
+        "detail": "Danismanlik sureci Turkce, Ingilizce, Almanca ve Farsca ilerler."
+      }
+    }
+  },
+  "Services": {
+    "eyebrow": "Imza Hizmetler",
+    "title": "Erkeklere ozel modern bakim hizmetleri.",
+    "description": "Fade, sakal tasarimi, modern kesimler ve sac renklendirme ana uzmanlik alanlaridir.",
+    "privateService": "Ozel Hizmet",
+    "consultationRequired": "Once Danismanlik",
+    "privateSession": "Ozel Seans",
+    "items": {
+      "haircut": {
+        "title": "Sac Kesimi",
+        "description": "Profilinize, sac yapiniza ve gunluk rutininize gore sekillendirilen ozel kesim."
+      },
+      "skinFade": {
+        "title": "Skin Fade",
+        "description": "Modern ve net bir gorunum icin temiz detaylarla hassas fade gecisleri."
+      },
+      "beardStyling": {
+        "title": "Sakal Sekillendirme",
+        "description": "Yapili sakal profili icin simetri odakli sekillendirme ve cizgi rafinesi."
+      },
+      "hairColoring": {
+        "title": "Sac Renklendirme",
+        "description": "Premium koruyucu formulasyonlarla dogal ton duzeltme ve guclendirme."
+      },
+      "bleaching": {
+        "title": "Acma Islemi",
+        "description": "Renk netligi ve saglikli toparlanma icin kontrollu acma prosesi."
+      },
+      "hairTreatment": {
+        "title": "Sac Bakimi",
+        "description": "Sac derisi ve telleri guclendirerek parlaklik ve konfor kazandiran protokol."
+      },
+      "kidsHaircut": {
+        "title": "Cocuk Sac Kesimi",
+        "description": "Yuksek hijyen standartlariyla sakin ve dikkatli cocuk kesim hizmeti."
+      }
+    }
+  },
+  "WhyChoose": {
+    "eyebrow": "Neden Biz",
+    "title": "Profesyonel yaklasim. Modern standart. Guvenilir sonuc.",
+    "items": {
+      "luxuryExperience": {
+        "title": "Ozel ve Odakli Hizmet",
+        "description": "Randevu sureci gizlilik ve konfor odakli planlanir."
+      },
+      "medicalGradeHygiene": {
+        "title": "Yuksek Hijyen",
+        "description": "Alet temizligi ve calisma alani duzeni her randevuda ayni standarttadir."
+      },
+      "skilledBarberTeam": {
+        "title": "Deneyimli Berber",
+        "description": "Yillar icinde oturmus teknikle tutarli kalite sunulur."
+      },
+      "modernTechniques": {
+        "title": "Modern Teknik",
+        "description": "Temiz fade gecisleri, net sakal cizgileri ve duzgun finisaj."
+      },
+      "touristFriendly": {
+        "title": "Cok Dilli Iletisim",
+        "description": "Yerel ve uluslararasi musteriler icin net iletisim."
+      },
+      "privateAppointmentFocus": {
+        "title": "Konum Esnekligi",
+        "description": "Istanbul genelinde otel/ev randevusu ve salon secenegi."
+      }
+    }
+  },
+  "Gallery": {
+    "title": "Secili Calismalar",
+    "subtitle": "Son donemden ozenle secilmis 9 sonuc.",
+    "viewMore": "Instagram'da Daha Fazla Gor",
+    "featuredAlt": {
+      "1": "Istanbul'da profesyonel skin fade sac kesimi ve temiz gecis sonucu",
+      "2": "Erkek sakal tasarimi ve net cizgi uygulamasi sonucu",
+      "3": "Modern erkek kesimi, hacimli ust bolum ve duzgun yan gecis",
+      "4": "Dusuk fade kesim, ense ve kontur detayli temiz finisaj",
+      "5": "Dengeli profil icin erkek kesim ve sakal sekillendirme sonucu",
+      "6": "Erkek sacinda dogal tonlu renklendirme ve parlak gorunum",
+      "7": "Makas finisajli klasik kisa erkek sac kesimi",
+      "8": "Yuksek kontrastli fade kesim ve net sakak detayi",
+      "9": "Temiz kesim ve belirgin sakal cizgisi ile profesyonel erkek bakimi sonucu"
+    }
+  },
+  "Faq": {
+    "eyebrow": "SSS",
+    "title": "Randevu Oncesi",
+    "items": {
+      "booking": {
+        "question": "Randevu nasil alabilirim?",
+        "answer": "WhatsApp'tan tarih, saat ve hizmet bilgisini iletin. Musaitlik hizli sekilde donulur."
+      },
+      "languages": {
+        "question": "Ingilizce, Almanca, Farsca, Arapca veya Rusca iletisime gecebilir miyim?",
+        "answer": "Berber Turkce, Ingilizce, Almanca ve Farsca konusur. Web sitesi 6 dilde kullanilabilir."
+      },
+      "privateAppointments": {
+        "question": "Otelde ve ozel konutlarda randevu sunuyor musunuz?",
+        "answer": "Evet. Otel ve konutlarda ozel randevu, Istanbul'daki premium hizmetimizin temel parcasidir."
+      },
+      "salonLocation": {
+        "question": "Salon nerede?",
+        "answer": "Salon, Istanbul Osmanbey / Bomonti bolgesindedir. Tam konum bilgisi WhatsApp rezervasyonu sonrasinda paylasilir."
+      },
+      "specialties": {
+        "question": "Sakal ve skin fade uzmanligi sunuyor musunuz?",
+        "answer": "Evet. Skin fade, sakal tasarimi, modern kesim ve sac renklendirme ana uzmanlik alanlaridir."
+      },
+      "realWork": {
+        "question": "Gercek calismalarinizi nasil gorebilirim?",
+        "answer": "Guncel gercek calismalar Instagram'da paylasilir. Daha fazlasi icin Instagram'a gecin."
+      }
+    }
+  },
+  "Location": {
+    "heading": "Iletisim",
+    "mapTitle": "Osmanbey Bomonti Istanbul haritasi",
+    "description": "Randevu ve tam salon konumu icin dogrudan WhatsApp uzerinden iletisime gecin.",
+    "workingHours": "Calisma Saatleri",
+    "everyDay": "Her Gun",
+    "hoursRange": "09:00 - 22:00",
+    "ctaBookNow": "Hemen Randevu",
+    "ctaWhatsApp": "WhatsApp",
+    "ctaInstagram": "Instagram",
+    "ctaGetDirections": "Yol Tarifi",
+    "ctaCallNow": "Hemen Ara"
+  },
+  "HomeFooter": {
+    "brandDescription": "Osmanbey / Bomonti, Istanbul'da premium ozel bakim.",
+    "navigation": "Navigasyon",
+    "languages": "Diller",
+    "social": "Sosyal",
+    "copyright": "© {year} Ali Cutz. Tum haklari saklidir.",
+    "privacy": "Gizlilik",
+    "terms": "Kosullar",
+    "nav": {
+      "home": "Ana Sayfa",
+      "services": "Hizmetler",
+      "about": "Hakkinda",
+      "instagram": "Instagram",
+      "contact": "Iletisim"
+    },
+    "languageNames": {
+      "tr": "Turkce",
+      "en": "Ingilizce",
+      "de": "Almanca",
+      "fa": "Farsca",
+      "ar": "Arapca",
+      "ru": "Rusca"
+    }
+  },
+  "HomePage": {
+    "metadata": {
+      "title": "Ali Cutz | Istanbul Erkek Berberi",
+      "description": "Istanbul'da profesyonel erkek berber hizmeti. 9+ yil deneyim, fade, sakal tasarimi, modern kesim ve sac renklendirme uzmanligi.",
+      "ogTitle": "Ali Cutz | Erkek Berberi Istanbul",
+      "ogDescription": "Osmanbey / Bomonti bolgesinde salon hizmeti ve ozel randevu. WhatsApp'tan hizli rezervasyon.",
+      "twitterTitle": "Ali Cutz | Erkek Berberi Istanbul",
+      "twitterDescription": "Istanbul'da modern erkek bakimi: temiz kesim, net detay, guvenilir sonuc.",
+      "imageAlt": "Ali Cutz premium berber studiou gorseli",
+      "keywords": [
+        "Istanbul Erkek Berberi",
+        "Istanbul Ozel Berber",
+        "Istanbul Sac Kesimi",
+        "Istanbul Skin Fade",
+        "Ingilizce Konusan Berber Istanbul",
+        "Almanca Konusan Berber Istanbul",
+        "Farsca Berber Istanbul",
+        "Barber Osmanbey Bomonti"
+      ]
+    },
+    "breadcrumbHome": "Ana Sayfa"
+  },
+  "PrivacyPage": {
+    "metadata": {
+      "title": "Gizlilik Politikasi | Ali Cutz",
+      "description": "Istanbul'da Ali Cutz erkek berber hizmeti icin gizlilik politikasi."
+    },
+    "title": "Gizlilik Politikasi",
+    "body": "Ali Cutz, musteri verilerini sadece randevu yonetimi, hizmet iletisimi ve hizmet kalitesini gelistirme amaciyla, gecerli gizlilik duzenlemelerine uygun sekilde isler."
+  },
+  "TermsPage": {
+    "metadata": {
+      "title": "Kosullar ve Sartlar | Ali Cutz",
+      "description": "Ali Cutz erkek berber hizmetleri icin kosullar ve sartlar."
+    },
+    "title": "Kosullar ve Sartlar",
+    "body": "Ali Cutz ile randevu olusturarak rezervasyon, iptal ve hizmet kurallarini kabul etmis olursunuz."
+  },
+  "ContactForm": {
+    "nameLabel": "Ad Soyad",
+    "namePlaceholder": "Adiniz ve soyadiniz",
+    "phoneLabel": "Telefon",
+    "phonePlaceholder": "+90 ...",
+    "serviceLabel": "Hizmet",
+    "servicePlaceholder": "Hizmet secin",
+    "messageLabel": "Mesaj",
+    "messagePlaceholder": "Tarih, saat ve konum tercihinizi yazin",
+    "submit": "Hemen Randevu",
+    "success": "Talebiniz alindi. En kisa surede geri donulecek.",
+    "error": "Bir hata olustu. Lutfen tekrar deneyin."
+  }
+}
