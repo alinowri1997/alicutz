@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Mail } from "lucide-react";
+import { FaInstagram } from "react-icons/fa";
 
 import { CONTACT_EMAIL, CONTACT_EMAIL_LINK, HOME_LOCALE_CODES, INSTAGRAM_LINK } from "@/constants/homepage";
 import { Link as LocaleLink } from "@/i18n/navigation";
@@ -59,16 +61,18 @@ export async function HomeFooterSection(): Promise<React.JSX.Element> {
                   href={INSTAGRAM_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="type-small inline-flex min-h-11 items-center py-2 text-text transition-colors duration-[var(--duration-fast)] hover:text-accent focus-visible:outline-none focus-visible:text-accent"
+                  className="group type-small inline-flex min-h-11 items-center gap-2 py-2 text-text transition-colors duration-[var(--duration-fast)] hover:text-accent focus-visible:outline-none focus-visible:text-accent"
                 >
-                  Instagram
+                  <FaInstagram className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
+                  <span>Instagram</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href={CONTACT_EMAIL_LINK}
-                  className="type-small inline-flex min-h-11 items-center py-2 text-text transition-colors duration-[var(--duration-fast)] hover:text-accent focus-visible:outline-none focus-visible:text-accent"
+                  className="group type-small inline-flex min-h-11 items-center gap-2 py-2 text-text transition-colors duration-[var(--duration-fast)] hover:text-accent focus-visible:outline-none focus-visible:text-accent"
                 >
+                  <Mail className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
                   {CONTACT_EMAIL}
                 </Link>
               </li>

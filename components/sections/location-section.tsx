@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Clock3 } from "lucide-react";
+import { Clock3, Mail, MapPin, Phone } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 import { buttonVariants } from "@/components/ui/button";
 import { GoogleMapPlaceholder } from "@/components/ui/google-map-placeholder";
@@ -25,28 +26,50 @@ export async function LocationSection(): Promise<React.JSX.Element> {
 
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 text-muted">
-              <Clock3 className="h-4 w-4" aria-hidden="true" />
+              <Clock3 className="h-5 w-5 text-accent" aria-hidden="true" />
               <p className="type-caption">{t("workingHours")}</p>
             </div>
             <p className="type-h5 text-text">{t("everyDay")}</p>
             <p className="type-h5 text-text">{t("hoursRange")}</p>
           </div>
 
-          <p className="type-h5 text-text">{CONTACT_INFO.whatsapp}</p>
+          <div className="inline-flex items-center gap-2 text-text">
+            <Phone className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+            <p className="type-h5">{CONTACT_INFO.whatsapp}</p>
+          </div>
           <Link
             href={CONTACT_EMAIL_LINK}
-            className="type-small text-muted transition-colors duration-[var(--duration-fast)] hover:text-text focus-visible:outline-none focus-visible:text-accent"
+            className="group inline-flex items-center gap-2 type-small text-muted transition-colors duration-[var(--duration-fast)] hover:text-text focus-visible:outline-none focus-visible:text-accent"
           >
+            <Mail className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
             {CONTACT_INFO.email}
           </Link>
 
           <div className="flex flex-wrap gap-3">
-            <Link href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "accent", size: "sm" }), "type-caption")}>{t("ctaBookNow")}</Link>
-            <Link href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaWhatsApp")}</Link>
-            <Link href={CONTACT_EMAIL_LINK} className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaEmail")}</Link>
-            <Link href={INSTAGRAM_LINK} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaInstagram")}</Link>
-            <Link href="https://maps.google.com/?q=Osmanbey+Bomonti+Istanbul" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaGetDirections")}</Link>
-            <Link href="tel:+905441772249" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaCallNow")}</Link>
+            <Link href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "accent", size: "sm" }), "group type-caption")}>
+              <FaWhatsapp className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
+              <span>{t("ctaBookNow")}</span>
+            </Link>
+            <Link href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "group type-caption")}>
+              <FaWhatsapp className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
+              <span>{t("ctaWhatsApp")}</span>
+            </Link>
+            <Link href={CONTACT_EMAIL_LINK} className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "group type-caption")}>
+              <Mail className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
+              <span>{t("ctaEmail")}</span>
+            </Link>
+            <Link href={INSTAGRAM_LINK} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "group type-caption")}>
+              <FaInstagram className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
+              <span>{t("ctaInstagram")}</span>
+            </Link>
+            <Link href="https://maps.google.com/?q=Osmanbey+Bomonti+Istanbul" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "group type-caption")}>
+              <MapPin className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
+              <span>{t("ctaGetDirections")}</span>
+            </Link>
+            <Link href="tel:+905441772249" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "group type-caption")}>
+              <Phone className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
+              <span>{t("ctaCallNow")}</span>
+            </Link>
           </div>
         </div>
       </div>

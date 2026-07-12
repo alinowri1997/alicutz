@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { FaInstagram } from "react-icons/fa";
 
 import { INSTAGRAM_LINK } from "@/constants/homepage";
 
@@ -89,6 +90,7 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
             rel="noopener noreferrer"
             className="group inline-flex items-center gap-2 text-text transition-colors duration-[var(--duration-fast)] hover:text-accent focus-visible:outline-none focus-visible:text-accent"
           >
+            <FaInstagram className="h-5 w-5 shrink-0 text-accent transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" aria-hidden="true" />
             <p className="type-h6">{tGallery("viewMore")}</p>
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </Link>
