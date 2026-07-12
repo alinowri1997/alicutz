@@ -5,51 +5,26 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import { INSTAGRAM_LINK } from "@/constants/homepage";
 
 const AUTOPLAY_MS = 4000;
 
-const PORTFOLIO_IMAGES = [
-  {
-    src: "/gallery/portfolio-01.jpg",
-    alt: "Men's skin fade haircut in Istanbul with clean taper and textured top",
-  },
-  {
-    src: "/gallery/portfolio-02.jpg",
-    alt: "Precision beard styling and line-up by a professional men's barber in Istanbul",
-  },
-  {
-    src: "/gallery/portfolio-03.jpg",
-    alt: "Modern men's haircut with natural volume and sharp side blend",
-  },
-  {
-    src: "/gallery/portfolio-04.jpg",
-    alt: "Low fade haircut with detailed contour work and clean neckline",
-  },
-  {
-    src: "/gallery/portfolio-05.jpg",
-    alt: "Contemporary men's haircut and beard shaping for a balanced profile",
-  },
-  {
-    src: "/gallery/portfolio-06.jpg",
-    alt: "Hair coloring result for men with natural tone correction and shine",
-  },
-  {
-    src: "/gallery/portfolio-07.jpg",
-    alt: "Classic short men's haircut with refined scissor finish",
-  },
-  {
-    src: "/gallery/portfolio-08.jpg",
-    alt: "High-contrast fade haircut with sharp temple and side detail",
-  },
-  {
-    src: "/gallery/portfolio-09.jpg",
-    alt: "Professional men's grooming result with clean cut and beard definition",
-  },
+const PORTFOLIO_IMAGE_PATHS = [
+  "/gallery/portfolio-01.jpg",
+  "/gallery/portfolio-02.jpg",
+  "/gallery/portfolio-03.jpg",
+  "/gallery/portfolio-04.jpg",
+  "/gallery/portfolio-05.jpg",
+  "/gallery/portfolio-06.jpg",
+  "/gallery/portfolio-07.jpg",
+  "/gallery/portfolio-08.jpg",
+  "/gallery/portfolio-09.jpg",
 ] as const;
 
 export function HeroPortfolioShowcase(): React.JSX.Element {
+  const tGallery = useTranslations("Gallery");
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isPaused, setIsPaused] = React.useState(false);
   const shouldReduceMotion = useReducedMotion();
@@ -60,7 +35,7 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
     }
 
     const intervalId = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % PORTFOLIO_IMAGES.length);
+      setActiveIndex((current) => (current + 1) % PORTFOLIO_IMAGE_PATHS.length);
     }, AUTOPLAY_MS);
 
     return () => {
@@ -68,7 +43,8 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
     };
   }, [isPaused, shouldReduceMotion]);
 
-  const currentImage = PORTFOLIO_IMAGES[activeIndex];
+  const currentImagePath = PORTFOLIO_IMAGE_PATHS[activeIndex];
+  const currentImageAlt = tGallery(`featuredAlt.${activeIndex + 1}`);
 
   return (
     <article id="portfolio" className="card-base card-premium overflow-hidden rounded-2xl p-4 sm:p-5">
@@ -77,7 +53,7 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
           href={INSTAGRAM_LINK}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Open Ali Cutz Instagram portfolio"
+          aria-label={tGallery("portfolioAriaLabel")}
           className="group relative block overflow-hidden rounded-2xl border border-border bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
@@ -85,7 +61,7 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
           <div className="relative aspect-[4/5]">
             <AnimatePresence initial={false}>
               <motion.div
-                key={currentImage.src}
+                key={currentImagePath}
                 initial={{ opacity: shouldReduceMotion ? 1 : 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: shouldReduceMotion ? 1 : 0 }}
@@ -93,8 +69,8 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
                 className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               >
                 <Image
-                  src={currentImage.src}
-                  alt={currentImage.alt}
+                  src={currentImagePath}
+                  alt={currentImageAlt}
                   fill
                   sizes="(min-width: 1024px) 38vw, (min-width: 768px) 44vw, 92vw"
                   quality={90}
@@ -113,10 +89,10 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
             rel="noopener noreferrer"
             className="group inline-flex items-center gap-2 text-text transition-colors duration-[var(--duration-fast)] hover:text-accent focus-visible:outline-none focus-visible:text-accent"
           >
-            <p className="type-h6">View More on Instagram</p>
+            <p className="type-h6">{tGallery("viewMore")}</p>
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </Link>
-          <p className="type-small mt-1 text-muted">Explore more of our latest work on Instagram.</p>
+          <p className="type-small mt-1 text-muted">{tGallery("portfolioDescription")}</p>
         </div>
       </div>
     </article>

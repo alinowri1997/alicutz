@@ -43,7 +43,7 @@ export async function LocationSection(): Promise<React.JSX.Element> {
           <div className="flex flex-wrap gap-3">
             <Link href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "accent", size: "sm" }), "type-caption")}>{t("ctaBookNow")}</Link>
             <Link href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaWhatsApp")}</Link>
-            <Link href={CONTACT_EMAIL_LINK} className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>Email</Link>
+            <Link href={CONTACT_EMAIL_LINK} className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaEmail")}</Link>
             <Link href={INSTAGRAM_LINK} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaInstagram")}</Link>
             <Link href="https://maps.google.com/?q=Osmanbey+Bomonti+Istanbul" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaGetDirections")}</Link>
             <Link href="tel:+905441772249" className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "type-caption")}>{t("ctaCallNow")}</Link>

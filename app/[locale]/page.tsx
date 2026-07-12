@@ -144,7 +144,7 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
       telephone: CONTACT_INFO.phone,
       email: CONTACT_INFO.email,
       contactType: "customer service",
-      availableLanguage: ["English", "Turkish", "German", "Arabic", "Persian", "Russian"],
+      availableLanguage: ["tr", "en", "de", "fa", "ar", "ru"],
       areaServed: "TR",
       url: WHATSAPP_LINK,
     },
@@ -165,14 +165,14 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
     email: CONTACT_INFO.email,
     contactType: "customer service",
     areaServed: "TR",
-    availableLanguage: ["English", "Turkish", "German", "Arabic", "Persian", "Russian"],
+    availableLanguage: ["tr", "en", "de", "fa", "ar", "ru"],
     url: WHATSAPP_LINK,
   };
 
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    serviceType: "Private premium barber appointment",
+    serviceType: tHome("schema.serviceType"),
     provider: {
       "@type": "Barbershop",
       name: "Ali Cutz",
@@ -184,7 +184,7 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
     },
     audience: {
       "@type": "Audience",
-      audienceType: "Hotel guests, tourists, business travelers, and residents",
+      audienceType: tHome("schema.audienceType"),
     },
     availableChannel: {
       "@type": "ServiceChannel",

@@ -124,6 +124,8 @@
     "title": "Selected Work",
     "subtitle": "Nine selected results from recent appointments.",
     "viewMore": "View More on Instagram",
+    "portfolioDescription": "Explore more of our latest work on Instagram.",
+    "portfolioAriaLabel": "Open Ali Cutz Instagram portfolio",
     "featuredAlt": {
       "1": "Men's skin fade haircut in Istanbul with clean taper and textured top",
       "2": "Precision beard styling and line-up by a professional men's barber in Istanbul",
@@ -175,6 +177,7 @@
     "hoursRange": "09:00 - 22:00",
     "ctaBookNow": "Book Now",
     "ctaWhatsApp": "WhatsApp",
+    "ctaEmail": "Email",
     "ctaInstagram": "Instagram",
     "ctaGetDirections": "Get Directions",
     "ctaCallNow": "Call Now"
@@ -223,6 +226,10 @@
         "Barber Osmanbey Bomonti"
       ]
     },
+    "schema": {
+      "serviceType": "Private premium barber appointment",
+      "audienceType": "Hotel guests, tourists, business travelers, and residents"
+    },
     "breadcrumbHome": "Home"
   },
   "PrivacyPage": {
@@ -240,6 +247,13 @@
     },
     "title": "Terms and Conditions",
     "body": "By booking an appointment with Ali Cutz, clients agree to booking, cancellation, and service conduct policies designed to maintain premium service quality for all guests."
+  },
+  "SystemPages": {
+    "notFoundTitle": "Page Not Found",
+    "notFoundDescription": "The requested page could not be found.",
+    "errorTitle": "Unable to Load This Page",
+    "errorDescription": "An unexpected error occurred. Please retry.",
+    "retry": "Retry"
   },
   "ContactForm": {
     "nameLabel": "Name",
