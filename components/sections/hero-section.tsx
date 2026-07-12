@@ -18,7 +18,7 @@ export async function HeroSection(): Promise<React.JSX.Element> {
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-primary via-secondary to-background" />
 
       <Container className="grid gap-6 md:min-h-[calc(100svh-5rem)] md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-14">
-        <div className="space-y-5 sm:space-y-6 md:space-y-7">
+        <div className="space-y-4 sm:space-y-6 md:space-y-7">
           <span id="portfolio" className="sr-only" />
 
           <p className="type-caption text-muted" aria-label={t("locationPositioningAria")}>
@@ -34,13 +34,13 @@ export async function HeroSection(): Promise<React.JSX.Element> {
             {t("title")}
           </Heading>
 
-          <div className="md:hidden">
-            <HeroPortfolioShowcase />
-          </div>
-
           <p className="type-body max-w-[56ch] text-muted">
             {t("description")}
           </p>
+
+          <div className="md:hidden -mt-1">
+            <HeroPortfolioShowcase />
+          </div>
 
           <HeroLanguageSwitcher />
 

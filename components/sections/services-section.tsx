@@ -1,26 +1,7 @@
-import {
-  Blend,
-  Brush,
-  Droplets,
-  Palette,
-  Scissors,
-  Sparkles,
-  UserRound,
-} from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { Heading } from "@/components/ui/heading";
 import { Section } from "@/components/ui/section";
-
-const SERVICE_ICONS = {
-  haircut: Scissors,
-  "skin-fade": Blend,
-  "beard-styling": Brush,
-  "hair-coloring": Palette,
-  "facial-therapy": Sparkles,
-  "hair-therapy": Droplets,
-  "kids-haircut": UserRound,
-} as const;
 
 const SERVICE_KEYS = [
   "haircut",
@@ -31,16 +12,6 @@ const SERVICE_KEYS = [
   "hairTherapy",
   "facialTherapy",
 ] as const;
-
-const SERVICE_ICON_MAP: Record<(typeof SERVICE_KEYS)[number], keyof typeof SERVICE_ICONS> = {
-  haircut: "haircut",
-  skinFade: "skin-fade",
-  beardStyling: "beard-styling",
-  hairColoring: "hair-coloring",
-  kidsHaircut: "kids-haircut",
-  hairTherapy: "hair-therapy",
-  facialTherapy: "facial-therapy",
-};
 
 export async function ServicesSection(): Promise<React.JSX.Element> {
   const t = await getTranslations("Services");
@@ -61,18 +32,9 @@ export async function ServicesSection(): Promise<React.JSX.Element> {
 
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {SERVICE_KEYS.map((serviceKey) => {
-          const iconKey = SERVICE_ICON_MAP[serviceKey];
-          const Icon = SERVICE_ICONS[iconKey] ?? Scissors;
-
           return (
             <div key={serviceKey}>
               <article className="card-base card-default flex h-full flex-col p-6 hover:-translate-y-1 hover:border-accent/60 hover:shadow-md">
-                <div className="mb-4 flex items-center">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background text-accent">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                </div>
-
                 <h3 className="type-h5 text-text">{t(`items.${serviceKey}.title`)}</h3>
                 <p className="type-small mt-3 flex-1 text-muted">{t(`items.${serviceKey}.description`)}</p>
               </article>
