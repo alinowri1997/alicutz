@@ -10,7 +10,7 @@ const FOOTER_NAV = [
   { key: "home", href: "#home" },
   { key: "services", href: "#services" },
   { key: "about", href: "#about" },
-  { key: "instagram", href: "#portfolio" },
+  { key: "instagram", href: INSTAGRAM_LINK, target: "_blank", rel: "noopener noreferrer" },
   { key: "contact", href: "#contact" },
 ];
 
@@ -33,6 +33,8 @@ export async function HomeFooterSection(): Promise<React.JSX.Element> {
                 <li key={item.key}>
                   <a
                     href={item.href}
+                    target={item.target}
+                    rel={item.rel}
                     className="type-small inline-flex min-h-11 items-center py-2 text-text transition-colors duration-[var(--duration-fast)] hover:text-accent focus-visible:outline-none focus-visible:text-accent"
                   >
                     {t(`nav.${item.key}`)}

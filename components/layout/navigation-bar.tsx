@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { buttonVariants } from "@/components/ui/button";
+import { INSTAGRAM_LINK } from "@/constants/homepage";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { locales, type AppLocale } from "@/i18n/routing";
 import { setStoredLocalePreference } from "@/lib/locale-preference";
@@ -15,6 +16,8 @@ import { cn } from "@/lib/utils";
 export interface NavigationItem {
   key: "home" | "services" | "about" | "instagram" | "contact";
   href: string;
+  target?: string;
+  rel?: string;
 }
 
 export interface NavigationBarProps {
@@ -29,7 +32,7 @@ const DEFAULT_ITEMS: NavigationItem[] = [
   { key: "home", href: "#home" },
   { key: "services", href: "#services" },
   { key: "about", href: "#about" },
-  { key: "instagram", href: "#portfolio" },
+  { key: "instagram", href: INSTAGRAM_LINK, target: "_blank", rel: "noopener noreferrer" },
   { key: "contact", href: "#contact" },
 ];
 
@@ -170,6 +173,8 @@ export function NavigationBar({
               <li key={item.key}>
                 <a
                   href={item.href}
+                  target={item.target}
+                  rel={item.rel}
                   className="type-small relative text-muted transition-colors duration-200 hover:text-text focus-visible:outline-none focus-visible:text-text"
                 >
                   {t(`items.${item.key}`)}
