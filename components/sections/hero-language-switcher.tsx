@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { locales, type AppLocale } from "@/i18n/routing";
+import { setStoredLocalePreference } from "@/lib/locale-preference";
 import { cn } from "@/lib/utils";
 
 const SCROLL_RESTORE_KEY = "hero-language-switch-scroll-y";
@@ -12,9 +13,9 @@ const SCROLL_RESTORE_KEY = "hero-language-switch-scroll-y";
 const HERO_LANGUAGES: Array<{ locale: AppLocale; label: string; flag: string; name: string }> = [
   { locale: "tr", label: "TR", flag: "🇹🇷", name: "Turkish" },
   { locale: "en", label: "EN", flag: "🇬🇧", name: "English" },
+  { locale: "ar", label: "AR", flag: "🇸🇦", name: "Arabic" },
   { locale: "de", label: "DE", flag: "🇩🇪", name: "German" },
   { locale: "fa", label: "FA", flag: "🇮🇷", name: "Persian" },
-  { locale: "ar", label: "AR", flag: "🇸🇦", name: "Arabic" },
   { locale: "ru", label: "RU", flag: "🇷🇺", name: "Russian" },
 ];
 
@@ -44,6 +45,7 @@ export function HeroLanguageSwitcher(): React.JSX.Element {
     }
 
     sessionStorage.setItem(SCROLL_RESTORE_KEY, String(window.scrollY));
+    setStoredLocalePreference(nextLocale);
     router.replace(pathname, { locale: nextLocale });
   };
 

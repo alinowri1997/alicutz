@@ -16,4 +16,4 @@ export const CONTACT_INFO: ContactInfo = {
   email: CONTACT_EMAIL,
 };
 
-export const HOME_LOCALE_CODES = ["tr", "en", "de", "fa", "ar", "ru"] as const;
+export const HOME_LOCALE_CODES = ["tr", "en", "ar", "de", "fa", "ru"] as const;

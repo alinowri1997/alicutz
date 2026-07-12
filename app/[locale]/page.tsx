@@ -144,7 +144,7 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
       telephone: CONTACT_INFO.phone,
       email: CONTACT_INFO.email,
       contactType: "customer service",
-      availableLanguage: ["tr", "en", "de", "fa", "ar", "ru"],
+      availableLanguage: ["tr", "en", "ar", "de", "fa", "ru"],
       areaServed: "TR",
       url: WHATSAPP_LINK,
     },
@@ -165,7 +165,7 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
     email: CONTACT_INFO.email,
     contactType: "customer service",
     areaServed: "TR",
-    availableLanguage: ["tr", "en", "de", "fa", "ar", "ru"],
+    availableLanguage: ["tr", "en", "ar", "de", "fa", "ru"],
     url: WHATSAPP_LINK,
   };
 

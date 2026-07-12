@@ -33,7 +33,7 @@ export function buildLanguageAlternates(pathname: string): NonNullable<Metadata[
 
   return {
     ...alternates,
-    "x-default": `${SITE_URL}/en${pathname}`,
+    "x-default": `${SITE_URL}/tr${pathname}`,
   };
 }
 

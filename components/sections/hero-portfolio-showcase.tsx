@@ -47,7 +47,7 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
   const currentImageAlt = tGallery(`featuredAlt.${activeIndex + 1}`);
 
   return (
-    <article id="portfolio" className="card-base card-premium overflow-hidden rounded-2xl p-4 sm:p-5">
+    <article className="card-base card-premium overflow-hidden rounded-2xl p-4 sm:p-5">
       <div className="flex flex-col gap-4 sm:gap-5">
         <Link
           href={INSTAGRAM_LINK}
@@ -58,7 +58,7 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div className="relative aspect-[4/5]">
+          <div className="relative aspect-[6/5] sm:aspect-[4/5]">
             <AnimatePresence initial={false}>
               <motion.div
                 key={currentImagePath}

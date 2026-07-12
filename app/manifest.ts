@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: SITE_NAME,
     short_name: SITE_NAME,
     description: "Professional men's barber service in Istanbul.",
-    start_url: "/en",
+    start_url: "/tr",
     display: "standalone",
     background_color: "#090807",
     theme_color: "#090807",
@@ -33,7 +33,7 @@ export default function manifest(): MetadataRoute.Manifest {
       },
     ],
     categories: ["lifestyle", "beauty"],
-    lang: "en",
+    lang: "tr",
     dir: "ltr",
     scope: SITE_URL,
   };

@@ -17,8 +17,8 @@ const SERVICE_ICONS = {
   "skin-fade": Blend,
   "beard-styling": Brush,
   "hair-coloring": Palette,
-  bleaching: Sparkles,
-  "hair-treatment": Droplets,
+  "facial-therapy": Sparkles,
+  "hair-therapy": Droplets,
   "kids-haircut": UserRound,
 } as const;
 
@@ -27,9 +27,9 @@ const SERVICE_KEYS = [
   "skinFade",
   "beardStyling",
   "hairColoring",
-  "bleaching",
-  "hairTreatment",
   "kidsHaircut",
+  "hairTherapy",
+  "facialTherapy",
 ] as const;
 
 const SERVICE_ICON_MAP: Record<(typeof SERVICE_KEYS)[number], keyof typeof SERVICE_ICONS> = {
@@ -37,9 +37,9 @@ const SERVICE_ICON_MAP: Record<(typeof SERVICE_KEYS)[number], keyof typeof SERVI
   skinFade: "skin-fade",
   beardStyling: "beard-styling",
   hairColoring: "hair-coloring",
-  bleaching: "bleaching",
-  hairTreatment: "hair-treatment",
   kidsHaircut: "kids-haircut",
+  hairTherapy: "hair-therapy",
+  facialTherapy: "facial-therapy",
 };
 
 export async function ServicesSection(): Promise<React.JSX.Element> {
@@ -66,21 +66,15 @@ export async function ServicesSection(): Promise<React.JSX.Element> {
 
           return (
             <div key={serviceKey}>
-              <article className="card-base card-default h-full p-6 hover:-translate-y-1 hover:border-accent/60 hover:shadow-md">
-                <div className="mb-5 flex items-center justify-between">
+              <article className="card-base card-default flex h-full flex-col p-6 hover:-translate-y-1 hover:border-accent/60 hover:shadow-md">
+                <div className="mb-4 flex items-center">
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background text-accent">
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </span>
-                  <p className="type-caption text-muted">{t("privateService")}</p>
                 </div>
 
                 <h3 className="type-h5 text-text">{t(`items.${serviceKey}.title`)}</h3>
-                <p className="type-small mt-2 text-muted">{t(`items.${serviceKey}.description`)}</p>
-
-                <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
-                  <p className="type-caption text-accent">{t("consultationRequired")}</p>
-                  <p className="type-caption text-muted">{t("privateSession")}</p>
-                </div>
+                <p className="type-small mt-3 flex-1 text-muted">{t(`items.${serviceKey}.description`)}</p>
               </article>
             </div>
           );

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: SITE_TITLE_TEMPLATE,
   },
   alternates: {
-    canonical: "/en",
+    canonical: "/tr",
   },
   manifest: "/manifest.webmanifest",
   robots: {
@@ -53,7 +53,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({children}: {children: React.ReactNode}): React.JSX.Element {
   return (
-    <html lang="en">
+    <html lang="tr">
       <body>{children}</body>
     </html>
   );

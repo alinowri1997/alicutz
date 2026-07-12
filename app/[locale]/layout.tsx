@@ -4,6 +4,7 @@ import {getMessages, getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 
 import {NavigationBar} from "@/components/layout";
+import {LocalePreferenceSync} from "@/components/layout/locale-preference-sync";
 import {buildLanguageAlternates, localeToLanguageTag, SITE_URL} from "@/lib/seo";
 import {defaultLocale, isRtlLocale, locales, routing, type AppLocale} from "@/i18n/routing";
 
@@ -65,6 +66,7 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
           {t("skipToContent")}
         </a>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <LocalePreferenceSync />
           <NavigationBar />
           {children}
         </NextIntlClientProvider>

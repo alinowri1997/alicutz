@@ -56,37 +56,34 @@
     "eyebrow": "Signature Services",
     "title": "Moderner Grooming-Service für Männer.",
     "description": "Spezialisiert auf Fades, Bartstyling, moderne Haarschnitte und Haarfarbe.",
-    "privateService": "Privatservice",
-    "consultationRequired": "Mit Beratung",
-    "privateSession": "Private Session",
     "items": {
       "haircut": {
-        "title": "Haarschnitt",
-        "description": "Individueller Schnitt passend zu Gesichtsprofil, Haarstruktur und Alltag."
+        "title": "Herrenhaarschnitt",
+        "description": "Individuell abgestimmt auf Gesichtsform, Haarstruktur und persönlichen Stil."
       },
       "skinFade": {
         "title": "Skin Fade",
-        "description": "Präzise Fade-Übergänge mit sauberen Details für ein modernes Finish."
+        "description": "Nahtlose Übergänge mit sauberen Linien und präzisem Finish."
       },
       "beardStyling": {
-        "title": "Bartstyling",
-        "description": "Symmetrieorientiertes Formen und Linienarbeit für ein strukturiertes Bartprofil."
+        "title": "Bart Styling",
+        "description": "Ausgewogene Bartform mit klaren Konturen und natürlichen Proportionen."
       },
       "hairColoring": {
         "title": "Haarfärbung",
-        "description": "Natürliche Farbkorrektur und Veredelung mit schützenden Premium-Formeln."
-      },
-      "bleaching": {
-        "title": "Bleaching",
-        "description": "Kontrollierter Aufhellungsprozess für klare Farbe und gesunde Regeneration."
-      },
-      "hairTreatment": {
-        "title": "Haarbehandlung",
-        "description": "Pflegeprotokoll für Kopfhaut und Haar: mehr Kraft, Glanz und Komfort."
+        "description": "Professionelle Farbservices mit gesunden, natürlich wirkenden Ergebnissen."
       },
       "kidsHaircut": {
         "title": "Kinderhaarschnitt",
-        "description": "Ruhiger, sorgfältiger Service für Kinder mit hohem Hygienestandard."
+        "description": "Ruhige, hygienische und komfortable Haarschnitte für Kinder."
+      },
+      "hairTherapy": {
+        "title": "Haarpflege",
+        "description": "Gezielte Pflegebehandlungen zum Stärken, Nähren und Regenerieren der Haarstruktur."
+      },
+      "facialTherapy": {
+        "title": "Gesichtsbehandlung",
+        "description": "Erfrischende Pflege für ein klares, gesund wirkendes Hautbild."
       }
     }
   },

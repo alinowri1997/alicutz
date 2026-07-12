@@ -9,6 +9,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { buttonVariants } from "@/components/ui/button";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { locales, type AppLocale } from "@/i18n/routing";
+import { setStoredLocalePreference } from "@/lib/locale-preference";
 import { cn } from "@/lib/utils";
 
 export interface NavigationItem {
@@ -55,6 +56,7 @@ export function NavigationBar({
 
   const handleLocaleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const nextLocale = event.target.value as AppLocale;
+    setStoredLocalePreference(nextLocale);
     router.replace(pathname, { locale: nextLocale });
   };
 

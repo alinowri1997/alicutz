@@ -56,37 +56,34 @@
     "eyebrow": "İmza Hizmetler",
     "title": "Erkeklere özel modern bakım hizmetleri.",
     "description": "Skin fade, sakal tasarımı, modern kesimler ve saç renklendirme ana uzmanlık alanlarımızdır.",
-    "privateService": "Özel Hizmet",
-    "consultationRequired": "Önce Danışmanlık",
-    "privateSession": "Özel Seans",
     "items": {
       "haircut": {
         "title": "Saç Kesimi",
-        "description": "Yüz hattınıza, saç yapınıza ve günlük rutininize göre şekillendirilen kişisel kesim."
+        "description": "Yüz hattınıza, saç dokunuza ve kişisel stilinize özel olarak planlanır."
       },
       "skinFade": {
         "title": "Skin Fade",
-        "description": "Temiz detaylar ve pürüzsüz geçişlerle modern, keskin görünüm."
+        "description": "Pürüzsüz geçişler, net çizgiler ve kusursuz bitişle modern görünüm sağlar."
       },
       "beardStyling": {
         "title": "Sakal Şekillendirme",
-        "description": "Simetri odaklı form ve net çizgilerle güçlü sakal profili."
+        "description": "Doğal oranları koruyan dengeli form ve temiz kontürlerle uygulanır."
       },
       "hairColoring": {
-        "title": "Saç Renklendirme",
-        "description": "Doğal ton düzeltme ve güçlendirme için koruyucu premium formüller."
-      },
-      "bleaching": {
-        "title": "Açma İşlemi",
-        "description": "Renk netliği ve sağlıklı toparlanma için kontrollü açma süreci."
-      },
-      "hairTreatment": {
-        "title": "Saç Bakımı",
-        "description": "Saç derisini ve saç tellerini güçlendiren, parlaklık kazandıran bakım protokolü."
+        "title": "Saç Boyama",
+        "description": "Sağlıklı ve doğal görünen sonuçlar için profesyonel saç boyama uygulaması."
       },
       "kidsHaircut": {
         "title": "Çocuk Saç Kesimi",
-        "description": "Yüksek hijyen standartlarıyla sakin ve özenli çocuk kesim hizmeti."
+        "description": "Çocuklar için sakin, hijyenik ve konforlu saç kesimi deneyimi."
+      },
+      "hairTherapy": {
+        "title": "Saç Bakımı",
+        "description": "Saçı güçlendiren, besleyen ve sağlıklı görünümü geri kazandıran profesyonel bakım."
+      },
+      "facialTherapy": {
+        "title": "Cilt Bakımı",
+        "description": "Cildi temiz, dengeli ve sağlıklı gösteren ferahlatıcı bakım uygulamasıdır."
       }
     }
   },

@@ -56,37 +56,34 @@
     "eyebrow": "Signature Services",
     "title": "Modern grooming services for men.",
     "description": "Specialized in fades, beard styling, modern haircuts, and hair coloring.",
-    "privateService": "Private Service",
-    "consultationRequired": "Consultation First",
-    "privateSession": "Private Session",
     "items": {
       "haircut": {
         "title": "Haircut",
-        "description": "Modern haircut designed for your face shape, texture, and routine."
+        "description": "Tailored to your face shape, hair texture, and personal style."
       },
       "skinFade": {
         "title": "Skin Fade",
-        "description": "Clean blend, sharp lines, and smooth transitions."
+        "description": "Seamless fades with clean lines and precise finishing."
       },
       "beardStyling": {
         "title": "Beard Styling",
-        "description": "Balanced shape, clean cheek lines, and a stronger profile."
+        "description": "Balanced beard shaping with clean contours and natural proportions."
       },
       "hairColoring": {
         "title": "Hair Coloring",
-        "description": "Natural color work and tonal correction with hair-safe products."
-      },
-      "bleaching": {
-        "title": "Bleaching",
-        "description": "Controlled lightening designed for clarity and healthy recovery."
-      },
-      "hairTreatment": {
-        "title": "Hair Treatment",
-        "description": "Targeted scalp and hair treatment to restore strength and shine."
+        "description": "Professional coloring with healthy, natural-looking results."
       },
       "kidsHaircut": {
         "title": "Kids Haircut",
-        "description": "Calm, careful haircut service with high hygiene standards."
+        "description": "Calm, hygienic, and comfortable haircuts for children."
+      },
+      "hairTherapy": {
+        "title": "Hair Therapy",
+        "description": "Professional treatments to strengthen, nourish, and restore healthy hair."
+      },
+      "facialTherapy": {
+        "title": "Facial Therapy",
+        "description": "Refreshing facial care for clean, healthy-looking skin."
       }
     }
   },
