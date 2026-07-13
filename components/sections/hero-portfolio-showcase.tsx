@@ -13,15 +13,15 @@ import { INSTAGRAM_LINK } from "@/constants/homepage";
 const AUTOPLAY_MS = 4000;
 
 const PORTFOLIO_IMAGE_PATHS = [
-  "/gallery/portfolio-01.jpg",
-  "/gallery/portfolio-02.jpg",
-  "/gallery/portfolio-03.jpg",
-  "/gallery/portfolio-04.jpg",
-  "/gallery/portfolio-05.jpg",
-  "/gallery/portfolio-06.jpg",
-  "/gallery/portfolio-07.jpg",
-  "/gallery/portfolio-08.jpg",
-  "/gallery/portfolio-09.jpg",
+  "/gallery/mens-skin-fade-istanbul-premium-barber.jpg",
+  "/gallery/beard-styling-istanbul-barber-alicutz.jpg",
+  "/gallery/modern-haircut-istanbul-bomonti-barber.jpg",
+  "/gallery/low-fade-haircut-sisli-istanbul.jpg",
+  "/gallery/mens-haircut-and-beard-shaping-istanbul.jpg",
+  "/gallery/mens-hair-coloring-istanbul-premium.jpg",
+  "/gallery/classic-mens-haircut-istanbul.jpg",
+  "/gallery/high-contrast-skin-fade-istanbul.jpg",
+  "/gallery/professional-mens-grooming-istanbul.jpg",
 ] as const;
 
 export function HeroPortfolioShowcase(): React.JSX.Element {
@@ -72,11 +72,12 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
                 <Image
                   src={currentImagePath}
                   alt={currentImageAlt}
-                  fill
+                  width={1920}
+                  height={2560}
                   sizes="(min-width: 1024px) 38vw, (min-width: 768px) 44vw, 92vw"
                   quality={90}
                   priority={activeIndex === 0}
-                  className="object-contain"
+                  className="h-full w-full object-contain"
                 />
               </motion.div>
             </AnimatePresence>

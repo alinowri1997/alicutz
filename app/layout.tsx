@@ -1,12 +1,20 @@
 import type {Metadata, Viewport} from "next";
 
-import {SITE_NAME, SITE_TITLE_TEMPLATE, SITE_URL} from "@/lib/seo";
+import {
+  DEFAULT_OG_IMAGE_HEIGHT,
+  DEFAULT_OG_IMAGE_PATH,
+  DEFAULT_OG_IMAGE_WIDTH,
+  SITE_NAME,
+  SITE_TITLE_TEMPLATE,
+  SITE_URL,
+} from "@/lib/seo";
 
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
+  description: "Premium men's barber in Istanbul with private hotel and residence appointments.",
   title: {
     default: SITE_NAME,
     template: SITE_TITLE_TEMPLATE,
@@ -37,11 +45,26 @@ export const metadata: Metadata = {
     shortcut: ["/favicon.ico"],
   },
   openGraph: {
+    title: SITE_NAME,
+    description: "Premium men's barber in Istanbul with private hotel and residence appointments.",
+    url: `${SITE_URL}/tr`,
+    locale: "tr-TR",
     siteName: SITE_NAME,
     type: "website",
+    images: [
+      {
+        url: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
+        width: DEFAULT_OG_IMAGE_WIDTH,
+        height: DEFAULT_OG_IMAGE_HEIGHT,
+        alt: "Ali Cutz premium barber work in Istanbul",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    title: SITE_NAME,
+    description: "Premium men's barber in Istanbul with private hotel and residence appointments.",
+    images: [`${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`],
   },
 };
 

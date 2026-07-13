@@ -3,7 +3,14 @@ import {hasLocale} from "next-intl";
 import {getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 
-import {buildLanguageAlternates, SITE_URL} from "@/lib/seo";
+import {
+  buildLanguageAlternates,
+  DEFAULT_OG_IMAGE_HEIGHT,
+  DEFAULT_OG_IMAGE_PATH,
+  DEFAULT_OG_IMAGE_WIDTH,
+  localeToLanguageTag,
+  SITE_URL,
+} from "@/lib/seo";
 import {defaultLocale, routing} from "@/i18n/routing";
 
 interface TermsPageProps {
@@ -14,6 +21,7 @@ export async function generateMetadata({params}: TermsPageProps): Promise<Metada
   const {locale: rawLocale} = await params;
   const locale = hasLocale(routing.locales, rawLocale) ? rawLocale : defaultLocale;
   const t = await getTranslations({locale, namespace: "TermsPage"});
+  const localeTag = localeToLanguageTag[locale];
 
   return {
     title: t("metadata.title"),
@@ -26,12 +34,22 @@ export async function generateMetadata({params}: TermsPageProps): Promise<Metada
       title: t("metadata.title"),
       description: t("metadata.description"),
       url: `${SITE_URL}/${locale}/terms`,
+      locale: localeTag,
       type: "website",
+      images: [
+        {
+          url: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
+          width: DEFAULT_OG_IMAGE_WIDTH,
+          height: DEFAULT_OG_IMAGE_HEIGHT,
+          alt: t("metadata.title"),
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: t("metadata.title"),
       description: t("metadata.description"),
+      images: [`${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`],
     },
   };
 }

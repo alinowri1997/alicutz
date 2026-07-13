@@ -30,7 +30,7 @@ export async function FaqPreviewSection(): Promise<React.JSX.Element> {
         {FAQ_KEYS.map((faqKey) => (
           <div key={faqKey}>
             <details className="group rounded-xl border border-border bg-surface p-5 open:border-accent/60">
-              <summary className="type-small cursor-pointer list-none pr-8 text-text focus-visible:outline-none">
+              <summary className="type-small cursor-pointer list-none rounded-sm pr-8 text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
                 {t(`items.${faqKey}.question`)}
               </summary>
               <p className="type-small mt-3 text-muted">{t(`items.${faqKey}.answer`)}</p>

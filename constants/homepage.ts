@@ -6,7 +6,7 @@ export interface ContactInfo {
 
 export const WHATSAPP_NUMBER = "+905441772249";
 export const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER.replace("+", "")}`;
-export const INSTAGRAM_LINK = "https://instagram.com/Alicutzzzz";
+export const INSTAGRAM_LINK = "https://instagram.com/alicutzzzz";
 export const CONTACT_EMAIL = "97alicutzzzz@gmail.com";
 export const CONTACT_EMAIL_LINK = `mailto:${CONTACT_EMAIL}`;
 

@@ -5,15 +5,18 @@ import {locales, type AppLocale} from "@/i18n/routing";
 export const SITE_URL = "https://alicutz.com";
 export const SITE_NAME = "Ali Cutz";
 export const SITE_TITLE_TEMPLATE = "%s | Ali Cutz";
+export const DEFAULT_OG_IMAGE_PATH = "/gallery/mens-skin-fade-istanbul-premium-barber.jpg";
+export const DEFAULT_OG_IMAGE_WIDTH = 1920;
+export const DEFAULT_OG_IMAGE_HEIGHT = 2560;
 
 export const LOCALE_PAGE_PATHS = ["", "/privacy", "/terms"] as const;
 
 export const localeToHrefLang: Record<AppLocale, string> = {
   en: "en",
-  fa: "fa",
+  fa: "fa-IR",
   de: "de",
-  tr: "tr",
-  ar: "ar",
+  tr: "tr-TR",
+  ar: "ar-SA",
   ru: "ru",
 };
 

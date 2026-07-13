@@ -1,7 +1,7 @@
 import type {MetadataRoute} from "next";
 
 import {defaultLocale, locales} from "@/i18n/routing";
-import {LOCALE_PAGE_PATHS, SITE_URL} from "@/lib/seo";
+import {localeToHrefLang, LOCALE_PAGE_PATHS, SITE_URL} from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
@@ -15,10 +15,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: path === "" ? 1 : 0.7,
         alternates: {
           languages: Object.fromEntries(
-            locales.map((altLocale) => [altLocale, `${SITE_URL}/${altLocale}${path}`]),
+            locales.map((altLocale) => [localeToHrefLang[altLocale], `${SITE_URL}/${altLocale}${path}`]),
           ),
         },
       });
+
+      const latestEntry = entries[entries.length - 1];
+      latestEntry.alternates = {
+        languages: {
+          ...(latestEntry.alternates?.languages ?? {}),
+          "x-default": `${SITE_URL}/${defaultLocale}${path}`,
+        },
+      };
     }
   }
 
@@ -32,6 +40,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
         "x-default": `${SITE_URL}/${defaultLocale}`,
       },
     },
+  });
+
+  entries.push({
+    url: `${SITE_URL}/500`,
+    lastModified: new Date(),
+    changeFrequency: "yearly",
+    priority: 0.2,
   });
 
   return entries;

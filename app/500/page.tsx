@@ -1,9 +1,39 @@
 import type {Metadata} from "next";
 import Link from "next/link";
 
+import {
+  DEFAULT_OG_IMAGE_HEIGHT,
+  DEFAULT_OG_IMAGE_PATH,
+  DEFAULT_OG_IMAGE_WIDTH,
+  SITE_URL,
+} from "@/lib/seo";
+
 export const metadata: Metadata = {
   title: "Server Error | Ali Cutz",
   description: "A server error occurred while loading Ali Cutz.",
+  alternates: {
+    canonical: `${SITE_URL}/500`,
+  },
+  openGraph: {
+    title: "Server Error | Ali Cutz",
+    description: "A server error occurred while loading Ali Cutz.",
+    url: `${SITE_URL}/500`,
+    type: "website",
+    images: [
+      {
+        url: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
+        width: DEFAULT_OG_IMAGE_WIDTH,
+        height: DEFAULT_OG_IMAGE_HEIGHT,
+        alt: "Ali Cutz",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Server Error | Ali Cutz",
+    description: "A server error occurred while loading Ali Cutz.",
+    images: [`${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`],
+  },
   robots: {
     index: false,
     follow: false,

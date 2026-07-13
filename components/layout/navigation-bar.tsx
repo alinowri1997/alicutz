@@ -273,6 +273,8 @@ export function NavigationBar({
                     >
                       <a
                         href={item.href}
+                        target={item.target}
+                        rel={item.rel}
                         className="type-h3 text-text transition-colors duration-200 hover:text-accent focus-visible:outline-none focus-visible:text-accent"
                         onClick={closeMenu}
                       >

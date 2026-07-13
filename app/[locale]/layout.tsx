@@ -5,7 +5,14 @@ import {notFound} from "next/navigation";
 
 import {NavigationBar} from "@/components/layout";
 import {LocalePreferenceSync} from "@/components/layout/locale-preference-sync";
-import {buildLanguageAlternates, localeToLanguageTag, SITE_URL} from "@/lib/seo";
+import {
+  buildLanguageAlternates,
+  DEFAULT_OG_IMAGE_HEIGHT,
+  DEFAULT_OG_IMAGE_PATH,
+  DEFAULT_OG_IMAGE_WIDTH,
+  localeToLanguageTag,
+  SITE_URL,
+} from "@/lib/seo";
 import {defaultLocale, isRtlLocale, locales, routing, type AppLocale} from "@/i18n/routing";
 
 interface LocaleLayoutProps {
@@ -36,11 +43,21 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
       url: `${SITE_URL}/${locale}`,
       locale: localeTag,
       type: "website",
+      alternateLocale: locales.filter((entry) => entry !== locale).map((entry) => localeToLanguageTag[entry]),
+      images: [
+        {
+          url: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
+          width: DEFAULT_OG_IMAGE_WIDTH,
+          height: DEFAULT_OG_IMAGE_HEIGHT,
+          alt: t("defaultTitle"),
+        },
+      ],
     },
     twitter: {
       title: t("defaultTitle"),
       description: t("defaultDescription"),
       card: "summary_large_image",
+      images: [`${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`],
     },
   };
 }
@@ -60,7 +77,7 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
   return (
     <div lang={localeToLanguageTag[locale]} dir={isRtlLocale(locale) ? "rtl" : "ltr"}>
         <a
-          href="#main-content"
+          href="#home"
           className="type-small sr-only fixed left-4 top-4 z-[100] rounded-md bg-surface px-4 py-2 text-text focus:not-sr-only"
         >
           {t("skipToContent")}

@@ -13,8 +13,15 @@ import {
   WhyChooseSection,
 } from "@/components/sections";
 import {CONTACT_INFO, INSTAGRAM_LINK, WHATSAPP_LINK} from "@/constants/homepage";
-import {buildLanguageAlternates, SITE_URL} from "@/lib/seo";
-import {defaultLocale, routing} from "@/i18n/routing";
+import {
+  buildLanguageAlternates,
+  DEFAULT_OG_IMAGE_HEIGHT,
+  DEFAULT_OG_IMAGE_PATH,
+  DEFAULT_OG_IMAGE_WIDTH,
+  localeToLanguageTag,
+  SITE_URL,
+} from "@/lib/seo";
+import {defaultLocale, locales, routing} from "@/i18n/routing";
 
 interface HomePageProps {
   params: Promise<{locale: string}>;
@@ -24,6 +31,7 @@ export async function generateMetadata({params}: HomePageProps): Promise<Metadat
   const {locale: rawLocale} = await params;
   const locale = hasLocale(routing.locales, rawLocale) ? rawLocale : defaultLocale;
   const t = await getTranslations({locale, namespace: "HomePage"});
+  const localeTag = localeToLanguageTag[locale];
   const metadata = t.raw("metadata") as {
     title: string;
     description: string;
@@ -47,11 +55,13 @@ export async function generateMetadata({params}: HomePageProps): Promise<Metadat
       description: metadata.ogDescription,
       url: `${SITE_URL}/${locale}`,
       type: "website",
+      locale: localeTag,
+      alternateLocale: locales.filter((entry) => entry !== locale).map((entry) => localeToLanguageTag[entry]),
       images: [
         {
-          url: `${SITE_URL}/images/hero-signature.svg`,
-          width: 1600,
-          height: 2000,
+          url: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
+          width: DEFAULT_OG_IMAGE_WIDTH,
+          height: DEFAULT_OG_IMAGE_HEIGHT,
           alt: metadata.imageAlt,
         },
       ],
@@ -60,7 +70,7 @@ export async function generateMetadata({params}: HomePageProps): Promise<Metadat
       card: "summary_large_image",
       title: metadata.twitterTitle,
       description: metadata.twitterDescription,
-      images: [`${SITE_URL}/images/hero-signature.svg`],
+      images: [`${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`],
     },
     keywords: metadata.keywords,
   };
@@ -77,6 +87,7 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
 
   const tFaq = await getTranslations({locale, namespace: "Faq"});
   const tHome = await getTranslations({locale, namespace: "HomePage"});
+  const pageUrl = `${SITE_URL}/${locale}`;
 
   const faqKeys = [
     "booking",
@@ -90,9 +101,11 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "HairSalon", "Barbershop"],
+    "@id": `${SITE_URL}#localbusiness`,
     name: "Ali Cutz",
-    image: `${SITE_URL}/images/hero-signature.svg`,
-    url: `${SITE_URL}/${locale}`,
+    description: tHome("metadata.description"),
+    image: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
+    url: pageUrl,
     email: CONTACT_INFO.email,
     telephone: CONTACT_INFO.phone,
     address: {
@@ -102,6 +115,22 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
       addressCountry: "TR",
     },
     areaServed: ["Istanbul", "Osmanbey", "Bomonti"],
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ],
+        opens: "09:00",
+        closes: "22:00",
+      },
+    ],
     sameAs: [INSTAGRAM_LINK, WHATSAPP_LINK],
   };
 
@@ -134,9 +163,10 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${SITE_URL}#organization`,
     name: "Ali Cutz",
-    url: `${SITE_URL}/${locale}`,
-    logo: `${SITE_URL}/images/hero-signature.svg`,
+    url: pageUrl,
+    logo: `${SITE_URL}/icon?size=512`,
     email: CONTACT_INFO.email,
     sameAs: [INSTAGRAM_LINK, WHATSAPP_LINK],
     contactPoint: {
@@ -153,8 +183,21 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${SITE_URL}#website`,
     name: "Ali Cutz",
-    url: `${SITE_URL}/${locale}`,
+    url: pageUrl,
+    inLanguage: locale,
+  };
+
+  const imageObjectSchema = {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    "@id": `${SITE_URL}#primary-image`,
+    contentUrl: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
+    url: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
+    width: DEFAULT_OG_IMAGE_WIDTH,
+    height: DEFAULT_OG_IMAGE_HEIGHT,
+    caption: tHome("metadata.imageAlt"),
     inLanguage: locale,
   };
 
@@ -175,8 +218,9 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
     serviceType: tHome("schema.serviceType"),
     provider: {
       "@type": "Barbershop",
+      "@id": `${SITE_URL}#localbusiness`,
       name: "Ali Cutz",
-      url: `${SITE_URL}/${locale}`,
+      url: pageUrl,
     },
     areaServed: {
       "@type": "City",
@@ -195,7 +239,6 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
 
   return (
     <main id="home">
-      <div id="main-content" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(localBusinessSchema)}}
@@ -215,6 +258,10 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
         dangerouslySetInnerHTML={{__html: JSON.stringify(contactPointSchema)}}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(serviceSchema)}} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(imageObjectSchema)}}
+      />
 
       <HeroSection />
       <StatisticsSection />
