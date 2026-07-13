@@ -2,7 +2,7 @@
   "Layout": {
     "skipToContent": "Skip to content",
     "defaultTitle": "Ali Cutz",
-    "defaultDescription": "Premium private men's grooming in Istanbul with WhatsApp-first booking."
+    "defaultDescription": "Professional barber service in Istanbul with WhatsApp-first booking."
   },
   "Navigation": {
     "logoText": "Ali Cutz",
@@ -23,14 +23,14 @@
   },
   "Hero": {
     "locationPositioningAria": "Location and positioning",
-    "eyebrow": "Premium Men's Grooming | Osmanbey / Bomonti, Istanbul",
-    "title": "Professional men's barber service in Istanbul.",
+    "eyebrow": "PREMIUM BARBER | OSMANBEY • BOMONTI • ISTANBUL",
+    "title": "Professional Barber in Istanbul.",
     "description": "Focused cuts. Clean fades. Precise beard work. Private appointments for clients who value time, discretion, and consistent quality.",
     "supportedLanguagesAria": "Supported languages",
     "serviceModelLabel": "Service Focus",
     "serviceModelValue": "Private appointments at hotels and residences, with salon service in Osmanbey / Bomonti.",
     "exploreServices": "View Services",
-    "heroImageAlt": "Luxury ambiance representing Ali Cutz premium grooming experience in Istanbul",
+    "heroImageAlt": "Luxury ambiance representing Ali Cutz premium barber experience in Istanbul",
     "privateAppointmentsLabel": "Private Appointments",
     "privateAppointmentsDescription": "Preferred by professionals, travelers, and long-stay visitors."
   },
@@ -54,7 +54,7 @@
   },
   "Services": {
     "eyebrow": "Signature Services",
-    "title": "Modern grooming services for men.",
+    "title": "Modern barber services for men.",
     "description": "Specialized in fades, beard styling, modern haircuts, and hair coloring.",
     "items": {
       "haircut": {
@@ -132,7 +132,7 @@
       "6": "Hair coloring result for men with natural tone correction and shine",
       "7": "Classic short men's haircut with refined scissor finish",
       "8": "High-contrast fade haircut with sharp temple and side detail",
-      "9": "Professional men's grooming result with clean cut and beard definition"
+      "9": "Professional barber result with clean cut and beard definition"
     }
   },
   "Faq": {
@@ -180,7 +180,7 @@
     "ctaCallNow": "Call Now"
   },
   "HomeFooter": {
-    "brandDescription": "Premium private grooming in Osmanbey / Bomonti, Istanbul.",
+    "brandDescription": "Premium private barber service in Osmanbey / Bomonti, Istanbul.",
     "navigation": "Navigation",
     "languages": "Languages",
     "social": "Social",
@@ -210,7 +210,7 @@
       "ogTitle": "Ali Cutz | Men's Barber Istanbul",
       "ogDescription": "Private appointments and salon service in Osmanbey / Bomonti. Book directly on WhatsApp.",
       "twitterTitle": "Ali Cutz | Men's Barber Istanbul",
-      "twitterDescription": "Modern men's grooming in Istanbul with precise cuts and clean finishes.",
+      "twitterDescription": "Modern barber service in Istanbul with precise cuts and clean finishes.",
       "imageAlt": "Ali Cutz premium barber studio visual",
       "keywords": [
         "Men's Barber Istanbul",

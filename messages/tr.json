@@ -2,7 +2,7 @@
   "Layout": {
     "skipToContent": "İçeriğe geç",
     "defaultTitle": "Ali Cutz",
-    "defaultDescription": "İstanbul’da WhatsApp odaklı rezervasyonla premium özel erkek bakımı."
+    "defaultDescription": "İstanbul’da WhatsApp odaklı rezervasyonla Profesyonel Erkek Berberi hizmeti."
   },
   "Navigation": {
     "logoText": "Ali Cutz",
@@ -23,8 +23,8 @@
   },
   "Hero": {
     "locationPositioningAria": "Konum ve konumlandırma",
-    "eyebrow": "Premium Erkek Bakımı | Osmanbey / Bomonti, İstanbul",
-    "title": "İstanbul’da profesyonel erkek berber hizmeti.",
+    "eyebrow": "PREMIUM BARBER | OSMANBEY • BOMONTI • ISTANBUL",
+    "title": "İstanbul’da Profesyonel Erkek Berberi.",
     "description": "Net kesimler, temiz fade geçişleri ve özenli sakal tasarımı. Zamanına, görünümüne ve tutarlı sonuca önem veren erkekler için.",
     "supportedLanguagesAria": "Desteklenen diller",
     "serviceModelLabel": "Hizmet Modeli",
@@ -54,7 +54,7 @@
   },
   "Services": {
     "eyebrow": "İmza Hizmetler",
-    "title": "Erkeklere özel modern bakım hizmetleri.",
+    "title": "Erkeklere özel modern barber hizmetleri.",
     "description": "Skin fade, sakal tasarımı, modern kesimler ve saç renklendirme ana uzmanlık alanlarımızdır.",
     "items": {
       "haircut": {
@@ -180,7 +180,7 @@
     "ctaCallNow": "Hemen Ara"
   },
   "HomeFooter": {
-    "brandDescription": "Osmanbey / Bomonti, İstanbul’da premium özel bakım.",
+    "brandDescription": "Osmanbey / Bomonti, İstanbul’da premium barber hizmeti.",
     "navigation": "Gezinme",
     "languages": "Diller",
     "social": "Sosyal",
@@ -210,7 +210,7 @@
       "ogTitle": "Ali Cutz | İstanbul Erkek Berberi",
       "ogDescription": "Osmanbey / Bomonti bölgesinde salon hizmeti ve özel randevu. WhatsApp’tan hızlı rezervasyon.",
       "twitterTitle": "Ali Cutz | İstanbul Erkek Berberi",
-      "twitterDescription": "İstanbul’da modern erkek bakımı: temiz kesim, net detay, güvenilir sonuç.",
+      "twitterDescription": "İstanbul’da modern barber hizmeti: temiz kesim, net detay, güvenilir sonuç.",
       "imageAlt": "Ali Cutz premium berber stüdyosunu temsil eden görsel",
       "keywords": [
         "İstanbul Erkek Berberi",

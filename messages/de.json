@@ -2,7 +2,7 @@
   "Layout": {
     "skipToContent": "Zum Inhalt springen",
     "defaultTitle": "Ali Cutz",
-    "defaultDescription": "Premium-Privatpflege für Männer in Istanbul mit WhatsApp-First-Buchung."
+    "defaultDescription": "Professioneller Barber-Service in Istanbul mit WhatsApp-First-Buchung."
   },
   "Navigation": {
     "logoText": "Ali Cutz",
@@ -23,14 +23,14 @@
   },
   "Hero": {
     "locationPositioningAria": "Standort und Positionierung",
-    "eyebrow": "Premium-Herrenpflege | Osmanbey / Bomonti, Istanbul",
-    "title": "Professioneller Herrenbarbier in Istanbul.",
+    "eyebrow": "PREMIUM BARBER | OSMANBEY • BOMONTI • ISTANBUL",
+    "title": "Professioneller Barber in Istanbul.",
     "description": "Klare Schnitte, saubere Fades und präzises Bartstyling. Für Männer, die Wert auf Zeit, Stil und konstante Qualität legen.",
     "supportedLanguagesAria": "Unterstützte Sprachen",
     "serviceModelLabel": "Servicefokus",
     "serviceModelValue": "Private Termine in Hotels und Residenzen sowie Salonservice in Osmanbey / Bomonti.",
     "exploreServices": "Leistungen ansehen",
-    "heroImageAlt": "Luxuriöse Atmosphäre, die die Premium-Pflege von Ali Cutz in Istanbul repräsentiert",
+    "heroImageAlt": "Luxuriöse Atmosphäre, die den Premium-Barber-Anspruch von Ali Cutz in Istanbul repräsentiert",
     "privateAppointmentsLabel": "Private Termine",
     "privateAppointmentsDescription": "Bevorzugt von Professionals, Geschäftsreisenden und Langzeitgästen."
   },
@@ -54,7 +54,7 @@
   },
   "Services": {
     "eyebrow": "Signature Services",
-    "title": "Moderner Grooming-Service für Männer.",
+    "title": "Moderne Barber-Services für Männer.",
     "description": "Spezialisiert auf Fades, Bartstyling, moderne Haarschnitte und Haarfarbe.",
     "items": {
       "haircut": {
@@ -132,7 +132,7 @@
       "6": "Männer-Haarfärbung mit natürlicher Tonkorrektur und gesundem Glanz",
       "7": "Klassischer kurzer Herrenhaarschnitt mit präzisem Scherenfinish",
       "8": "Kontrastreicher Fade mit scharfer Schläfen- und Seitenkontur",
-      "9": "Professionelles Männer-Grooming mit sauberem Schnitt und definierter Bartlinie"
+      "9": "Professionelles Barber-Ergebnis mit sauberem Schnitt und definierter Bartlinie"
     }
   },
   "Faq": {
@@ -180,7 +180,7 @@
     "ctaCallNow": "Jetzt anrufen"
   },
   "HomeFooter": {
-    "brandDescription": "Premium-Privatpflege in Osmanbey / Bomonti, Istanbul.",
+    "brandDescription": "Premium-Barber-Service in Osmanbey / Bomonti, Istanbul.",
     "navigation": "Navigation",
     "languages": "Sprachen",
     "social": "Social",
@@ -205,12 +205,12 @@
   },
   "HomePage": {
     "metadata": {
-      "title": "Ali Cutz | Herrenbarbier Istanbul",
-      "description": "Professioneller Herrenbarbier in Istanbul. 9+ Jahre Erfahrung mit Fokus auf Fades, Bartstyling, moderne Schnitte und Haarfärbung.",
-      "ogTitle": "Ali Cutz | Herrenbarbier in Istanbul",
+      "title": "Ali Cutz | Professioneller Barber in Istanbul",
+      "description": "Professioneller Barber in Istanbul. 9+ Jahre Erfahrung mit Fokus auf Fades, Bartstyling, moderne Schnitte und Haarfärbung.",
+      "ogTitle": "Ali Cutz | Professioneller Barber in Istanbul",
       "ogDescription": "Private Termine und Salonservice in Osmanbey / Bomonti. Direkt per WhatsApp buchen.",
-      "twitterTitle": "Ali Cutz | Herrenbarbier in Istanbul",
-      "twitterDescription": "Moderner Herrenservice in Istanbul mit präziser Technik und konstantem Ergebnis.",
+      "twitterTitle": "Ali Cutz | Professioneller Barber in Istanbul",
+      "twitterDescription": "Moderner Barber-Service in Istanbul mit präziser Technik und konstantem Ergebnis.",
       "imageAlt": "Visual des Premium-Barber-Studios von Ali Cutz",
       "keywords": [
         "Herrenbarbier Istanbul",
@@ -224,7 +224,7 @@
       ]
     },
     "schema": {
-      "serviceType": "Premium-Privattermin beim Herrenbarbier",
+      "serviceType": "Premium-Privattermin beim professionellen Barber",
       "audienceType": "Hotelgäste, Touristen, Geschäftsreisende und lokale Kunden"
     },
     "breadcrumbHome": "Start"
