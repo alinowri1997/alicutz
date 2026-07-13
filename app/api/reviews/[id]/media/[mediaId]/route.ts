@@ -10,7 +10,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string; mediaId: string }> }
 ): Promise<NextResponse<ApiResponse<void>>> {
   try {
-    const { id: reviewId, mediaId } = await params;
+    await params;
 
     // TODO: Delete media from storage and database
 

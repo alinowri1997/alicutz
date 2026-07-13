@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseBrowser } from '@/lib/supabase/client';
+import { getSupabaseBrowser } from '@/lib/supabase/client';
 import { updateReviewSchema } from '@/lib/schemas/reviews';
 import type { ApiResponse, ReviewWithRelations } from '@/lib/types/reviews';
 
@@ -16,11 +16,8 @@ export async function GET(
   try {
     const { id } = await params;
 
-    if (!supabaseBrowser) {
-      throw new Error('Supabase not configured');
-    }
-
-    const { data: review, error } = await supabaseBrowser!
+    const supabase = getSupabaseBrowser();
+    const { data: review, error } = await supabase
       .from('reviews')
       .select('*')
       .eq('id', id)
@@ -29,13 +26,13 @@ export async function GET(
 
     if (error) throw error;
 
-    const { data: media } = await supabaseBrowser.from('review_media').select('*').eq('review_id', id);
-    const { data: replies } = await supabaseBrowser
+    const { data: media } = await supabase.from('review_media').select('*').eq('review_id', id);
+    const { data: replies } = await supabase
       .from('review_replies')
       .select('*')
       .eq('review_id', id)
       .is('deleted_at', null);
-    const { count: likesCount } = await supabaseBrowser
+    const { count: likesCount } = await supabase
       .from('review_likes')
       .select('*', { count: 'exact' })
       .eq('review_id', id);
@@ -79,7 +76,8 @@ export async function PUT(
 
     const validated = updateReviewSchema.parse(body);
 
-    const { error } = await supabaseBrowser
+    const supabase = getSupabaseBrowser();
+    const { error } = await supabase
       .from('reviews')
       .update({
         ...validated,
@@ -116,7 +114,8 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    const { error } = await supabaseBrowser
+    const supabase = getSupabaseBrowser();
+    const { error } = await supabase
       .from('reviews')
       .update({ deleted_at: new Date().toISOString() })
       .eq('id', id);

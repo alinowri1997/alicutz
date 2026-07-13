@@ -5,7 +5,7 @@
 
 'use server';
 
-import { supabaseBrowser, getCurrentUser } from '@/lib/supabase/client';
+import { getSupabaseBrowser, getCurrentUser } from '@/lib/supabase/client';
 import { createReviewSchema, updateReviewSchema, createReviewReplySchema, createFlagSchema } from '@/lib/schemas/reviews';
 import type { Review, ReviewWithRelations, CreateReviewInput } from '@/lib/types/reviews';
 
@@ -18,7 +18,8 @@ export async function createReview(input: CreateReviewInput): Promise<Review> {
 
   const validated = createReviewSchema.parse(input);
 
-  const { data, error } = await supabaseBrowser.from('reviews').insert({
+  const supabase = getSupabaseBrowser();
+  const { data, error } = await supabase.from('reviews').insert({
     user_id: user.id,
     user_name: validated.user_name,
     user_email: validated.user_email,
@@ -37,8 +38,9 @@ export async function createReview(input: CreateReviewInput): Promise<Review> {
  */
 export async function getReview(reviewId: string): Promise<ReviewWithRelations | null> {
   const user = await getCurrentUser();
+  const supabase = getSupabaseBrowser();
 
-  const { data: review, error: reviewError } = await supabaseBrowser
+  const { data: review, error: reviewError } = await supabase
     .from('reviews')
     .select('*')
     .eq('id', reviewId)
@@ -47,27 +49,27 @@ export async function getReview(reviewId: string): Promise<ReviewWithRelations |
 
   if (reviewError) return null;
 
-  const { data: media } = await supabaseBrowser
+  const { data: media } = await supabase
     .from('review_media')
     .select('*')
     .eq('review_id', reviewId)
     .order('position', { ascending: true });
 
-  const { data: replies } = await supabaseBrowser
+  const { data: replies } = await supabase
     .from('review_replies')
     .select('*')
     .eq('review_id', reviewId)
     .is('deleted_at', null)
     .order('created_at', { ascending: true });
 
-  const { count: likesCount } = await supabaseBrowser
+  const { count: likesCount } = await supabase
     .from('review_likes')
     .select('*', { count: 'exact' })
     .eq('review_id', reviewId);
 
   let userLiked = false;
   if (user) {
-    const { data: userLike } = await supabaseBrowser
+    const { data: userLike } = await supabase
       .from('review_likes')
       .select('*')
       .eq('review_id', reviewId)
@@ -95,7 +97,7 @@ export async function getReviews(page: number = 1, limit: number = 10): Promise<
   const user = await getCurrentUser();
   const offset = (page - 1) * limit;
 
-  const { data: reviews, count } = await supabaseBrowser
+  const { data: reviews, count } = await getSupabaseBrowser()
     .from('reviews')
     .select('*', { count: 'exact' })
     .is('deleted_at', null)
@@ -106,25 +108,25 @@ export async function getReviews(page: number = 1, limit: number = 10): Promise<
 
   const enrichedReviews = await Promise.all(
     reviews.map(async (review) => {
-      const { data: media } = await supabaseBrowser
+      const { data: media } = await getSupabaseBrowser()
         .from('review_media')
         .select('*')
         .eq('review_id', review.id);
 
-      const { data: replies } = await supabaseBrowser
+      const { data: replies } = await getSupabaseBrowser()
         .from('review_replies')
         .select('*')
         .eq('review_id', review.id)
         .is('deleted_at', null);
 
-      const { count: likesCount } = await supabaseBrowser
+      const { count: likesCount } = await getSupabaseBrowser()
         .from('review_likes')
         .select('*', { count: 'exact' })
         .eq('review_id', review.id);
 
       let userLiked = false;
       if (user) {
-        const { data: userLike } = await supabaseBrowser
+        const { data: userLike } = await getSupabaseBrowser()
           .from('review_likes')
           .select('*')
           .eq('review_id', review.id)
@@ -152,13 +154,13 @@ export async function getReviews(page: number = 1, limit: number = 10): Promise<
 /**
  * Update a review
  */
-export async function updateReview(reviewId: string, input: any): Promise<Review> {
+export async function updateReview(reviewId: string, input: Record<string, unknown>): Promise<Review> {
   const user = await getCurrentUser();
   if (!user) throw new Error('Unauthorized');
 
   const validated = updateReviewSchema.parse(input);
 
-  const { data, error } = await supabaseBrowser
+  const { data, error } = await getSupabaseBrowser()
     .from('reviews')
     .update({
       ...validated,
@@ -180,7 +182,7 @@ export async function deleteReview(reviewId: string): Promise<void> {
   const user = await getCurrentUser();
   if (!user) throw new Error('Unauthorized');
 
-  const { error } = await supabaseBrowser
+  const { error } = await getSupabaseBrowser()
     .from('reviews')
     .update({ deleted_at: new Date().toISOString() })
     .eq('id', reviewId)
@@ -196,7 +198,7 @@ export async function likeReview(reviewId: string): Promise<void> {
   const user = await getCurrentUser();
   if (!user) throw new Error('Unauthorized');
 
-  const { error } = await supabaseBrowser.from('review_likes').insert({
+  const { error } = await getSupabaseBrowser().from('review_likes').insert({
     review_id: reviewId,
     user_id: user.id,
   });
@@ -211,7 +213,7 @@ export async function unlikeReview(reviewId: string): Promise<void> {
   const user = await getCurrentUser();
   if (!user) throw new Error('Unauthorized');
 
-  const { error } = await supabaseBrowser
+  const { error } = await getSupabaseBrowser()
     .from('review_likes')
     .delete()
     .eq('review_id', reviewId)
@@ -223,13 +225,13 @@ export async function unlikeReview(reviewId: string): Promise<void> {
 /**
  * Create a reply to a review
  */
-export async function createReply(reviewId: string, input: any): Promise<void> {
+export async function createReply(reviewId: string, input: Record<string, unknown>): Promise<void> {
   const user = await getCurrentUser();
   if (!user) throw new Error('Unauthorized');
 
   const validated = createReviewReplySchema.parse(input);
 
-  const { error } = await supabaseBrowser.from('review_replies').insert({
+  const { error } = await getSupabaseBrowser().from('review_replies').insert({
     review_id: reviewId,
     user_id: user.id,
     user_name: validated.user_name,
@@ -245,13 +247,13 @@ export async function createReply(reviewId: string, input: any): Promise<void> {
 /**
  * Flag/report a review
  */
-export async function flagReview(reviewId: string, input: any): Promise<void> {
+export async function flagReview(reviewId: string, input: Record<string, unknown>): Promise<void> {
   const user = await getCurrentUser();
   if (!user) throw new Error('Unauthorized');
 
   const validated = createFlagSchema.parse(input);
 
-  const { error } = await supabaseBrowser.from('review_flags').insert({
+  const { error } = await getSupabaseBrowser().from('review_flags').insert({
     review_id: reviewId,
     reason: validated.reason,
     description: validated.description,

@@ -3,7 +3,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseBrowser } from '@/lib/supabase/client';
+import { getSupabaseBrowser } from '@/lib/supabase/client';
 import { createFlagSchema } from '@/lib/schemas/reviews';
 import type { ApiResponse } from '@/lib/types/reviews';
 
@@ -14,7 +14,8 @@ export async function POST(
   try {
     const { id: reviewId } = await params;
     const body = await req.json();
-    const session = await supabaseBrowser.auth.getSession();
+    const supabase = getSupabaseBrowser();
+    const session = await supabase.auth.getSession();
 
     if (!session.data.session) {
       return NextResponse.json(
@@ -31,7 +32,7 @@ export async function POST(
 
     const validated = createFlagSchema.parse(body);
 
-    const { error } = await supabaseBrowser.from('review_flags').insert({
+    const { error } = await supabase.from('review_flags').insert({
       review_id: reviewId,
       reason: validated.reason,
       description: validated.description,

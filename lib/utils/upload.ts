@@ -3,7 +3,7 @@
  * Handle image and video uploads to Supabase Storage
  */
 
-import { supabaseBrowser } from '@/lib/supabase/client';
+import { getSupabaseBrowser } from '@/lib/supabase/client';
 import type { UploadMediaResponse, MediaType } from '@/lib/types/reviews';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
@@ -102,7 +102,7 @@ export async function uploadMedia(
 
   // Upload to storage
   const bucketName = mediaType === 'image' ? 'review-images' : 'review-videos';
-  const { data, error } = await supabaseBrowser.storage
+  const { data, error } = await getSupabaseBrowser().storage
     .from(bucketName)
     .upload(filename, file, {
       cacheControl: '3600',
@@ -123,11 +123,6 @@ export async function uploadMedia(
     duration = await getVideoDuration(file);
   }
 
-  // Get public URL
-  const {
-    data: { publicUrl },
-  } = supabaseBrowser.storage.from(bucketName).getPublicUrl(filename);
-
   return {
     id: crypto.randomUUID(),
     storage_path: data.path,
@@ -144,7 +139,7 @@ export async function uploadMedia(
  */
 export async function deleteMedia(storagePath: string, mediaType: MediaType): Promise<void> {
   const bucketName = mediaType === 'image' ? 'review-images' : 'review-videos';
-  const { error } = await supabaseBrowser.storage.from(bucketName).remove([storagePath]);
+  const { error } = await getSupabaseBrowser().storage.from(bucketName).remove([storagePath]);
 
   if (error) {
     throw new Error(`Delete failed: ${error.message}`);
@@ -160,7 +155,7 @@ export async function getSignedMediaUrl(
   expiresIn: number = 3600
 ): Promise<string> {
   const bucketName = mediaType === 'image' ? 'review-images' : 'review-videos';
-  const { data, error } = await supabaseBrowser.storage
+  const { data, error } = await getSupabaseBrowser().storage
     .from(bucketName)
     .createSignedUrl(storagePath, expiresIn);
 

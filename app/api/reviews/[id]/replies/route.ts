@@ -4,9 +4,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseBrowser } from '@/lib/supabase/client';
+import { getSupabaseBrowser } from '@/lib/supabase/client';
 import { createReviewReplySchema } from '@/lib/schemas/reviews';
-import type { ApiResponse } from '@/lib/types/reviews';
+import type { ApiResponse, ReviewReply } from '@/lib/types/reviews';
 
 export async function POST(
   req: NextRequest,
@@ -14,8 +14,9 @@ export async function POST(
 ): Promise<NextResponse<ApiResponse<void>>> {
   try {
     const { id: reviewId } = await params;
-    const body = await req.json();
-    const session = await supabaseBrowser.auth.getSession();
+    const body = await req.json() as Record<string, unknown>;
+    const supabase = getSupabaseBrowser();
+    const session = await supabase.auth.getSession();
 
     if (!session.data.session) {
       return NextResponse.json(
@@ -32,7 +33,7 @@ export async function POST(
 
     const validated = createReviewReplySchema.parse(body);
 
-    const { error } = await supabaseBrowser.from('review_replies').insert({
+    const { error } = await supabase.from('review_replies').insert({
       review_id: reviewId,
       user_id: session.data.session.user.id,
       user_name: validated.user_name,
@@ -67,11 +68,12 @@ export async function POST(
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<any>>> {
+): Promise<NextResponse<ApiResponse<ReviewReply[]>>> {
   try {
     const { id: reviewId } = await params;
 
-    const { data: replies, error } = await supabaseBrowser
+    const supabase = getSupabaseBrowser();
+    const { data: replies, error } = await supabase
       .from('review_replies')
       .select('*')
       .eq('review_id', reviewId)

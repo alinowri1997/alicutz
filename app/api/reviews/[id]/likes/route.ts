@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseBrowser } from '@/lib/supabase/client';
+import { getSupabaseBrowser } from '@/lib/supabase/client';
 import type { ApiResponse } from '@/lib/types/reviews';
 
 export async function POST(
@@ -14,11 +14,8 @@ export async function POST(
   try {
     const { id: reviewId } = await params;
 
-    if (!supabaseBrowser) {
-      throw new Error('Supabase not configured');
-    }
-
-    const session = await supabaseBrowser.auth.getSession();
+    const supabase = getSupabaseBrowser();
+    const session = await supabase.auth.getSession();
 
     if (!session.data.session) {
       return NextResponse.json(
@@ -33,7 +30,7 @@ export async function POST(
       );
     }
 
-    const { error } = await supabaseBrowser.from('review_likes').insert({
+    const { error } = await supabase.from('review_likes').insert({
       review_id: reviewId,
       user_id: session.data.session.user.id,
     });
@@ -67,11 +64,8 @@ export async function DELETE(
   try {
     const { id: reviewId } = await params;
 
-    if (!supabaseBrowser) {
-      throw new Error('Supabase not configured');
-    }
-
-    const session = await supabaseBrowser.auth.getSession();
+    const supabase = getSupabaseBrowser();
+    const session = await supabase.auth.getSession();
 
     if (!session.data.session) {
       return NextResponse.json(
@@ -86,7 +80,7 @@ export async function DELETE(
       );
     }
 
-    const { error } = await supabaseBrowser
+    const { error } = await supabase
       .from('review_likes')
       .delete()
       .eq('review_id', reviewId)

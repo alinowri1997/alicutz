@@ -14,7 +14,6 @@ export async function POST(
     const formData = await req.formData();
 
     const file = formData.get('file') as File;
-    const position = parseInt((formData.get('position') as string) || '0', 10);
 
     if (!file) {
       return NextResponse.json(

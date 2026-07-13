@@ -4,16 +4,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseBrowser } from '@/lib/supabase/client';
-import { filterReviewsSchema, type FilterReviewsQuery } from '@/lib/schemas/reviews';
+import { getSupabaseBrowser } from '@/lib/supabase/client';
+import { filterReviewsSchema } from '@/lib/schemas/reviews';
 import type { ApiResponse, PaginatedReviews } from '@/lib/types/reviews';
 
 export async function GET(req: NextRequest): Promise<NextResponse<ApiResponse<PaginatedReviews>>> {
   try {
-    if (!supabaseBrowser) {
-      throw new Error('Supabase not configured');
-    }
-
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '10', 10);
@@ -24,7 +20,8 @@ export async function GET(req: NextRequest): Promise<NextResponse<ApiResponse<Pa
 
     const query = filterReviewsSchema.parse({ page, limit, rating, sort_by: sortBy, search, featured_only: featuredOnly });
 
-    let supabaseQuery = supabaseBrowser!
+    const supabase = getSupabaseBrowser();
+    let supabaseQuery = supabase
       .from('reviews')
       .select('*, review_media(*), review_replies(*)', { count: 'exact' })
       .is('deleted_at', null);
