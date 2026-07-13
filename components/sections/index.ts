@@ -5,5 +5,6 @@ export * from "@/components/sections/statistics-section";
 export * from "@/components/sections/services-section";
 export * from "@/components/sections/why-choose-section";
 export * from "@/components/sections/faq-preview-section";
+export * from "@/components/sections/reviews-section";
 export * from "@/components/sections/location-section";
 export * from "@/components/sections/home-footer-section";

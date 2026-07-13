@@ -8,6 +8,7 @@ import {
   HeroSection,
   HomeFooterSection,
   LocationSection,
+  ReviewsSection,
   ServicesSection,
   StatisticsSection,
   WhyChooseSection,
@@ -264,6 +265,7 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
       />
 
       <HeroSection />
+      <ReviewsSection />
       <StatisticsSection />
       <ServicesSection />
       <WhyChooseSection />
