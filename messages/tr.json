@@ -143,25 +143,29 @@
         "question": "Randevu nasıl alabilirim?",
         "answer": "WhatsApp’tan tarih, saat ve hizmet bilgisini gönderin. Uygunluğu hızlıca teyit edelim."
       },
-      "languages": {
-        "question": "İngilizce, Almanca, Farsça, Arapça veya Rusça iletişim kurabilir miyim?",
-        "answer": "Berber Türkçe, İngilizce, Almanca ve Farsça konuşur. Web sitesi altı dilde kullanılabilir."
+      "walkIns": {
+        "question": "Randevusuz müşteri kabul ediyor musunuz?",
+        "answer": "Servis kalitesini korumak için önceliğimiz randevulu çalışmaktır. Önce WhatsApp’tan yazabilirsiniz."
       },
-      "privateAppointments": {
-        "question": "Otelde ve özel konutlarda randevu veriyor musunuz?",
-        "answer": "Evet. Otel ve konutlarda özel randevu, İstanbul’daki premium hizmetimizin temel parçasıdır."
+      "hotelService": {
+        "question": "Istanbul’da otelde hizmet veriyor musunuz?",
+        "answer": "Evet. Şişli, Osmanbey, Bomonti ve merkez Istanbul bölgelerinde otel ve rezidanslara özel barber hizmeti sunuyoruz."
       },
-      "salonLocation": {
-        "question": "Salon nerede?",
-        "answer": "Salon İstanbul’da Osmanbey / Bomonti bölgesindedir. Tam konum bilgisi WhatsApp rezervasyonu sonrası paylaşılır."
+      "speakEnglish": {
+        "question": "İngilizce konuşuyor musunuz?",
+        "answer": "Evet. Danışmanlık ve rezervasyon sürecini İngilizce yürütebiliriz."
       },
-      "specialties": {
-        "question": "Skin fade ve sakal alanında uzman hizmet veriyor musunuz?",
-        "answer": "Evet. Skin fade, sakal tasarımı, modern kesim ve saç renklendirme ana uzmanlık alanlarımızdır."
+      "speakGerman": {
+        "question": "Almanca konuşuyor musunuz?",
+        "answer": "Evet. Almanca iletişim desteği veriyoruz."
       },
-      "realWork": {
-        "question": "Gerçek çalışmalarınızı nasıl görebilirim?",
-        "answer": "Güncel gerçek çalışmalar Instagram’da paylaşılır. Daha fazla örnek için Instagram’a geçebilirsiniz."
+      "speakPersian": {
+        "question": "Farsça konuşuyor musunuz?",
+        "answer": "Evet. Farsça iletişim desteği veriyoruz."
+      },
+      "haircutDuration": {
+        "question": "Bir saç kesimi ortalama ne kadar sürer?",
+        "answer": "Saç yapısı ve seçilen stile göre çoğu erkek saç kesimi yaklaşık 35-50 dakika sürer."
       }
     }
   },
@@ -213,6 +217,9 @@
       "twitterDescription": "İstanbul’da modern barber hizmeti: temiz kesim, net detay, güvenilir sonuç.",
       "imageAlt": "Ali Cutz premium berber stüdyosunu temsil eden görsel",
       "keywords": [
+        "barber istanbul",
+        "barber şişli",
+        "premium barber istanbul",
         "İstanbul Erkek Berberi",
         "İstanbul Özel Berber",
         "İstanbul Saç Kesimi",

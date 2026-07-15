@@ -5,11 +5,12 @@ import { Section } from "@/components/ui/section";
 
 const FAQ_KEYS = [
   "booking",
-  "languages",
-  "privateAppointments",
-  "salonLocation",
-  "specialties",
-  "realWork",
+  "walkIns",
+  "hotelService",
+  "speakEnglish",
+  "speakGerman",
+  "speakPersian",
+  "haircutDuration",
 ] as const;
 
 export async function FaqPreviewSection(): Promise<React.JSX.Element> {

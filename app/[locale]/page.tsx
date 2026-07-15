@@ -98,11 +98,12 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
 
   const faqKeys = [
     "booking",
-    "languages",
-    "privateAppointments",
-    "salonLocation",
-    "specialties",
-    "realWork",
+    "walkIns",
+    "hotelService",
+    "speakEnglish",
+    "speakGerman",
+    "speakPersian",
+    "haircutDuration",
   ] as const;
 
   const localBusinessSchema = {

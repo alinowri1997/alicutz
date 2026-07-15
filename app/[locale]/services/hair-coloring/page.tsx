@@ -7,6 +7,8 @@ import {LandingPage} from "@/components/seo/landing-page";
 import {
   buildSeoPageMetadata,
   buildSeoPageSchemas,
+  getLandingCtaLabel,
+  getLandingFaq,
   getSeoPageCopy,
   getSeoPageLinks,
   type SeoPageKey,
@@ -42,6 +44,8 @@ export default async function HairColoringPage({params}: HairColoringPageProps):
       heading={copy.heading}
       summary={copy.summary}
       links={getSeoPageLinks(locale, PAGE_KEY)}
+      faqItems={getLandingFaq(locale)}
+      ctaLabel={getLandingCtaLabel(locale)}
       schemas={buildSeoPageSchemas(locale, PAGE_KEY)}
     />
   );

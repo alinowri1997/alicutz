@@ -143,25 +143,29 @@
         "question": "Wie buche ich einen Termin?",
         "answer": "Senden Sie eine WhatsApp-Nachricht mit Wunschdatum, Uhrzeit und Service. Wir bestätigen die Verfügbarkeit schnell."
       },
-      "languages": {
-        "question": "Kann ich auf Englisch, Deutsch, Persisch, Arabisch oder Russisch kommunizieren?",
-        "answer": "Der Barbier spricht Türkisch, Englisch, Deutsch und Persisch. Die Website ist in sechs Sprachen verfügbar."
+      "walkIns": {
+        "question": "Akzeptieren Sie Laufkundschaft?",
+        "answer": "Für gleichbleibende Premium-Qualität arbeiten wir vorrangig mit Termin. Schreiben Sie uns zuerst auf WhatsApp."
       },
-      "privateAppointments": {
-        "question": "Bieten Sie Termine in Hotels und privaten Residenzen an?",
-        "answer": "Ja. Private Termine in Hotels und Residenzen sind ein Kernbestandteil unseres Premium-Services in Istanbul."
+      "hotelService": {
+        "question": "Bieten Sie Hotelservice in Istanbul an?",
+        "answer": "Ja. Wir bieten private Barber-Termine in Hotels und Residenzen in Sisli, Osmanbey, Bomonti und zentralem Istanbul an."
       },
-      "salonLocation": {
-        "question": "Wo befindet sich der Salon?",
-        "answer": "Der Salon liegt im Bereich Osmanbey / Bomonti, Istanbul. Genaue Standortdetails teilen wir nach der WhatsApp-Buchung."
+      "speakEnglish": {
+        "question": "Sprechen Sie Englisch?",
+        "answer": "Ja. Beratung und Buchung sind auf Englisch möglich."
       },
-      "specialties": {
-        "question": "Bieten Sie Spezialisierungen für Bart und Skin Fade an?",
-        "answer": "Ja. Fades, Bartstyling, moderne Haarschnitte und Haarfärbung gehören zu unseren Kernleistungen."
+      "speakGerman": {
+        "question": "Sprechen Sie Deutsch?",
+        "answer": "Ja. Kommunikation auf Deutsch ist möglich."
       },
-      "realWork": {
-        "question": "Wie kann ich echte Ergebnisse sehen?",
-        "answer": "Aktuelle Arbeiten werden auf Instagram veröffentlicht. Dort finden Sie weitere Ergebnisse."
+      "speakPersian": {
+        "question": "Sprechen Sie Persisch?",
+        "answer": "Ja. Kommunikation auf Persisch ist möglich."
+      },
+      "haircutDuration": {
+        "question": "Wie lange dauert ein Haarschnitt?",
+        "answer": "Die meisten Herrenhaarschnitte dauern je nach Haartyp und Stil etwa 35 bis 50 Minuten."
       }
     }
   },

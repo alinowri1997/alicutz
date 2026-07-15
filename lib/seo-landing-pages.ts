@@ -47,6 +47,11 @@ interface SeoPageCopy {
   keywords: string[];
 }
 
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 const COPY: Record<AppLocale, Record<SeoPageKey, SeoPageCopy>> = {
   tr: {
     services: {
@@ -54,48 +59,48 @@ const COPY: Record<AppLocale, Record<SeoPageKey, SeoPageCopy>> = {
       description: "Alicutz Istanbul barber hizmetleri: saç kesimi, fade, sakal, saç renklendirme ve özel randevu.",
       heading: "Profesyonel Barber Hizmetleri",
       summary: "Şişli, Osmanbey ve Bomonti bölgesinde premium barber hizmetleri.",
-      keywords: ["Barber Istanbul", "Premium Barber Istanbul", "Barber Şişli", "Barber Bomonti"],
+      keywords: ["barber istanbul", "barber şişli", "premium barber istanbul", "barber bomonti"],
     },
     haircut: {
       title: "Saç Kesimi | Profesyonel Barber Istanbul",
       description: "Yüz hatlarına uygun premium erkek saç kesimi hizmeti. Alicutz ile Istanbul'da profesyonel barber deneyimi.",
       heading: "Saç Kesimi",
-      summary: "Modern ve klasik erkek saç kesimlerinde tutarlı, premium sonuç.",
-      keywords: ["Haircut Istanbul", "Erkek saç kesimi Istanbul", "Profesyonel Barber"],
+      summary: "Modern ve klasik erkek saç kesiminde yüz hattına uygun, temiz ve tutarlı sonuç.",
+      keywords: ["erkek saç kesimi", "men's haircut istanbul", "Haircut Istanbul"],
     },
     fade: {
       title: "Fade | Skin Fade Istanbul",
       description: "Temiz geçişli low, mid ve high skin fade uygulamaları. Istanbul'da premium barber fade hizmeti.",
       heading: "Fade Hizmeti",
-      summary: "Net çizgiler ve dengeli geçişlerle skin fade uzmanlığı.",
-      keywords: ["Skin Fade Istanbul", "Fade Istanbul", "Barber Istanbul"],
+      summary: "Skin fade, taper fade ve modern fade haircut çizgisinde net geçişler.",
+      keywords: ["fade haircut", "skin fade", "taper fade"],
     },
     beard: {
       title: "Sakal Trim ve Şekillendirme | Barber Istanbul",
       description: "Sakal trim, kontür ve şekillendirme hizmetleri ile yüz hatlarına uygun profesyonel görünüm.",
       heading: "Sakal Trim ve Şekillendirme",
       summary: "Yüz oranına uygun sakal detayları ve temiz çizgiler.",
-      keywords: ["Beard Styling Istanbul", "Sakal trim Istanbul", "Barber Şişli"],
+      keywords: ["beard trim", "sakal tıraşı", "Beard Styling Istanbul"],
     },
     hairColoring: {
       title: "Saç Renklendirme | Barber Istanbul",
       description: "Doğal ve premium sonuçlar için erkek saç renklendirme hizmeti. Alicutz Istanbul.",
       heading: "Saç Renklendirme",
       summary: "Saç dokusunu koruyan profesyonel renklendirme uygulamaları.",
-      keywords: ["Hair Coloring Istanbul", "Erkek saç boyama Istanbul", "Premium Barber"],
+      keywords: ["men's hair color", "saç boyama erkek", "Hair Coloring Istanbul"],
     },
     hotelHomeService: {
       title: "Otel ve Evde Barber Servisi | Istanbul",
       description: "Şişli, Osmanbey, Bomonti ve çevresinde otel ve evde premium barber randevusu.",
       heading: "Otel ve Evde Barber Servisi",
       summary: "Zamanı değerli misafirler için yerinde profesyonel barber hizmeti.",
-      keywords: ["Hotel Barber Istanbul", "Home Barber Istanbul", "Premium Barber Istanbul"],
+      keywords: ["hotel barber istanbul", "home barber istanbul", "Premium Barber Istanbul"],
     },
     contact: {
       title: "İletişim ve Randevu | Alicutz",
       description: "Alicutz iletişim sayfası. WhatsApp üzerinden hızlı rezervasyon ve konum bilgisi.",
       heading: "İletişim ve Randevu",
-      summary: "WhatsApp ile hızlı dönüş ve premium randevu planlaması.",
+      summary: "Şişli, Osmanbey, Bomonti ve Istanbul genelinde WhatsApp ile hızlı randevu planlaması.",
       keywords: ["Barber Contact Istanbul", "WhatsApp Barber Istanbul", "Alicutz"],
     },
     gallery: {
@@ -112,48 +117,48 @@ const COPY: Record<AppLocale, Record<SeoPageKey, SeoPageCopy>> = {
       description: "Professional barber services in Istanbul including haircut, fade, beard trim, hair coloring, and private appointments.",
       heading: "Professional Barber Services",
       summary: "Premium barber service coverage in Sisli, Osmanbey, and Bomonti.",
-      keywords: ["Barber Istanbul", "Premium Barber Istanbul", "Barber Bomonti", "Barber Sisli"],
+      keywords: ["barber istanbul", "barber şişli", "premium barber istanbul", "barber bomonti"],
     },
     haircut: {
       title: "Haircut Service | Professional Barber Istanbul",
       description: "Precision haircut service tailored to face shape and lifestyle by a professional barber in Istanbul.",
       heading: "Haircut Service",
-      summary: "Clean, consistent haircut standards for premium clients.",
-      keywords: ["Haircut Istanbul", "Men's Barber Istanbul", "Professional Barber"],
+      summary: "Clean, face-shape-aware men's haircut work with consistent premium standards.",
+      keywords: ["men's haircut istanbul", "erkek saç kesimi", "Haircut Istanbul"],
     },
     fade: {
       title: "Fade Service | Skin Fade Istanbul",
       description: "Low, mid, and high skin fade services with clean transitions and premium finishing.",
       heading: "Fade Service",
-      summary: "Skin fade work with sharp detail and modern balance.",
-      keywords: ["Skin Fade Istanbul", "Fade Istanbul", "Barber Istanbul"],
+      summary: "Skin fade, taper fade, and modern fade haircut execution with clean transitions.",
+      keywords: ["fade haircut", "skin fade", "taper fade"],
     },
     beard: {
       title: "Beard Trim Service | Barber Istanbul",
       description: "Professional beard trim and styling for clean contour, structure, and balanced profile.",
       heading: "Beard Trim Service",
-      summary: "Defined beard lines and shape design for premium grooming.",
-      keywords: ["Beard Styling Istanbul", "Beard Trim Istanbul", "Premium Barber"],
+      summary: "Defined beard lines and balanced beard trim for a sharp professional profile.",
+      keywords: ["beard trim", "sakal tıraşı", "Beard Trim Istanbul"],
     },
     hairColoring: {
       title: "Hair Coloring Service | Barber Istanbul",
       description: "Professional men's hair coloring with natural-looking tone correction and healthy finish.",
       heading: "Hair Coloring Service",
       summary: "Premium coloring process designed for modern men's styles.",
-      keywords: ["Hair Coloring Istanbul", "Men's Hair Color Istanbul", "Barber Istanbul"],
+      keywords: ["men's hair color", "saç boyama erkek", "Hair Coloring Istanbul"],
     },
     hotelHomeService: {
       title: "Hotel and Home Barber Service | Istanbul",
       description: "Private hotel and home barber appointments across Sisli, Osmanbey, and Bomonti in Istanbul.",
       heading: "Hotel and Home Barber Service",
       summary: "Luxury on-location barber appointments for travelers and residents.",
-      keywords: ["Hotel Barber Istanbul", "Home Barber Istanbul", "Private Barber Istanbul"],
+      keywords: ["hotel barber istanbul", "home barber istanbul", "Private Barber Istanbul"],
     },
     contact: {
       title: "Contact and Booking | Alicutz",
       description: "Book your barber appointment via WhatsApp and request exact location details in Istanbul.",
       heading: "Contact and Booking",
-      summary: "Fast WhatsApp booking flow for premium barber appointments.",
+      summary: "Fast WhatsApp booking for clients in Şişli, Osmanbey, Bomonti, and Istanbul.",
       keywords: ["Barber Contact Istanbul", "WhatsApp Booking Barber", "Alicutz"],
     },
     gallery: {
@@ -398,6 +403,80 @@ const COPY: Record<AppLocale, Record<SeoPageKey, SeoPageCopy>> = {
   },
 };
 
+const LANDING_FAQ: Record<AppLocale, FaqItem[]> = {
+  tr: [
+    {question: "Randevu nasıl alabilirim?", answer: "WhatsApp üzerinden tarih, saat ve hizmet bilgisini gönderin. Uygunluğu hızlıca teyit ediyoruz."},
+    {question: "Randevusuz müşteri kabul ediyor musunuz?", answer: "Premium servis kalitesini korumak için önceliğimiz randevulu çalışmaktır."},
+    {question: "Otelde hizmet veriyor musunuz?", answer: "Evet. Şişli, Osmanbey, Bomonti ve çevresinde otelde barber hizmeti sunuyoruz."},
+    {question: "İngilizce konuşuyor musunuz?", answer: "Evet, rezervasyon ve danışmanlık sürecini İngilizce yürütebiliriz."},
+    {question: "Almanca konuşuyor musunuz?", answer: "Evet, Almanca iletişim desteği veriyoruz."},
+    {question: "Farsça konuşuyor musunuz?", answer: "Evet, Farsça iletişim desteği veriyoruz."},
+    {question: "Bir saç kesimi ortalama ne kadar sürer?", answer: "Saç yapısı ve seçilen stile bağlı olarak çoğu saç kesimi yaklaşık 35-50 dakika sürer."},
+  ],
+  en: [
+    {question: "How do I book?", answer: "Send your preferred date, time, and service on WhatsApp. We confirm availability quickly."},
+    {question: "Do you accept walk-ins?", answer: "To keep premium service quality consistent, we primarily work by appointment."},
+    {question: "Do you provide hotel service?", answer: "Yes. We provide hotel barber service across Sisli, Osmanbey, Bomonti, and central Istanbul."},
+    {question: "Do you speak English?", answer: "Yes, consultations and booking communication are available in English."},
+    {question: "Do you speak German?", answer: "Yes, German communication support is available."},
+    {question: "Do you speak Persian?", answer: "Yes, Persian communication support is available."},
+    {question: "How long does a haircut take?", answer: "Most men's haircut sessions take around 35 to 50 minutes depending on hair type and style."},
+  ],
+  de: [
+    {question: "Wie buche ich einen Termin?", answer: "Senden Sie Datum, Uhrzeit und Servicewunsch per WhatsApp. Wir bestätigen die Verfügbarkeit schnell."},
+    {question: "Akzeptieren Sie Laufkundschaft?", answer: "Für gleichbleibende Premium-Qualität arbeiten wir in der Regel mit Termin."},
+    {question: "Bieten Sie Hotelservice an?", answer: "Ja. Wir bieten Hotelservice in Sisli, Osmanbey, Bomonti und zentralem Istanbul an."},
+    {question: "Sprechen Sie Englisch?", answer: "Ja, Beratung und Buchung sind auf Englisch möglich."},
+    {question: "Sprechen Sie Deutsch?", answer: "Ja, Kommunikation auf Deutsch ist möglich."},
+    {question: "Sprechen Sie Persisch?", answer: "Ja, Kommunikation auf Persisch ist möglich."},
+    {question: "Wie lange dauert ein Haarschnitt?", answer: "Die meisten Herrenhaarschnitte dauern je nach Haartyp und Stil etwa 35 bis 50 Minuten."},
+  ],
+  fa: [
+    {question: "چطور نوبت رزرو کنم؟", answer: "تاریخ، ساعت و خدمت مورد نظر را در واتساپ ارسال کنید تا سریع تایید شود."},
+    {question: "مشتری بدون نوبت می پذیرید؟", answer: "برای حفظ کیفیت پریمیوم، اولویت با رزرو قبلی است."},
+    {question: "خدمات هتل ارائه می دهید؟", answer: "بله. در شیشلی، عثمان‌بی، بومونتی و مرکز استانبول خدمات هتل ارائه می‌شود."},
+    {question: "آیا انگلیسی صحبت می کنید؟", answer: "بله، مشاوره و رزرو به زبان انگلیسی انجام می‌شود."},
+    {question: "آیا آلمانی صحبت می کنید؟", answer: "بله، ارتباط به زبان آلمانی نیز امکان‌پذیر است."},
+    {question: "آیا فارسی صحبت می کنید؟", answer: "بله، ارتباط کامل به زبان فارسی انجام می‌شود."},
+    {question: "اصلاح مو معمولاً چقدر زمان می برد؟", answer: "بیشتر نوبت‌های اصلاح مو با توجه به مدل و جنس مو حدود 35 تا 50 دقیقه زمان می‌برد."},
+  ],
+  ar: [
+    {question: "كيف أحجز؟", answer: "أرسل التاريخ والوقت والخدمة المطلوبة عبر واتساب، وسنؤكد الموعد بسرعة."},
+    {question: "هل تقبلون بدون موعد؟", answer: "للحفاظ على جودة خدمة فاخرة ثابتة، نعتمد أساساً على نظام المواعيد."},
+    {question: "هل تقدمون خدمة الفندق؟", answer: "نعم. نقدم خدمة الحلاق في الفنادق ضمن شيشلي وعثمان بي وبومونتي ومركز إسطنبول."},
+    {question: "هل تتحدثون الإنجليزية؟", answer: "نعم، الاستشارة والحجز متاحان باللغة الإنجليزية."},
+    {question: "هل تتحدثون الألمانية؟", answer: "نعم، نوفر دعماً للتواصل باللغة الألمانية."},
+    {question: "هل تتحدثون الفارسية؟", answer: "نعم، نوفر دعماً للتواصل باللغة الفارسية."},
+    {question: "كم يستغرق قص الشعر عادة؟", answer: "غالباً يستغرق قص الشعر الرجالي بين 35 و50 دقيقة حسب نوع الشعر والموديل."},
+  ],
+  ru: [
+    {question: "Как записаться?", answer: "Отправьте дату, время и нужную услугу в WhatsApp, и мы быстро подтвердим запись."},
+    {question: "Принимаете без записи?", answer: "Чтобы сохранять премиальный уровень сервиса, мы в основном работаем по предварительной записи."},
+    {question: "Вы делаете выезд в отель?", answer: "Да. Мы предоставляем выездной сервис в отели в районах Шишли, Османбей, Бомонти и центре Стамбула."},
+    {question: "Вы говорите по-английски?", answer: "Да, консультация и бронирование доступны на английском языке."},
+    {question: "Вы говорите по-немецки?", answer: "Да, мы поддерживаем общение на немецком языке."},
+    {question: "Вы говорите по-персидски?", answer: "Да, мы поддерживаем общение на персидском языке."},
+    {question: "Сколько длится мужская стрижка?", answer: "В среднем мужская стрижка занимает 35-50 минут в зависимости от структуры волос и выбранного стиля."},
+  ],
+};
+
+export function getLandingFaq(locale: AppLocale): FaqItem[] {
+  return LANDING_FAQ[locale] ?? LANDING_FAQ[defaultLocale];
+}
+
+export function getLandingCtaLabel(locale: AppLocale): string {
+  const labels: Record<AppLocale, string> = {
+    tr: "WhatsApp'tan Randevu Al",
+    en: "Book via WhatsApp",
+    de: "Per WhatsApp buchen",
+    fa: "رزرو از طریق واتساپ",
+    ar: "احجز عبر واتساب",
+    ru: "Записаться через WhatsApp",
+  };
+
+  return labels[locale] ?? labels[defaultLocale];
+}
+
 export function getSeoPageCopy(locale: AppLocale, pageKey: SeoPageKey): SeoPageCopy {
   return COPY[locale]?.[pageKey] ?? COPY[defaultLocale][pageKey];
 }
@@ -537,7 +616,20 @@ export function buildSeoPageSchemas(locale: AppLocale, pageKey: SeoPageKey): Rec
     },
   };
 
-  return [localBusiness, breadcrumb, website, organization, service];
+  const faq = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: getLandingFaq(locale).map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+
+  return [localBusiness, breadcrumb, website, organization, service, faq];
 }
 
 export function getSeoPageLinks(locale: AppLocale, pageKey: SeoPageKey): Array<{href: string; label: string}> {

@@ -5,14 +5,21 @@ interface LandingPageLink {
   label: string;
 }
 
+interface LandingPageFaq {
+  question: string;
+  answer: string;
+}
+
 interface LandingPageProps {
   heading: string;
   summary: string;
   links: LandingPageLink[];
+  faqItems: LandingPageFaq[];
+  ctaLabel: string;
   schemas: Record<string, unknown>[];
 }
 
-export function LandingPage({heading, summary, links, schemas}: LandingPageProps): React.JSX.Element {
+export function LandingPage({heading, summary, links, faqItems, ctaLabel, schemas}: LandingPageProps): React.JSX.Element {
   return (
     <main id="main-content" className="container py-32" aria-labelledby="landing-heading">
       {schemas.map((schema, index) => (
@@ -48,6 +55,33 @@ export function LandingPage({heading, summary, links, schemas}: LandingPageProps
             ))}
           </ul>
         </nav>
+      </section>
+
+      <section className="mt-10 space-y-4" aria-labelledby="landing-faq-heading">
+        <h2 id="landing-faq-heading" className="type-h5 text-text">
+          FAQ
+        </h2>
+        <div className="grid gap-3">
+          {faqItems.map((item) => (
+            <details key={item.question} className="rounded-xl border border-border bg-surface p-4">
+              <summary className="type-small cursor-pointer text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+                {item.question}
+              </summary>
+              <p className="type-small mt-2 text-muted">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-10" aria-label="Primary booking action">
+        <Link
+          href="https://wa.me/905441772249"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="type-small inline-flex min-h-11 items-center text-accent transition-colors duration-[var(--duration-fast)] hover:text-text focus-visible:outline-none focus-visible:text-text"
+        >
+          {ctaLabel}
+        </Link>
       </section>
     </main>
   );

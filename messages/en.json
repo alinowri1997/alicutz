@@ -6,7 +6,7 @@
   },
   "Navigation": {
     "logoText": "Ali Cutz",
-    "bookViaWhatsApp": "Book Now",
+    "bookViaWhatsApp": "Book via WhatsApp",
     "openNavigationMenu": "Open navigation menu",
     "closeNavigationMenu": "Close navigation menu",
     "mobileNavigation": "Mobile navigation",
@@ -143,25 +143,29 @@
         "question": "How do I book an appointment?",
         "answer": "Send a WhatsApp message with your preferred date, time, and service. You will get a fast confirmation."
       },
-      "languages": {
-        "question": "Can I communicate in English, German, Persian, Arabic, or Russian?",
-        "answer": "The barber speaks Turkish, English, German, and Persian. Website content is available in six languages."
+      "walkIns": {
+        "question": "Do you accept walk-ins?",
+        "answer": "To keep service quality consistent, appointments are prioritized. Message on WhatsApp first."
       },
-      "privateAppointments": {
-        "question": "Do you offer appointments at hotels and private residences?",
-        "answer": "Yes. Private appointments at hotels and residences are a core part of our premium service in Istanbul."
+      "hotelService": {
+        "question": "Do you provide hotel service in Istanbul?",
+        "answer": "Yes. We provide private barber appointments at hotels and residences across Sisli, Osmanbey, Bomonti, and central Istanbul."
       },
-      "salonLocation": {
-        "question": "Where is the salon located?",
-        "answer": "The salon is in the Osmanbey / Bomonti area, Istanbul. Exact location details are shared after booking via WhatsApp."
+      "speakEnglish": {
+        "question": "Do you speak English?",
+        "answer": "Yes. Consultation and booking support are available in English."
       },
-      "specialties": {
-        "question": "Do you provide beard and skin fade specialist services?",
-        "answer": "Yes. Fades, beard styling, modern haircuts, and hair coloring are core specialties."
+      "speakGerman": {
+        "question": "Do you speak German?",
+        "answer": "Yes. German communication support is available."
       },
-      "realWork": {
-        "question": "How can I view your real work?",
-        "answer": "Recent real work is published on Instagram. You can view more results there."
+      "speakPersian": {
+        "question": "Do you speak Persian?",
+        "answer": "Yes. Persian communication support is available."
+      },
+      "haircutDuration": {
+        "question": "How long does a haircut take?",
+        "answer": "Most men's haircut appointments take around 35 to 50 minutes, depending on hair type and style."
       }
     }
   },
@@ -172,7 +176,7 @@
     "workingHours": "Working Hours",
     "everyDay": "Every Day",
     "hoursRange": "09:00 - 22:00",
-    "ctaBookNow": "Book Now",
+    "ctaBookNow": "Book via WhatsApp",
     "ctaWhatsApp": "WhatsApp",
     "ctaEmail": "Email",
     "ctaInstagram": "Instagram",
@@ -213,6 +217,9 @@
       "twitterDescription": "Modern barber service in Istanbul with precise cuts and clean finishes.",
       "imageAlt": "Ali Cutz premium barber studio visual",
       "keywords": [
+        "barber istanbul",
+        "barber şişli",
+        "premium barber istanbul",
         "Men's Barber Istanbul",
         "Barber Istanbul",
         "Premium Barber Istanbul",
