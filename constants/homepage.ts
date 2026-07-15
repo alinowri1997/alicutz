@@ -7,8 +7,17 @@ export interface ContactInfo {
 export const WHATSAPP_NUMBER = "+905441772249";
 export const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER.replace("+", "")}`;
 export const INSTAGRAM_LINK = "https://instagram.com/alicutzzzz";
+export const GOOGLE_BUSINESS_LINK = "https://www.google.com/maps";
 export const CONTACT_EMAIL = "97alicutzzzz@gmail.com";
 export const CONTACT_EMAIL_LINK = `mailto:${CONTACT_EMAIL}`;
+
+export const CORE_SERVICE_LABELS = [
+  "Haircut",
+  "Fade",
+  "Beard Trim",
+  "Hair Coloring",
+  "Hair Styling",
+] as const;
 
 export const CONTACT_INFO: ContactInfo = {
   phone: "+90 544 177 22 49",

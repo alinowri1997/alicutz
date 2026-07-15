@@ -102,7 +102,7 @@ export function ReviewForm({ onReviewSubmitted }: ReviewFormProps): React.JSX.El
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Rating */}
         <div>
-          <label className="type-caption text-muted block mb-2">Rating</label>
+          <label className="type-caption text-muted block mb-2" htmlFor="review-rating-group">Rating</label>
           <div className="flex gap-2">
             {([1, 2, 3, 4, 5] as const).map((r) => (
               <button
@@ -110,6 +110,8 @@ export function ReviewForm({ onReviewSubmitted }: ReviewFormProps): React.JSX.El
                 type="button"
                 onClick={() => setRating(r)}
                 className="transition-transform hover:scale-110"
+                id={r === 1 ? "review-rating-group" : undefined}
+                aria-label={`Set rating to ${r} star${r > 1 ? 's' : ''}`}
               >
                 <Star
                   className={`h-6 w-6 ${rating >= r ? 'fill-accent text-accent' : 'text-border'}`}
@@ -121,8 +123,9 @@ export function ReviewForm({ onReviewSubmitted }: ReviewFormProps): React.JSX.El
 
         {/* Name */}
         <div>
-          <label className="type-caption text-muted block mb-1">Name</label>
+          <label className="type-caption text-muted block mb-1" htmlFor="review-name">Name</label>
           <input
+            id="review-name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -134,8 +137,9 @@ export function ReviewForm({ onReviewSubmitted }: ReviewFormProps): React.JSX.El
 
         {/* Email */}
         <div>
-          <label className="type-caption text-muted block mb-1">Email</label>
+          <label className="type-caption text-muted block mb-1" htmlFor="review-email">Email</label>
           <input
+            id="review-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -147,8 +151,9 @@ export function ReviewForm({ onReviewSubmitted }: ReviewFormProps): React.JSX.El
 
         {/* Title */}
         <div>
-          <label className="type-caption text-muted block mb-1">Review Title</label>
+          <label className="type-caption text-muted block mb-1" htmlFor="review-title">Review Title</label>
           <input
+            id="review-title"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -160,8 +165,9 @@ export function ReviewForm({ onReviewSubmitted }: ReviewFormProps): React.JSX.El
 
         {/* Content */}
         <div>
-          <label className="type-caption text-muted block mb-1">Your Review</label>
+          <label className="type-caption text-muted block mb-1" htmlFor="review-content">Your Review</label>
           <textarea
+            id="review-content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Share your experience..."
@@ -176,12 +182,13 @@ export function ReviewForm({ onReviewSubmitted }: ReviewFormProps): React.JSX.El
 
         {/* Media Upload */}
         <div>
-          <label className="type-caption text-muted block mb-2">Add Photos or Videos (Optional)</label>
+          <label className="type-caption text-muted block mb-2" htmlFor="review-media-upload">Add Photos or Videos (Optional)</label>
           <div className="flex gap-2">
             <label className="flex-1 px-4 py-3 rounded border-2 border-dashed border-border hover:border-accent/50 cursor-pointer transition-colors flex items-center justify-center gap-2 text-muted hover:text-accent">
               <Upload className="h-4 w-4" />
               <span className="text-sm">Upload Media</span>
               <input
+                id="review-media-upload"
                 type="file"
                 multiple
                 accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"

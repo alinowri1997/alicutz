@@ -14,6 +14,23 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
+  keywords: [
+    "Men's Barber Istanbul",
+    "Barber Istanbul",
+    "Barber Bomonti",
+    "Barber Sisli",
+    "Skin Fade Istanbul",
+    "Haircut Istanbul",
+    "Beard Styling Istanbul",
+    "Hair Coloring Istanbul",
+    "Hair Therapy Istanbul",
+    "Facial Therapy Istanbul",
+    "Premium Barber Istanbul",
+  ],
+  authors: [{ name: "Alicutz" }],
+  creator: "Alicutz",
+  publisher: "Alicutz",
+  category: "Barber Shop",
   description: "Premium men's barber in Istanbul with private hotel and residence appointments.",
   title: {
     default: SITE_NAME,
@@ -26,6 +43,7 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -71,6 +89,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   themeColor: "#090807",
 };
 

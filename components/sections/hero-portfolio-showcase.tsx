@@ -74,6 +74,7 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
                   alt={currentImageAlt}
                   width={1920}
                   height={2560}
+                  decoding="async"
                   sizes="(min-width: 1024px) 38vw, (min-width: 768px) 44vw, 92vw"
                   quality={90}
                   priority={activeIndex === 0}

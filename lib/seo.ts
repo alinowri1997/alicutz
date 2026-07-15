@@ -3,13 +3,25 @@ import type {Metadata} from "next";
 import {locales, type AppLocale} from "@/i18n/routing";
 
 export const SITE_URL = "https://alicutz.com";
-export const SITE_NAME = "Ali Cutz";
-export const SITE_TITLE_TEMPLATE = "%s | Ali Cutz";
+export const SITE_NAME = "Alicutz";
+export const SITE_TITLE_TEMPLATE = "%s | Alicutz";
 export const DEFAULT_OG_IMAGE_PATH = "/gallery/mens-skin-fade-istanbul-premium-barber.jpg";
 export const DEFAULT_OG_IMAGE_WIDTH = 1920;
 export const DEFAULT_OG_IMAGE_HEIGHT = 2560;
 
-export const LOCALE_PAGE_PATHS = ["", "/privacy", "/terms"] as const;
+export const LOCALE_PAGE_PATHS = [
+  "",
+  "/privacy",
+  "/terms",
+  "/services",
+  "/services/haircut",
+  "/services/fade",
+  "/services/beard",
+  "/services/hair-coloring",
+  "/services/hotel-home-service",
+  "/contact",
+  "/gallery",
+] as const;
 
 export const localeToHrefLang: Record<AppLocale, string> = {
   en: "en",

@@ -13,7 +13,13 @@ import {
   StatisticsSection,
   WhyChooseSection,
 } from "@/components/sections";
-import {CONTACT_INFO, INSTAGRAM_LINK, WHATSAPP_LINK} from "@/constants/homepage";
+import {
+  CONTACT_INFO,
+  CORE_SERVICE_LABELS,
+  GOOGLE_BUSINESS_LINK,
+  INSTAGRAM_LINK,
+  WHATSAPP_LINK,
+} from "@/constants/homepage";
 import {
   buildLanguageAlternates,
   DEFAULT_OG_IMAGE_HEIGHT,
@@ -103,19 +109,35 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "HairSalon", "Barbershop"],
     "@id": `${SITE_URL}#localbusiness`,
-    name: "Ali Cutz",
+    name: "Alicutz",
+    category: "Barber Shop",
+    priceRange: "$$",
     description: tHome("metadata.description"),
     image: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
     url: pageUrl,
     email: CONTACT_INFO.email,
     telephone: CONTACT_INFO.phone,
+    knowsLanguage: ["Turkish", "English", "German", "Persian", "Arabic", "Russian"],
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Osmanbey / Bomonti",
+      addressLocality: "Şişli",
+      streetAddress: "Osmanbey / Bomonti",
       addressRegion: "Istanbul",
       addressCountry: "TR",
     },
-    areaServed: ["Istanbul", "Osmanbey", "Bomonti"],
+    areaServed: ["Istanbul", "Şişli", "Osmanbey", "Bomonti"],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Barber Services",
+      itemListElement: CORE_SERVICE_LABELS.map((serviceName, index) => ({
+        "@type": "Offer",
+        position: index + 1,
+        itemOffered: {
+          "@type": "Service",
+          name: serviceName,
+        },
+      })),
+    },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
@@ -132,7 +154,7 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
         closes: "22:00",
       },
     ],
-    sameAs: [INSTAGRAM_LINK, WHATSAPP_LINK],
+    sameAs: [INSTAGRAM_LINK, GOOGLE_BUSINESS_LINK],
   };
 
   const faqSchema = {
@@ -165,11 +187,11 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": `${SITE_URL}#organization`,
-    name: "Ali Cutz",
+    name: "Alicutz",
     url: pageUrl,
     logo: `${SITE_URL}/icon?size=512`,
     email: CONTACT_INFO.email,
-    sameAs: [INSTAGRAM_LINK, WHATSAPP_LINK],
+    sameAs: [INSTAGRAM_LINK, GOOGLE_BUSINESS_LINK],
     contactPoint: {
       "@type": "ContactPoint",
       telephone: CONTACT_INFO.phone,
@@ -185,7 +207,7 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${SITE_URL}#website`,
-    name: "Ali Cutz",
+    name: "Alicutz",
     url: pageUrl,
     inLanguage: locale,
   };
@@ -220,7 +242,7 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
     provider: {
       "@type": "Barbershop",
       "@id": `${SITE_URL}#localbusiness`,
-      name: "Ali Cutz",
+      name: "Alicutz",
       url: pageUrl,
     },
     areaServed: {
@@ -235,6 +257,18 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
       "@type": "ServiceChannel",
       serviceUrl: WHATSAPP_LINK,
       servicePhone: CONTACT_INFO.phone,
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Core Barber Services",
+      itemListElement: CORE_SERVICE_LABELS.map((serviceName, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Service",
+          name: serviceName,
+        },
+      })),
     },
   };
 
