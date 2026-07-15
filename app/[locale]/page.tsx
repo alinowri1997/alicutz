@@ -112,7 +112,6 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
     "@id": `${SITE_URL}#localbusiness`,
     name: "Alicutz",
     category: "Barber Shop",
-    priceRange: "$$",
     description: tHome("metadata.description"),
     image: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
     url: pageUrl,

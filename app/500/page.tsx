@@ -7,6 +7,7 @@ import {
   DEFAULT_OG_IMAGE_WIDTH,
   SITE_URL,
 } from "@/lib/seo";
+import {defaultLocale} from "@/i18n/routing";
 
 export const metadata: Metadata = {
   title: "Server Error | Ali Cutz",
@@ -48,7 +49,7 @@ export default function ServerErrorPage(): React.JSX.Element {
         We could not complete this request right now. Please try again.
       </p>
       <Link
-        href="/en"
+        href={`/${defaultLocale}`}
         className="type-small mt-8 inline-flex items-center text-accent transition-colors duration-[var(--duration-fast)] hover:text-text focus-visible:outline-none"
       >
         Return to Home

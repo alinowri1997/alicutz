@@ -4,7 +4,6 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { FaInstagram } from "react-icons/fa";
 
@@ -28,10 +27,9 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
   const tGallery = useTranslations("Gallery");
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isPaused, setIsPaused] = React.useState(false);
-  const shouldReduceMotion = useReducedMotion();
 
   React.useEffect(() => {
-    if (isPaused || shouldReduceMotion) {
+    if (isPaused) {
       return;
     }
 
@@ -42,7 +40,7 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [isPaused, shouldReduceMotion]);
+  }, [isPaused]);
 
   const currentImagePath = PORTFOLIO_IMAGE_PATHS[activeIndex];
   const currentImageAlt = tGallery(`featuredAlt.${activeIndex + 1}`);
@@ -60,28 +58,20 @@ export function HeroPortfolioShowcase(): React.JSX.Element {
           onMouseLeave={() => setIsPaused(false)}
         >
           <div className="relative aspect-[6/5] sm:aspect-[4/5]">
-            <AnimatePresence initial={false}>
-              <motion.div
+            <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.02]">
+              <Image
                 key={currentImagePath}
-                initial={{ opacity: shouldReduceMotion ? 1 : 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: shouldReduceMotion ? 1 : 0 }}
-                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-              >
-                <Image
-                  src={currentImagePath}
-                  alt={currentImageAlt}
-                  width={1920}
-                  height={2560}
-                  decoding="async"
-                  sizes="(min-width: 1024px) 38vw, (min-width: 768px) 44vw, 92vw"
-                  quality={90}
-                  priority={activeIndex === 0}
-                  className="h-full w-full object-contain"
-                />
-              </motion.div>
-            </AnimatePresence>
+                src={currentImagePath}
+                alt={currentImageAlt}
+                width={1920}
+                height={2560}
+                decoding="async"
+                sizes="(min-width: 1024px) 38vw, (min-width: 768px) 44vw, 92vw"
+                quality={90}
+                priority={activeIndex === 0}
+                className="h-full w-full object-contain"
+              />
+            </div>
           </div>
         </Link>
 

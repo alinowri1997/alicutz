@@ -4,7 +4,6 @@ import {getMessages, getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 
 import {NavigationBar} from "@/components/layout";
-import {LocalePreferenceSync} from "@/components/layout/locale-preference-sync";
 import {
   buildLanguageAlternates,
   DEFAULT_OG_IMAGE_HEIGHT,
@@ -71,21 +70,26 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
 
   setRequestLocale(locale);
 
-  const messages = await getMessages({locale});
+  const allMessages = await getMessages({locale});
+  const messages = {
+    Navigation: allMessages.Navigation,
+    Hero: allMessages.Hero,
+    Gallery: allMessages.Gallery,
+    SystemPages: allMessages.SystemPages,
+  };
   const t = await getTranslations({locale, namespace: "Layout"});
 
   return (
     <div lang={localeToLanguageTag[locale]} dir={isRtlLocale(locale) ? "rtl" : "ltr"}>
         <a
-          href="#home"
+          href="#main-content"
           className="type-small sr-only fixed left-4 top-4 z-[100] rounded-md bg-surface px-4 py-2 text-text focus:not-sr-only"
         >
           {t("skipToContent")}
         </a>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <LocalePreferenceSync />
           <NavigationBar />
-          {children}
+          <div id="main-content">{children}</div>
         </NextIntlClientProvider>
     </div>
   );

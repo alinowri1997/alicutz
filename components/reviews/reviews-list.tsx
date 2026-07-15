@@ -70,8 +70,10 @@ export function ReviewsList({ reviews, isLoading }: ReviewsListProps): React.JSX
                     {media.media_type === 'image' ? (
                       <Image
                         src={media.storage_path}
-                        alt="Review"
+                        alt={`${review.user_name} review photo${review.title ? ` for ${review.title}` : ''}`}
                         fill
+                        sizes="64px"
+                        loading="lazy"
                         className="object-cover"
                       />
                     ) : (

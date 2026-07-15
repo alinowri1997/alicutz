@@ -9,6 +9,7 @@ import {
   buildSeoPageSchemas,
   getLandingCtaLabel,
   getLandingFaq,
+  getLandingUiCopy,
   getSeoPageCopy,
   getSeoPageLinks,
   type SeoPageKey,
@@ -38,6 +39,7 @@ export default async function HotelHomeServicePage({params}: HotelHomeServicePag
   setRequestLocale(locale);
 
   const copy = getSeoPageCopy(locale, PAGE_KEY);
+  const ui = getLandingUiCopy(locale);
 
   return (
     <LandingPage
@@ -46,6 +48,9 @@ export default async function HotelHomeServicePage({params}: HotelHomeServicePag
       links={getSeoPageLinks(locale, PAGE_KEY)}
       faqItems={getLandingFaq(locale)}
       ctaLabel={getLandingCtaLabel(locale)}
+      relatedPagesLabel={ui.relatedPagesLabel}
+      relatedPagesAriaLabel={ui.relatedPagesAriaLabel}
+      faqLabel={ui.faqLabel}
       schemas={buildSeoPageSchemas(locale, PAGE_KEY)}
     />
   );

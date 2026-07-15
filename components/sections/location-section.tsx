@@ -19,7 +19,7 @@ export async function LocationSection(): Promise<React.JSX.Element> {
         {t("heading")}
       </Heading>
       <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-        <GoogleMapPlaceholder title={t("mapTitle")} query="Osmanbey Bomonti Istanbul" />
+        <GoogleMapPlaceholder title={t("mapTitle")} query="Osmanbey Bomonti Istanbul" actionLabel={t("ctaGetDirections")} />
 
         <div className="flex flex-col items-start gap-8">
           <p className="type-body max-w-[38ch] text-muted">{t("description")}</p>

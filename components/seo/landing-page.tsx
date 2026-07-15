@@ -16,10 +16,23 @@ interface LandingPageProps {
   links: LandingPageLink[];
   faqItems: LandingPageFaq[];
   ctaLabel: string;
+  relatedPagesLabel: string;
+  relatedPagesAriaLabel: string;
+  faqLabel: string;
   schemas: Record<string, unknown>[];
 }
 
-export function LandingPage({heading, summary, links, faqItems, ctaLabel, schemas}: LandingPageProps): React.JSX.Element {
+export function LandingPage({
+  heading,
+  summary,
+  links,
+  faqItems,
+  ctaLabel,
+  relatedPagesLabel,
+  relatedPagesAriaLabel,
+  faqLabel,
+  schemas,
+}: LandingPageProps): React.JSX.Element {
   return (
     <main id="main-content" className="container py-32" aria-labelledby="landing-heading">
       {schemas.map((schema, index) => (
@@ -39,9 +52,9 @@ export function LandingPage({heading, summary, links, faqItems, ctaLabel, schema
 
       <section className="mt-10 space-y-4" aria-labelledby="landing-navigation-heading">
         <h2 id="landing-navigation-heading" className="type-h5 text-text">
-          Related Pages
+          {relatedPagesLabel}
         </h2>
-        <nav aria-label="Related internal links">
+        <nav aria-label={relatedPagesAriaLabel}>
           <ul className="grid gap-3 sm:grid-cols-2">
             {links.map((linkItem) => (
               <li key={linkItem.href}>
@@ -59,7 +72,7 @@ export function LandingPage({heading, summary, links, faqItems, ctaLabel, schema
 
       <section className="mt-10 space-y-4" aria-labelledby="landing-faq-heading">
         <h2 id="landing-faq-heading" className="type-h5 text-text">
-          FAQ
+          {faqLabel}
         </h2>
         <div className="grid gap-3">
           {faqItems.map((item) => (

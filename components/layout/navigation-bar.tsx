@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -56,6 +55,13 @@ export function NavigationBar({
 
   const effectiveLogoText = logoText ?? t("logoText");
   const effectiveBookingLabel = bookingLabel ?? t("bookViaWhatsApp");
+  const resolveNavHref = (href: string): string => {
+    if (!href.startsWith("#")) {
+      return href;
+    }
+
+    return pathname === "/" ? href : `/${locale}${href}`;
+  };
 
   const handleLocaleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const nextLocale = event.target.value as AppLocale;
@@ -146,10 +152,7 @@ export function NavigationBar({
   };
 
   return (
-    <motion.header
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+    <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 border-b transition-all duration-300",
         isScrolled
@@ -172,7 +175,7 @@ export function NavigationBar({
             {items.map((item) => (
               <li key={item.key}>
                 <a
-                  href={item.href}
+                  href={resolveNavHref(item.href)}
                   target={item.target}
                   rel={item.rel}
                   className="type-small relative text-muted transition-colors duration-200 hover:text-text focus-visible:outline-none focus-visible:text-text"
@@ -225,29 +228,20 @@ export function NavigationBar({
         </button>
       </div>
 
-      <AnimatePresence>
-        {isOpen ? (
-          <>
-            <motion.div
+      {isOpen ? (
+        <>
+            <div
               className="fixed inset-0 z-40 bg-primary/65 backdrop-blur-md md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
               onClick={closeMenu}
             />
 
-            <motion.div
+            <div
               id={MENU_ID}
               ref={menuPanelRef}
               role="dialog"
               aria-modal="true"
               aria-label={t("mobileNavigation")}
               className="fixed inset-0 z-50 flex min-h-dvh flex-col bg-background px-6 py-5 md:hidden"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="flex items-center justify-between">
                 <span className="type-h5 tracking-[0.08em] uppercase text-text">{effectiveLogoText}</span>
@@ -263,16 +257,12 @@ export function NavigationBar({
 
               <nav aria-label={t("mobilePrimaryNavigation")} className="mt-12">
                 <ul className="space-y-5">
-                  {items.map((item, index) => (
-                    <motion.li
+                  {items.map((item) => (
+                    <li
                       key={item.key}
-                      initial={{ opacity: 0, x: -14 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -14 }}
-                      transition={{ duration: 0.22, delay: 0.05 + index * 0.04 }}
                     >
                       <a
-                        href={item.href}
+                        href={resolveNavHref(item.href)}
                         target={item.target}
                         rel={item.rel}
                         className="type-h3 text-text transition-colors duration-200 hover:text-accent focus-visible:outline-none focus-visible:text-accent"
@@ -280,7 +270,7 @@ export function NavigationBar({
                       >
                         {t(`items.${item.key}`)}
                       </a>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
               </nav>
@@ -317,10 +307,9 @@ export function NavigationBar({
                   {effectiveBookingLabel}
                 </Link>
               </div>
-            </motion.div>
-          </>
-        ) : null}
-      </AnimatePresence>
-    </motion.header>
+            </div>
+        </>
+      ) : null}
+    </header>
   );
 }

@@ -52,6 +52,12 @@ interface FaqItem {
   answer: string;
 }
 
+interface LandingUiCopy {
+  relatedPagesLabel: string;
+  relatedPagesAriaLabel: string;
+  faqLabel: string;
+}
+
 const COPY: Record<AppLocale, Record<SeoPageKey, SeoPageCopy>> = {
   tr: {
     services: {
@@ -460,6 +466,39 @@ const LANDING_FAQ: Record<AppLocale, FaqItem[]> = {
   ],
 };
 
+const LANDING_UI_COPY: Record<AppLocale, LandingUiCopy> = {
+  tr: {
+    relatedPagesLabel: "İlgili Sayfalar",
+    relatedPagesAriaLabel: "İlgili dahili bağlantılar",
+    faqLabel: "Sıkça Sorulan Sorular",
+  },
+  en: {
+    relatedPagesLabel: "Related Pages",
+    relatedPagesAriaLabel: "Related internal links",
+    faqLabel: "FAQ",
+  },
+  de: {
+    relatedPagesLabel: "Verwandte Seiten",
+    relatedPagesAriaLabel: "Verwandte interne Links",
+    faqLabel: "FAQ",
+  },
+  fa: {
+    relatedPagesLabel: "صفحات مرتبط",
+    relatedPagesAriaLabel: "لینک‌های داخلی مرتبط",
+    faqLabel: "سوالات متداول",
+  },
+  ar: {
+    relatedPagesLabel: "صفحات ذات صلة",
+    relatedPagesAriaLabel: "روابط داخلية ذات صلة",
+    faqLabel: "الأسئلة الشائعة",
+  },
+  ru: {
+    relatedPagesLabel: "Похожие страницы",
+    relatedPagesAriaLabel: "Связанные внутренние ссылки",
+    faqLabel: "FAQ",
+  },
+};
+
 export function getLandingFaq(locale: AppLocale): FaqItem[] {
   return LANDING_FAQ[locale] ?? LANDING_FAQ[defaultLocale];
 }
@@ -475,6 +514,10 @@ export function getLandingCtaLabel(locale: AppLocale): string {
   };
 
   return labels[locale] ?? labels[defaultLocale];
+}
+
+export function getLandingUiCopy(locale: AppLocale): LandingUiCopy {
+  return LANDING_UI_COPY[locale] ?? LANDING_UI_COPY[defaultLocale];
 }
 
 export function getSeoPageCopy(locale: AppLocale, pageKey: SeoPageKey): SeoPageCopy {
@@ -529,7 +572,6 @@ export function buildSeoPageSchemas(locale: AppLocale, pageKey: SeoPageKey): Rec
     "@type": ["LocalBusiness", "HairSalon", "Barbershop"],
     name: "Alicutz",
     category: "Barber Shop",
-    priceRange: "$$",
     url: pageUrl,
     image: `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
     address: {
@@ -546,27 +588,53 @@ export function buildSeoPageSchemas(locale: AppLocale, pageKey: SeoPageKey): Rec
     potentialAction: {
       "@type": "ReserveAction",
       target: WHATSAPP_LINK,
-      name: "Book via WhatsApp",
+      name: getLandingCtaLabel(locale),
     },
   };
+
+  const isNestedServicePage =
+    pageKey === "haircut" ||
+    pageKey === "fade" ||
+    pageKey === "beard" ||
+    pageKey === "hairColoring" ||
+    pageKey === "hotelHomeService";
+
+  const breadcrumbItems = [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: locale === "tr" ? "Ana Sayfa" : "Home",
+      item: `${SITE_URL}/${locale}`,
+    },
+  ];
+
+  if (isNestedServicePage) {
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: 2,
+      name: getSeoPageCopy(locale, "services").heading,
+      item: `${SITE_URL}/${locale}${SEO_PAGE_PATHS.services}`,
+    });
+
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: 3,
+      name: copy.heading,
+      item: pageUrl,
+    });
+  } else {
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: 2,
+      name: copy.heading,
+      item: pageUrl,
+    });
+  }
 
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: `${SITE_URL}/${locale}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: copy.heading,
-        item: pageUrl,
-      },
-    ],
+    itemListElement: breadcrumbItems,
   };
 
   const website = {

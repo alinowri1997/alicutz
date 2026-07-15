@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import {defaultLocale} from "@/i18n/routing";
+
 export default function NotFound(): React.JSX.Element {
   return (
     <main className="container py-32">
@@ -8,7 +10,7 @@ export default function NotFound(): React.JSX.Element {
         The page you are looking for is not available.
       </p>
       <Link
-        href="/en"
+        href={`/${defaultLocale}`}
         className="type-small mt-8 inline-flex items-center text-accent transition-colors duration-[var(--duration-fast)] hover:text-text focus-visible:outline-none"
       >
         Return to Home

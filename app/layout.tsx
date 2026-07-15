@@ -1,4 +1,6 @@
 import type {Metadata, Viewport} from "next";
+import {JetBrains_Mono, Manrope, Playfair_Display} from "next/font/google";
+import {GoogleAnalytics} from "@next/third-parties/google";
 
 import {
   DEFAULT_OG_IMAGE_HEIGHT,
@@ -10,6 +12,24 @@ import {
 } from "@/lib/seo";
 
 import "./globals.css";
+
+const displayFont = Playfair_Display({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-playfair-display",
+});
+
+const bodyFont = Manrope({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-manrope",
+});
+
+const monoFont = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains-mono",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -96,7 +116,10 @@ export const viewport: Viewport = {
 export default function RootLayout({children}: {children: React.ReactNode}): React.JSX.Element {
   return (
     <html lang="tr">
-      <body>{children}</body>
+      <body className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}>
+        {children}
+        <GoogleAnalytics gaId="G-2NN1G4LQ2Z" />
+      </body>
     </html>
   );
 }
