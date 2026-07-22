@@ -41,7 +41,7 @@ export function ReviewsSection(): React.JSX.Element {
   }, []);
 
   return (
-    <section aria-labelledby="reviews-heading" className="py-16 sm:py-20 md:py-24 bg-surface">
+    <section id="reviews" aria-labelledby="reviews-heading" className="py-16 sm:py-20 md:py-24 bg-surface">
       <Container className="space-y-12">
         <div className="space-y-3">
           <p className="type-caption text-muted">Client Experiences</p>

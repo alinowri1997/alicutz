@@ -4,14 +4,12 @@ import {getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 
 import {
-  FaqPreviewSection,
+  AboutSection,
   HeroSection,
-  HomeFooterSection,
+  LatestWorkSection,
   LocationSection,
   ReviewsSection,
   ServicesSection,
-  StatisticsSection,
-  WhyChooseSection,
 } from "@/components/sections";
 import {
   CONTACT_INFO,
@@ -92,19 +90,8 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
 
   setRequestLocale(locale);
 
-  const tFaq = await getTranslations({locale, namespace: "Faq"});
   const tHome = await getTranslations({locale, namespace: "HomePage"});
   const pageUrl = `${SITE_URL}/${locale}`;
-
-  const faqKeys = [
-    "booking",
-    "walkIns",
-    "hotelService",
-    "speakEnglish",
-    "speakGerman",
-    "speakPersian",
-    "haircutDuration",
-  ] as const;
 
   const localBusinessSchema = {
     "@context": "https://schema.org",
@@ -155,19 +142,6 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
       },
     ],
     sameAs: [INSTAGRAM_LINK, GOOGLE_BUSINESS_LINK],
-  };
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqKeys.map((faqKey) => ({
-      "@type": "Question",
-      name: tFaq(`items.${faqKey}.question`),
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: tFaq(`items.${faqKey}.answer`),
-      },
-    })),
   };
 
   const breadcrumbSchema = {
@@ -278,7 +252,6 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(localBusinessSchema)}}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(faqSchema)}} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(breadcrumbSchema)}}
@@ -299,13 +272,11 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
       />
 
       <HeroSection />
-      <ReviewsSection />
-      <StatisticsSection />
+      <LatestWorkSection />
       <ServicesSection />
-      <WhyChooseSection />
-      <FaqPreviewSection />
+      <AboutSection />
+      <ReviewsSection />
       <LocationSection />
-      <HomeFooterSection />
     </main>
   );
 }

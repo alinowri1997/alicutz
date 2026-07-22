@@ -6,14 +6,13 @@ import { Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { buttonVariants } from "@/components/ui/button";
-import { INSTAGRAM_LINK } from "@/constants/homepage";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { locales, type AppLocale } from "@/i18n/routing";
 import { setStoredLocalePreference } from "@/lib/locale-preference";
 import { cn } from "@/lib/utils";
 
 export interface NavigationItem {
-  key: "home" | "services" | "about" | "instagram" | "contact";
+  key: "services" | "gallery" | "about" | "reviews" | "contact";
   href: string;
   target?: string;
   rel?: string;
@@ -28,19 +27,35 @@ export interface NavigationBarProps {
 }
 
 const DEFAULT_ITEMS: NavigationItem[] = [
-  { key: "home", href: "#home" },
   { key: "services", href: "#services" },
+  { key: "gallery", href: "#gallery" },
   { key: "about", href: "#about" },
-  { key: "instagram", href: INSTAGRAM_LINK, target: "_blank", rel: "noopener noreferrer" },
+  { key: "reviews", href: "#reviews" },
   { key: "contact", href: "#contact" },
 ];
 
 const MENU_ID = "mobile-navigation-menu";
+const NAV_LABELS: Record<NavigationItem["key"], string> = {
+  services: "Services",
+  gallery: "Gallery",
+  about: "About",
+  reviews: "Reviews",
+  contact: "Contact",
+};
+
+const LANGUAGE_LABELS: Record<AppLocale, string> = {
+  en: "English",
+  tr: "Türkçe",
+  de: "Deutsch",
+  fa: "فارسی",
+  ar: "العربية",
+  ru: "Русский",
+};
 
 export function NavigationBar({
   logoText,
   logoHref = "#home",
-  bookingLabel,
+  bookingLabel = "Book Appointment",
   bookingHref = "https://wa.me/905441772249",
   items = DEFAULT_ITEMS,
 }: NavigationBarProps): React.JSX.Element {
@@ -53,8 +68,8 @@ export function NavigationBar({
   const menuPanelRef = React.useRef<HTMLDivElement>(null);
   const openButtonRef = React.useRef<HTMLButtonElement>(null);
 
-  const effectiveLogoText = logoText ?? t("logoText");
-  const effectiveBookingLabel = bookingLabel ?? t("bookViaWhatsApp");
+  const effectiveLogoText = logoText ?? "ALICUTZ";
+  const effectiveBookingLabel = bookingLabel;
   const resolveNavHref = (href: string): string => {
     if (!href.startsWith("#")) {
       return href;
@@ -180,7 +195,7 @@ export function NavigationBar({
                   rel={item.rel}
                   className="type-small relative text-muted transition-colors duration-200 hover:text-text focus-visible:outline-none focus-visible:text-text"
                 >
-                  {t(`items.${item.key}`)}
+                  {NAV_LABELS[item.key]}
                 </a>
               </li>
             ))}
@@ -189,18 +204,18 @@ export function NavigationBar({
 
         <div className="hidden md:flex md:items-center md:gap-3">
           <label className="type-caption text-muted" htmlFor="desktop-locale-switcher">
-            {t("languageSwitcherLabel")}
+            Language
           </label>
           <select
             id="desktop-locale-switcher"
-            aria-label={t("languageSwitcherLabel")}
+            aria-label="Language"
             className="type-caption rounded-full border border-border bg-surface px-3 py-2 text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             value={locale}
             onChange={handleLocaleChange}
           >
             {locales.map((localeOption) => (
               <option key={localeOption} value={localeOption}>
-                {localeOption.toUpperCase()}
+                {LANGUAGE_LABELS[localeOption]}
               </option>
             ))}
           </select>
@@ -268,7 +283,7 @@ export function NavigationBar({
                         className="type-h3 text-text transition-colors duration-200 hover:text-accent focus-visible:outline-none focus-visible:text-accent"
                         onClick={closeMenu}
                       >
-                        {t(`items.${item.key}`)}
+                        {NAV_LABELS[item.key]}
                       </a>
                     </li>
                   ))}
@@ -278,18 +293,18 @@ export function NavigationBar({
               <div className="mt-auto space-y-4 pb-6">
                 <div className="space-y-2">
                   <label className="type-caption text-muted" htmlFor="mobile-locale-switcher">
-                    {t("languageSwitcherLabel")}
+                    Language
                   </label>
                   <select
                     id="mobile-locale-switcher"
-                    aria-label={t("languageSwitcherLabel")}
+                    aria-label="Language"
                     className="type-caption w-full rounded-full border border-border bg-surface px-4 py-3 text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     value={locale}
                     onChange={handleLocaleChange}
                   >
                     {locales.map((localeOption) => (
                       <option key={localeOption} value={localeOption}>
-                        {localeOption.toUpperCase()}
+                        {LANGUAGE_LABELS[localeOption]}
                       </option>
                     ))}
                   </select>

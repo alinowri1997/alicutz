@@ -73,8 +73,6 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
   const allMessages = await getMessages({locale});
   const messages = {
     Navigation: allMessages.Navigation,
-    Hero: allMessages.Hero,
-    Gallery: allMessages.Gallery,
     SystemPages: allMessages.SystemPages,
   };
   const t = await getTranslations({locale, namespace: "Layout"});

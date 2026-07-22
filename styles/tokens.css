@@ -1,16 +1,16 @@
 :root {
   /* Brand: premium, masculine, minimal */
-  --color-primary: #0b0a09;
-  --color-primary-foreground: #f5efe3;
-  --color-secondary: #171411;
-  --color-secondary-foreground: #efe6d8;
-  --color-accent: #b08d57;
-  --color-accent-foreground: #0d0b08;
-  --color-background: #090807;
-  --color-surface: #141210;
-  --color-border: #2e2923;
-  --color-text: #f5efe3;
-  --color-muted: #b7aa97;
+  --color-primary: #060606;
+  --color-primary-foreground: #f4f4f4;
+  --color-secondary: #121212;
+  --color-secondary-foreground: #ececec;
+  --color-accent: #f4f4f4;
+  --color-accent-foreground: #101010;
+  --color-background: #050505;
+  --color-surface: #101010;
+  --color-border: #2b2b2b;
+  --color-text: #f4f4f4;
+  --color-muted: #b3b3b3;
 
   /* shadcn semantic compatibility */
   --background: var(--color-background);
@@ -23,7 +23,7 @@
   --primary-foreground: var(--color-primary-foreground);
   --secondary: var(--color-secondary);
   --secondary-foreground: var(--color-secondary-foreground);
-  --muted: #1d1915;
+  --muted: #1a1a1a;
   --muted-foreground: var(--color-muted);
   --accent: var(--color-accent);
   --accent-foreground: var(--color-accent-foreground);
@@ -40,29 +40,29 @@
   --color-danger: #8b2a2d;
 
   /* Typography */
-  --font-family-display: var(--font-playfair-display), "Playfair Display", "Times New Roman", serif;
-  --font-family-body: var(--font-manrope), "Manrope", "Avenir Next", "Segoe UI", sans-serif;
-  --font-family-mono: var(--font-jetbrains-mono), "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  --font-family-display: var(--font-manrope), "Manrope", "Segoe UI", sans-serif;
+  --font-family-body: var(--font-manrope), "Manrope", "Segoe UI", sans-serif;
+  --font-family-mono: var(--font-manrope), "Manrope", "Segoe UI", sans-serif;
 
   --font-size-display: clamp(3rem, 7vw, 5.5rem);
   --line-height-display: 1.05;
   --letter-spacing-display: -0.03em;
-  --font-weight-display: 600;
+  --font-weight-display: 700;
 
   --font-size-h1: clamp(2.25rem, 4.5vw, 3.5rem);
   --line-height-h1: 1.1;
   --letter-spacing-h1: -0.02em;
-  --font-weight-h1: 600;
+  --font-weight-h1: 700;
 
   --font-size-h2: clamp(1.875rem, 3.6vw, 2.75rem);
   --line-height-h2: 1.15;
   --letter-spacing-h2: -0.015em;
-  --font-weight-h2: 600;
+  --font-weight-h2: 700;
 
   --font-size-h3: clamp(1.5rem, 2.8vw, 2.125rem);
   --line-height-h3: 1.2;
   --letter-spacing-h3: -0.01em;
-  --font-weight-h3: 600;
+  --font-weight-h3: 700;
 
   --font-size-h4: clamp(1.25rem, 2.2vw, 1.625rem);
   --line-height-h4: 1.25;

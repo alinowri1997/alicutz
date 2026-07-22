@@ -1,5 +1,5 @@
 import type {Metadata, Viewport} from "next";
-import {JetBrains_Mono, Manrope, Playfair_Display} from "next/font/google";
+import {Manrope} from "next/font/google";
 import {GoogleAnalytics} from "@next/third-parties/google";
 
 import {
@@ -13,22 +13,10 @@ import {
 
 import "./globals.css";
 
-const displayFont = Playfair_Display({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-playfair-display",
-});
-
-const bodyFont = Manrope({
+const brandFont = Manrope({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-manrope",
-});
-
-const monoFont = JetBrains_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-jetbrains-mono",
 });
 
 export const metadata: Metadata = {
@@ -116,7 +104,7 @@ export const viewport: Viewport = {
 export default function RootLayout({children}: {children: React.ReactNode}): React.JSX.Element {
   return (
     <html lang="tr">
-      <body className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}>
+      <body className={brandFont.variable}>
         {children}
         <GoogleAnalytics gaId="G-2NN1G4LQ2Z" />
       </body>
