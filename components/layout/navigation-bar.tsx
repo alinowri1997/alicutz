@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import {AnimatePresence, motion} from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -169,9 +170,9 @@ export function NavigationBar({
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 border-b transition-all duration-500",
         isScrolled
-          ? "border-border/70 bg-background/65 shadow-sm backdrop-blur-xl"
+          ? "border-white/10 bg-black/88 shadow-sm backdrop-blur-md"
           : "border-transparent bg-transparent",
       )}
     >
@@ -179,7 +180,7 @@ export function NavigationBar({
         <div className="flex min-w-0 items-center">
           <Link
             href={logoHref}
-            className="type-h5 whitespace-nowrap tracking-[0.08em] uppercase text-text"
+            className="type-h6 whitespace-nowrap font-semibold tracking-[0.22em] uppercase text-text"
           >
             {effectiveLogoText}
           </Link>
@@ -243,23 +244,32 @@ export function NavigationBar({
         </button>
       </div>
 
-      {isOpen ? (
-        <>
-            <div
-              className="fixed inset-0 z-40 bg-primary/65 backdrop-blur-md md:hidden"
+      <AnimatePresence>
+        {isOpen ? (
+          <>
+            <motion.div
+              className="fixed inset-0 z-40 bg-black/55 backdrop-blur-sm md:hidden"
+              initial={{opacity: 0}}
+              animate={{opacity: 1}}
+              exit={{opacity: 0}}
+              transition={{duration: 0.22, ease: [0.22, 1, 0.36, 1]}}
               onClick={closeMenu}
             />
 
-            <div
+            <motion.div
               id={MENU_ID}
               ref={menuPanelRef}
               role="dialog"
               aria-modal="true"
               aria-label={t("mobileNavigation")}
-              className="fixed inset-0 z-50 flex min-h-dvh flex-col bg-background px-6 py-5 md:hidden"
+              className="fixed inset-0 z-50 flex min-h-dvh flex-col bg-black px-6 py-5 md:hidden"
+              initial={{x: "100%"}}
+              animate={{x: 0}}
+              exit={{x: "100%"}}
+              transition={{duration: 0.34, ease: [0.22, 1, 0.36, 1]}}
             >
               <div className="flex items-center justify-between">
-                <span className="type-h5 tracking-[0.08em] uppercase text-text">{effectiveLogoText}</span>
+                <span className="type-h6 font-semibold tracking-[0.22em] uppercase text-text">{effectiveLogoText}</span>
                 <button
                   type="button"
                   className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border text-text transition-colors duration-200 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -270,12 +280,10 @@ export function NavigationBar({
                 </button>
               </div>
 
-              <nav aria-label={t("mobilePrimaryNavigation")} className="mt-12">
-                <ul className="space-y-5">
+              <nav aria-label={t("mobilePrimaryNavigation")} className="mt-14">
+                <ul className="space-y-6">
                   {items.map((item) => (
-                    <li
-                      key={item.key}
-                    >
+                    <li key={item.key}>
                       <a
                         href={resolveNavHref(item.href)}
                         target={item.target}
@@ -313,18 +321,16 @@ export function NavigationBar({
                   href={bookingHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={cn(
-                    buttonVariants({ variant: "accent", size: "lg" }),
-                    "w-full type-caption",
-                  )}
+                  className={cn(buttonVariants({ variant: "accent", size: "lg" }), "w-full type-caption")}
                   onClick={closeMenu}
                 >
                   {effectiveBookingLabel}
                 </Link>
               </div>
-            </div>
-        </>
-      ) : null}
+            </motion.div>
+          </>
+        ) : null}
+      </AnimatePresence>
     </header>
   );
 }

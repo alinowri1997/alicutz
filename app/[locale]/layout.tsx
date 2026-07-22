@@ -3,7 +3,7 @@ import {hasLocale, NextIntlClientProvider} from "next-intl";
 import {getMessages, getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 
-import {NavigationBar} from "@/components/layout";
+import {FloatingBookButton, NavigationBar} from "@/components/layout";
 import {
   buildLanguageAlternates,
   DEFAULT_OG_IMAGE_HEIGHT,
@@ -88,6 +88,7 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
         <NextIntlClientProvider locale={locale} messages={messages}>
           <NavigationBar />
           <div id="main-content">{children}</div>
+          <FloatingBookButton />
         </NextIntlClientProvider>
     </div>
   );

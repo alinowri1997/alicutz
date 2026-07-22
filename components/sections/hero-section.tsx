@@ -16,22 +16,19 @@ export async function HeroSection(): Promise<React.JSX.Element> {
     >
       <div className="pointer-events-none absolute inset-0 -z-10 bg-background" />
 
-      <Container className="grid gap-8 md:min-h-[calc(100svh-5rem)] md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-16">
+      <Container className="grid gap-8 md:min-h-[calc(100svh-5rem)] md:grid-cols-[1fr_1fr] md:items-center md:gap-16">
         <div className="space-y-6 sm:space-y-7 md:space-y-8">
-          <p className="type-caption text-muted" aria-label={t("locationPositioningAria")}>
-            {t("eyebrow")}
-          </p>
 
           <Heading
             id="hero-heading"
             as="h1"
             size="display"
-            className="max-w-[15ch] text-balance text-text"
+            className="max-w-[12ch] text-balance text-text"
           >
             {t("title")}
           </Heading>
 
-          <p className="type-body max-w-[56ch] text-muted">
+          <p className="type-body max-w-[46ch] text-muted">
             {t("description")}
           </p>
 
@@ -45,10 +42,9 @@ export async function HeroSection(): Promise<React.JSX.Element> {
           </Link>
         </div>
 
-        <div className="hidden md:block">
-          <div className="relative h-[70vh] min-h-[520px] rounded-2xl border border-border bg-primary/70">
+        <div className="block">
+          <div className="relative h-[52vh] min-h-[340px] rounded-2xl border border-border bg-primary/70 md:h-[72vh] md:min-h-[540px]">
             <div className="absolute inset-0 bg-black/35" aria-hidden="true" />
-            <p className="type-caption absolute bottom-6 left-6 text-muted">Cinematic video placeholder</p>
           </div>
         </div>
       </Container>

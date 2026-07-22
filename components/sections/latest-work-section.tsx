@@ -1,68 +1,176 @@
 "use client";
 
+import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 
 import {INSTAGRAM_LINK} from "@/constants/homepage";
 
-const LATEST_WORK_IMAGES = [
-  "/gallery/mens-skin-fade-istanbul-premium-barber.jpg",
-  "/gallery/beard-styling-istanbul-barber-alicutz.jpg",
-  "/gallery/modern-haircut-istanbul-bomonti-barber.jpg",
-  "/gallery/low-fade-haircut-sisli-istanbul.jpg",
-  "/gallery/mens-haircut-and-beard-shaping-istanbul.jpg",
-  "/gallery/mens-hair-coloring-istanbul-premium.jpg",
+const AUTOPLAY_MS = 5000;
+
+const FEATURED_CUTS = [
+  {
+    src: "/gallery/mens-skin-fade-istanbul-premium-barber.jpg",
+    alt: "Textured skin fade by Alicutz in Istanbul",
+    postUrl: "https://www.instagram.com/p/DBvA1icutz1/",
+  },
+  {
+    src: "/gallery/beard-styling-istanbul-barber-alicutz.jpg",
+    alt: "Precision beard styling by Alicutz",
+    postUrl: "https://www.instagram.com/p/DBvA1icutz2/",
+  },
+  {
+    src: "/gallery/modern-haircut-istanbul-bomonti-barber.jpg",
+    alt: "Modern layered haircut in Bomonti",
+    postUrl: "https://www.instagram.com/p/DBvA1icutz3/",
+  },
+  {
+    src: "/gallery/low-fade-haircut-sisli-istanbul.jpg",
+    alt: "Low fade with clean temple transition",
+    postUrl: "https://www.instagram.com/p/DBvA1icutz4/",
+  },
+  {
+    src: "/gallery/mens-haircut-and-beard-shaping-istanbul.jpg",
+    alt: "Haircut and beard shaping pairing",
+    postUrl: "https://www.instagram.com/p/DBvA1icutz5/",
+  },
+  {
+    src: "/gallery/mens-hair-coloring-istanbul-premium.jpg",
+    alt: "Premium men hair coloring result",
+    postUrl: "https://www.instagram.com/p/DBvA1icutz6/",
+  },
 ] as const;
 
 export function LatestWorkSection(): React.JSX.Element {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [isPaused, setIsPaused] = React.useState(false);
+  const [touchStartX, setTouchStartX] = React.useState<number | null>(null);
+
+  const nextSlide = React.useCallback(() => {
+    setActiveIndex((current) => (current + 1) % FEATURED_CUTS.length);
+  }, []);
+
+  const previousSlide = React.useCallback(() => {
+    setActiveIndex((current) => (current - 1 + FEATURED_CUTS.length) % FEATURED_CUTS.length);
+  }, []);
+
+  React.useEffect(() => {
+    if (isPaused) {
+      return;
+    }
+
+    const intervalId = window.setInterval(nextSlide, AUTOPLAY_MS);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [isPaused, nextSlide]);
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>): void => {
+    setTouchStartX(event.touches[0]?.clientX ?? null);
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>): void => {
+    if (touchStartX === null) {
+      return;
+    }
+
+    const deltaX = event.changedTouches[0].clientX - touchStartX;
+
+    if (Math.abs(deltaX) >= 40) {
+      if (deltaX < 0) {
+        nextSlide();
+      } else {
+        previousSlide();
+      }
+    }
+
+    setTouchStartX(null);
+  };
+
   return (
-    <section id="gallery" aria-labelledby="latest-work-heading" className="py-16 sm:py-20 md:py-24">
+    <section id="gallery" aria-labelledby="featured-cuts-heading" className="py-16 sm:py-20 md:py-24">
       <div className="container space-y-10">
-        <div className="space-y-3">
-          <p className="type-caption text-muted">Instagram</p>
-          <h2 id="latest-work-heading" className="type-h2 text-text">
-            Latest Work
+        <div className="space-y-2">
+          <h2 id="featured-cuts-heading" className="type-h2 text-text">
+            Featured Cuts
           </h2>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {LATEST_WORK_IMAGES.map((src, index) => (
-            <motion.div
-              key={src}
-              initial={{opacity: 0, y: 12}}
-              whileInView={{opacity: 1, y: 0}}
-              viewport={{once: true, amount: 0.2}}
-              transition={{duration: 0.35, delay: index * 0.04, ease: [0.22, 1, 0.36, 1]}}
-            >
+        <div
+          className="overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          aria-label="Featured cuts carousel"
+        >
+          <motion.div
+            className="flex gap-4 sm:gap-6"
+            animate={{x: `-${activeIndex * 88}%`}}
+            transition={{duration: 0.55, ease: [0.22, 1, 0.36, 1]}}
+          >
+            {FEATURED_CUTS.map((item, index) => {
+              const isActive = index === activeIndex;
+
+              return (
+                <div key={item.src} className="w-[88%] shrink-0 md:w-[80%]">
+                  <motion.div
+                    animate={{opacity: isActive ? 1 : 0.72, scale: isActive ? 1 : 0.985}}
+                    transition={{duration: 0.45, ease: [0.22, 1, 0.36, 1]}}
+                  >
               <Link
-                href={INSTAGRAM_LINK}
+                href={item.postUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block overflow-hidden rounded-xl border border-border bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                aria-label="Open Instagram gallery"
+                className="group relative block overflow-hidden rounded-2xl border border-border bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                aria-label="View cut on Instagram"
               >
                 <Image
-                  src={src}
-                  alt="Alicutz latest barber work"
+                  src={item.src}
+                  alt={item.alt}
                   width={1920}
                   height={2560}
-                  sizes="(min-width: 1024px) 30vw, (min-width: 640px) 48vw, 100vw"
-                  className="aspect-[4/5] h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  priority={index === 0}
+                  sizes="(min-width: 1024px) 72vw, 88vw"
+                  className="aspect-[16/9] h-full w-full object-cover"
                 />
+
+                <AnimatePresence>
+                  {isActive ? (
+                    <motion.div
+                      initial={{opacity: 0}}
+                      animate={{opacity: 1}}
+                      exit={{opacity: 0}}
+                      transition={{duration: 0.25}}
+                      className="absolute inset-0 flex items-end justify-start bg-black/0 p-6 transition-colors duration-300 group-hover:bg-black/40"
+                    >
+                      <span className="type-small text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        {"View on Instagram ->"}
+                      </span>
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
               </Link>
-            </motion.div>
-          ))}
+                  </motion.div>
+                </div>
+              );
+            })}
+          </motion.div>
         </div>
 
-        <Link
-          href={INSTAGRAM_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="type-small inline-flex min-h-11 items-center rounded-full border border-border px-7 py-3 text-text transition-colors duration-[var(--duration-fast)] hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          View Instagram
-        </Link>
+        <div className="space-y-2">
+          <Link
+            href={INSTAGRAM_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="type-small inline-flex items-center text-text transition-colors duration-[var(--duration-fast)] hover:text-accent focus-visible:outline-none focus-visible:text-accent"
+          >
+            {"Explore More ->"}
+          </Link>
+          <p className="type-caption text-muted">@alicutzzzz</p>
+        </div>
       </div>
     </section>
   );
