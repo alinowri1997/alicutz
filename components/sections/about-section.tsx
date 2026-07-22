@@ -16,12 +16,12 @@ export async function AboutSection(): Promise<React.JSX.Element> {
           <Heading as="h2" size="h2" id="about-heading" className="max-w-[22ch] text-balance text-text">
             {t("title")}
           </Heading>
-          <p className="type-body max-w-[56ch] text-muted">{t("description")}</p>
+          <p className="type-small max-w-[50ch] text-muted">{t("description")}</p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2" aria-label={t("listAria")}>
           {ABOUT_KEYS.map((key) => (
-            <article key={key} className="rounded-xl border border-border bg-background p-6">
+            <article key={key} className="rounded-xl border border-border bg-background p-6 transition-colors duration-300 hover:border-white/20">
               <p className="type-caption text-muted">{t(`items.${key}.label`)}</p>
               <p className="type-h3 mt-3 text-text">{t(`items.${key}.value`)}</p>
               <p className="type-small mt-2 text-muted">{t(`items.${key}.detail`)}</p>

@@ -13,7 +13,7 @@ export function ReviewStats({ averageRating, totalReviews, isLoading }: ReviewSt
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-24 rounded-lg bg-skeleton animate-pulse" />
+          <div key={i} className="h-24 rounded-xl bg-skeleton animate-pulse" />
         ))}
       </div>
     );
@@ -21,7 +21,7 @@ export function ReviewStats({ averageRating, totalReviews, isLoading }: ReviewSt
 
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6">
-      <div className="rounded-lg border border-border bg-background p-6">
+      <div className="rounded-xl border border-border bg-background p-6 transition-colors duration-300 hover:border-white/20">
         <div className="space-y-2">
           <p className="type-caption text-muted">Average Rating</p>
           <div className="flex items-baseline gap-2">
@@ -39,14 +39,14 @@ export function ReviewStats({ averageRating, totalReviews, isLoading }: ReviewSt
         </div>
       </div>
 
-      <div className="rounded-lg border border-border bg-background p-6">
+      <div className="rounded-xl border border-border bg-background p-6 transition-colors duration-300 hover:border-white/20">
         <div className="space-y-2">
           <p className="type-caption text-muted">Total Reviews</p>
           <p className="text-4xl font-bold text-text">{totalReviews}</p>
         </div>
       </div>
 
-      <div className="rounded-lg border border-border bg-background p-6 col-span-2 sm:col-span-1">
+      <div className="col-span-2 rounded-xl border border-border bg-background p-6 transition-colors duration-300 hover:border-white/20 sm:col-span-1">
         <div className="space-y-2">
           <p className="type-caption text-muted">Satisfaction</p>
           <p className="text-4xl font-bold text-text">{averageRating >= 4 ? '100%' : '95%'}</p>

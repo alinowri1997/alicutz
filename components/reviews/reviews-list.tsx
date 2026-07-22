@@ -26,7 +26,7 @@ export function ReviewsList({ reviews, isLoading }: ReviewsListProps): React.JSX
 
   if (reviews.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-border bg-background p-8 text-center">
+      <div className="rounded-xl border border-dashed border-border bg-background p-8 text-center">
         <p className="text-muted">No reviews yet. Be the first to share your experience!</p>
       </div>
     );
@@ -35,7 +35,7 @@ export function ReviewsList({ reviews, isLoading }: ReviewsListProps): React.JSX
   return (
     <div className="space-y-6">
       {reviews.map((review) => (
-        <div key={review.id} className="rounded-lg border border-border bg-background p-6 hover:border-accent/50 transition-colors">
+        <div key={review.id} className="rounded-xl border border-border bg-background p-6 transition-colors duration-300 hover:border-white/20">
           <div className="space-y-3">
             {/* Header */}
             <div className="flex items-start justify-between">
@@ -50,14 +50,14 @@ export function ReviewsList({ reviews, isLoading }: ReviewsListProps): React.JSX
                   ))}
                 </div>
               </div>
-              {review.is_verified && <span className="text-xs px-2 py-1 rounded bg-accent/10 text-accent">Verified</span>}
+              {review.is_verified && <span className="rounded bg-accent/10 px-2 py-1 text-xs text-accent">Verified</span>}
             </div>
 
             {/* Title */}
             {review.title && <p className="font-medium text-text">{review.title}</p>}
 
             {/* Content */}
-            <p className="text-sm text-muted line-clamp-3">{review.content}</p>
+            <p className="type-small text-muted line-clamp-4">{review.content}</p>
 
             {/* Media */}
             {review.media && review.media.length > 0 && (
@@ -65,7 +65,7 @@ export function ReviewsList({ reviews, isLoading }: ReviewsListProps): React.JSX
                 {review.media.slice(0, 3).map((media) => (
                   <div
                     key={media.id}
-                    className="h-16 w-16 rounded bg-surface border border-border overflow-hidden relative"
+                    className="relative h-16 w-16 overflow-hidden rounded border border-border bg-surface"
                   >
                     {media.media_type === 'image' ? (
                       <Image
@@ -83,7 +83,7 @@ export function ReviewsList({ reviews, isLoading }: ReviewsListProps): React.JSX
                     )}
                   </div>
                 ))}
-                {review.media.length > 3 && <div className="h-16 w-16 rounded bg-surface border border-border flex items-center justify-center">
+                {review.media.length > 3 && <div className="flex h-16 w-16 items-center justify-center rounded border border-border bg-surface">
                   <span className="text-xs text-muted">+{review.media.length - 3}</span>
                 </div>}
               </div>

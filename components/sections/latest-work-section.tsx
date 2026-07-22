@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {AnimatePresence, motion} from "framer-motion";
+import {motion} from "framer-motion";
 
 import {INSTAGRAM_LINK} from "@/constants/homepage";
 
@@ -89,6 +89,10 @@ export function LatestWorkSection(): React.JSX.Element {
     setTouchStartX(null);
   };
 
+  const nextIndex = (activeIndex + 1) % FEATURED_CUTS.length;
+  const activeCut = FEATURED_CUTS[activeIndex];
+  const nextCut = FEATURED_CUTS[nextIndex];
+
   return (
     <section id="gallery" aria-labelledby="featured-cuts-heading" className="py-16 sm:py-20 md:py-24">
       <div className="container space-y-10">
@@ -99,65 +103,97 @@ export function LatestWorkSection(): React.JSX.Element {
         </div>
 
         <div
-          className="overflow-hidden"
+          className="hidden md:grid md:grid-cols-[minmax(0,1fr)_clamp(42px,7vw,72px)] md:items-stretch md:gap-4"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          aria-label="Featured cuts carousel"
+        >
+          <motion.div
+            key={activeCut.src}
+            initial={{opacity: 0.85, scale: 0.985}}
+            animate={{opacity: 1, scale: 1}}
+            transition={{duration: 0.45, ease: [0.22, 1, 0.36, 1]}}
+            className="relative"
+          >
+            <Link
+              href={activeCut.postUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative block overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_45px_rgba(0,0,0,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              aria-label="View cut on Instagram"
+            >
+              <Image
+                src={activeCut.src}
+                alt={activeCut.alt}
+                width={1920}
+                height={2560}
+                priority={activeIndex === 0}
+                sizes="(min-width: 1024px) 78vw, 100vw"
+                className="aspect-[3/4] h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 flex items-end bg-black/0 p-6 transition-colors duration-300 group-hover:bg-black/35">
+                <span className="type-small text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  {"View on Instagram ->"}
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-surface/60">
+            <Link
+              href={nextCut.postUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              aria-label="Preview next cut on Instagram"
+            >
+              <Image
+                src={nextCut.src}
+                alt={nextCut.alt}
+                width={1920}
+                height={2560}
+                sizes="8vw"
+                className="h-full w-full object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+              />
+            </Link>
+          </div>
+        </div>
+
+        <div
+          className="md:hidden"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           aria-label="Featured cuts carousel"
         >
-          <motion.div
-            className="flex gap-4 sm:gap-6"
-            animate={{x: `-${activeIndex * 88}%`}}
-            transition={{duration: 0.55, ease: [0.22, 1, 0.36, 1]}}
-          >
-            {FEATURED_CUTS.map((item, index) => {
-              const isActive = index === activeIndex;
-
-              return (
-                <div key={item.src} className="w-[88%] shrink-0 md:w-[80%]">
-                  <motion.div
-                    animate={{opacity: isActive ? 1 : 0.72, scale: isActive ? 1 : 0.985}}
-                    transition={{duration: 0.45, ease: [0.22, 1, 0.36, 1]}}
+          <div className="overflow-hidden px-2">
+            <motion.div
+              className="flex"
+              animate={{x: `-${activeIndex * 100}%`}}
+              transition={{duration: 0.48, ease: [0.22, 1, 0.36, 1]}}
+            >
+              {FEATURED_CUTS.map((item, index) => (
+                <div key={item.src} className="w-full shrink-0 px-1">
+                  <Link
+                    href={item.postUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative block overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_14px_32px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    aria-label="View cut on Instagram"
                   >
-              <Link
-                href={item.postUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative block overflow-hidden rounded-2xl border border-border bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                aria-label="View cut on Instagram"
-              >
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  width={1920}
-                  height={2560}
-                  priority={index === 0}
-                  sizes="(min-width: 1024px) 72vw, 88vw"
-                  className="aspect-[16/9] h-full w-full object-cover"
-                />
-
-                <AnimatePresence>
-                  {isActive ? (
-                    <motion.div
-                      initial={{opacity: 0}}
-                      animate={{opacity: 1}}
-                      exit={{opacity: 0}}
-                      transition={{duration: 0.25}}
-                      className="absolute inset-0 flex items-end justify-start bg-black/0 p-6 transition-colors duration-300 group-hover:bg-black/40"
-                    >
-                      <span className="type-small text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                        {"View on Instagram ->"}
-                      </span>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
-              </Link>
-                  </motion.div>
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      width={1920}
+                      height={2560}
+                      priority={index === 0}
+                      sizes="92vw"
+                      className="aspect-[3/4] h-full w-full object-cover"
+                    />
+                  </Link>
                 </div>
-              );
-            })}
-          </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -169,7 +205,7 @@ export function LatestWorkSection(): React.JSX.Element {
           >
             {"Explore More ->"}
           </Link>
-          <p className="type-caption text-muted">@alicutzzzz</p>
+          <p className="type-caption text-muted">@ALICUTZZZZ</p>
         </div>
       </div>
     </section>
