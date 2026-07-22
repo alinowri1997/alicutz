@@ -10,7 +10,11 @@ export async function ensureStorageFolders(): Promise<void> {
 
   const folders = [
     FIREBASE_STORAGE_FOLDERS.heroVideo,
+    FIREBASE_STORAGE_FOLDERS.hero,
     FIREBASE_STORAGE_FOLDERS.gallery,
+    FIREBASE_STORAGE_FOLDERS.reviews,
+    FIREBASE_STORAGE_FOLDERS.logo,
+    FIREBASE_STORAGE_FOLDERS.general,
     FIREBASE_STORAGE_FOLDERS.avatars,
   ];
 

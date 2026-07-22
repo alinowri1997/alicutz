@@ -12,6 +12,9 @@ export const FIREBASE_COLLECTIONS = {
   featuredCuts: "featuredCuts",
   services: "services",
   reviews: "reviews",
+  contact: "contact",
+  siteSettings: "siteSettings",
+  mediaLibrary: "mediaLibrary",
   settings: "settings",
   languages: "languages",
 } as const;
@@ -20,7 +23,11 @@ export type FirebaseCollectionName = (typeof FIREBASE_COLLECTIONS)[keyof typeof 
 
 export const FIREBASE_STORAGE_FOLDERS = {
   heroVideo: "hero-video",
+  hero: "hero",
   gallery: "gallery",
+  reviews: "reviews",
+  logo: "logo",
+  general: "general",
   avatars: "avatars",
 } as const;
 
