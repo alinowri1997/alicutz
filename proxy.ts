@@ -29,10 +29,6 @@ function getUnauthorizedRedirect(request: NextRequest): NextResponse {
 }
 
 export default function proxy(request: NextRequest): NextResponse {
-  if (request.nextUrl.pathname === "/admin" || request.nextUrl.pathname.startsWith("/admin/")) {
-    return NextResponse.next();
-  }
-
   if (isAdminPath(request.nextUrl.pathname)) {
     const sessionCookie = request.cookies.get(AUTH_COOKIE_NAMES.session)?.value;
     const roleCookie = request.cookies.get(AUTH_COOKIE_NAMES.role)?.value;

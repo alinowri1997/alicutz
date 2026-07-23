@@ -21,15 +21,18 @@ import {
   type SidebarItem,
 } from "@/components/admin";
 import {
+  ActivityLogManager,
   ContactManager,
   DashboardHome,
   FeaturedCutsManager,
   HeroManager,
+  LanguagesManager,
   LoginScreen,
   MediaLibraryManager,
-  PlaceholderModule,
   ReviewsManager,
+  SeoManager,
   ServicesManager,
+  SiteHealthManager,
   SettingsManager,
 } from "@/components/admin/modules";
 import {useAdminSession} from "@/hooks/use-admin-session";
@@ -41,10 +44,12 @@ const NAV_ITEMS: SidebarItem[] = [
   {key: "services", label: "Services", icon: Wrench},
   {key: "reviews", label: "Reviews", icon: MessageSquare},
   {key: "contact", label: "Contact", icon: Phone},
-  {key: "languages", label: "Languages", icon: Globe},
-  {key: "seo", label: "SEO", icon: Search},
-  {key: "settings", label: "Settings", icon: Settings},
   {key: "media-library", label: "Media Library", icon: Images},
+  {key: "seo", label: "SEO", icon: Search},
+  {key: "languages", label: "Languages", icon: Globe},
+  {key: "settings", label: "Settings", icon: Settings},
+  {key: "activity-log", label: "Activity Log", icon: MessageSquare},
+  {key: "site-health", label: "Site Health", icon: Sparkles},
 ];
 
 function formatPageLabel(activeKey: string): string {
@@ -71,23 +76,27 @@ function renderModule(activePage: string): React.JSX.Element {
     case "media-library":
       return <MediaLibraryManager />;
     case "languages":
-      return <PlaceholderModule title="Languages" />;
+      return <LanguagesManager />;
     case "seo":
-      return <PlaceholderModule title="SEO" />;
+      return <SeoManager />;
+    case "activity-log":
+      return <ActivityLogManager />;
+    case "site-health":
+      return <SiteHealthManager />;
     default:
       return <DashboardHome />;
   }
 }
 
 export default function AdminPage(): React.JSX.Element {
-  const {isAuthenticated, isLoading, signIn, signOut} = useAdminSession();
+  const {isAuthenticated, isLoading, signIn, signOut, forgotPassword} = useAdminSession();
   const [activePage, setActivePage] = React.useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   const currentPage = formatPageLabel(activePage);
 
   if (!isAuthenticated) {
-    return <LoginScreen onSubmit={signIn} isLoading={isLoading} />;
+    return <LoginScreen onSubmit={signIn} onForgotPassword={forgotPassword} isLoading={isLoading} />;
   }
 
   return (

@@ -16,6 +16,7 @@ const EMPTY_CUT: FeaturedCutFields = {
   instagramPostUrl: "",
   title: "",
   alt: "",
+  enabled: true,
 };
 
 export function FeaturedCutsManager(): React.JSX.Element {
@@ -107,6 +108,15 @@ export function FeaturedCutsManager(): React.JSX.Element {
               />
             </div>
 
+            <label className="inline-flex items-center gap-2 text-sm text-[#d5d5d5]">
+              <input
+                type="checkbox"
+                checked={draft.enabled}
+                onChange={(event) => setDraft((current) => ({...current, enabled: event.target.checked}))}
+              />
+              Enabled
+            </label>
+
             <div className="grid gap-2">
               <FieldLabel htmlFor="cut-library-image">Reuse Existing Media</FieldLabel>
               <select
@@ -183,6 +193,13 @@ export function FeaturedCutsManager(): React.JSX.Element {
                   <p className="truncate text-sm text-[#f1f1f1]">{item.data.title || item.data.alt || "Untitled"}</p>
                   <p className="truncate text-xs text-[#979797]">{item.data.instagramPostUrl || "No URL"}</p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => void applyWorkflow(item.id, item.data.enabled ? "disable" : "enable")}
+                  className="h-8 rounded-lg border border-white/10 bg-[#1b1b1b] px-2 text-[11px] text-[#ececec]"
+                >
+                  {item.data.enabled ? "Disable" : "Enable"}
+                </button>
                 <button
                   type="button"
                   onClick={() => void applyWorkflow(item.id, "publish")}

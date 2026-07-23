@@ -10,6 +10,7 @@ import {
   listSectionDocuments,
   reorderSectionDocuments,
 } from "@/services/firestore/admin-content-service";
+import {createActivityLog} from "@/services/firestore/activity-log-service";
 import {requireAdmin} from "@/services/auth/require-admin";
 
 export async function GET(
@@ -53,6 +54,14 @@ export async function POST(
     const payload = createContentSchema.parse(await req.json());
     const created = await createSectionDocument(section, payload.data, payload.id);
 
+    await createActivityLog({
+      session: auth.session,
+      action: "content.create",
+      targetType: "content",
+      targetId: created.id,
+      targetSection: section,
+    });
+
     return NextResponse.json({success: true, data: created}, {status: 201});
   } catch (error) {
     return NextResponse.json(
@@ -80,6 +89,13 @@ export async function PATCH(
     const payload = reorderSchema.parse(await req.json());
 
     await reorderSectionDocuments(section, payload.ids);
+    await createActivityLog({
+      session: auth.session,
+      action: "content.reorder",
+      targetType: "content",
+      targetSection: section,
+      metadata: {ids: payload.ids},
+    });
 
     return NextResponse.json({success: true}, {status: 200});
   } catch (error) {

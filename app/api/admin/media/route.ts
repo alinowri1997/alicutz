@@ -2,6 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 
 import {mediaFolderSchema} from "@/lib/schemas/admin-cms";
 import {requireAdmin} from "@/services/auth/require-admin";
+import {createActivityLog} from "@/services/firestore/activity-log-service";
 import {listMediaAssets, uploadMediaAsset} from "@/services/storage/media-library-service";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -43,6 +44,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     const asset = await uploadMediaAsset(folder, file);
+    await createActivityLog({
+      session: auth.session,
+      action: "media.upload",
+      targetType: "media",
+      targetId: asset.id,
+      metadata: {folder},
+    });
 
     return NextResponse.json({success: true, data: asset}, {status: 201});
   } catch (error) {

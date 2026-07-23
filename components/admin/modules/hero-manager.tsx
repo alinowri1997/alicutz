@@ -65,17 +65,19 @@ function HeroManagerEditor({
 }: HeroManagerEditorProps): React.JSX.Element {
   const [draft, setDraft] = React.useState<HeroContentFields>(initialDraft);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const autosaveTimeoutRef = React.useRef<number | null>(null);
+  const firstRenderRef = React.useRef(true);
 
-  const ensureDocument = async (): Promise<string> => {
+  const ensureDocument = React.useCallback(async (): Promise<string> => {
     if (documentId) {
       return documentId;
     }
 
     const created = await createItem(EMPTY_HERO, "primary");
     return created.id;
-  };
+  }, [documentId, createItem]);
 
-  const saveDraft = async (): Promise<void> => {
+  const saveDraft = React.useCallback(async (): Promise<void> => {
     setIsSubmitting(true);
     try {
       const id = await ensureDocument();
@@ -83,7 +85,7 @@ function HeroManagerEditor({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [draft, ensureDocument, updateItem]);
 
   const publish = async (): Promise<void> => {
     setIsSubmitting(true);
@@ -129,6 +131,27 @@ function HeroManagerEditor({
       heroPosterUrl: uploaded.downloadUrl,
     }));
   };
+
+  React.useEffect(() => {
+    if (firstRenderRef.current) {
+      firstRenderRef.current = false;
+      return;
+    }
+
+    if (autosaveTimeoutRef.current) {
+      window.clearTimeout(autosaveTimeoutRef.current);
+    }
+
+    autosaveTimeoutRef.current = window.setTimeout(() => {
+      void saveDraft();
+    }, 1000);
+
+    return () => {
+      if (autosaveTimeoutRef.current) {
+        window.clearTimeout(autosaveTimeoutRef.current);
+      }
+    };
+  }, [draft, saveDraft]);
 
   return (
     <SectionContainer
@@ -225,6 +248,19 @@ function HeroManagerEditor({
                   }}
                 />
               </label>
+              <button
+                type="button"
+                onClick={() =>
+                  setDraft((current) => ({
+                    ...current,
+                    heroVideoPath: "",
+                    heroVideoUrl: "",
+                  }))
+                }
+                className="inline-flex h-10 items-center justify-center rounded-lg border border-white/15 bg-[#161616] px-3 text-xs text-[#ececec]"
+              >
+                Delete Hero Video
+              </button>
               <label className="inline-flex h-10 cursor-pointer items-center justify-center rounded-lg border border-white/15 bg-[#161616] px-3 text-xs text-[#ececec]">
                 Upload Poster Image
                 <input
@@ -239,6 +275,19 @@ function HeroManagerEditor({
                   }}
                 />
               </label>
+              <button
+                type="button"
+                onClick={() =>
+                  setDraft((current) => ({
+                    ...current,
+                    heroPosterPath: "",
+                    heroPosterUrl: "",
+                  }))
+                }
+                className="inline-flex h-10 items-center justify-center rounded-lg border border-white/15 bg-[#161616] px-3 text-xs text-[#ececec]"
+              >
+                Delete Poster Image
+              </button>
             </div>
 
             <WorkflowButtons

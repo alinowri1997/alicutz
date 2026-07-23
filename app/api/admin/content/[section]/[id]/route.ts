@@ -12,6 +12,7 @@ import {
   getSectionDocument,
   updateSectionDocument,
 } from "@/services/firestore/admin-content-service";
+import {createActivityLog} from "@/services/firestore/activity-log-service";
 
 export async function GET(
   _req: NextRequest,
@@ -58,6 +59,13 @@ export async function PUT(
     const payload = updateContentSchema.parse(await req.json());
 
     const updated = await updateSectionDocument(section, id, payload.data);
+    await createActivityLog({
+      session: auth.session,
+      action: "content.update",
+      targetType: "content",
+      targetId: id,
+      targetSection: section,
+    });
 
     return NextResponse.json({success: true, data: updated}, {status: 200});
   } catch (error) {
@@ -84,6 +92,13 @@ export async function DELETE(
     const {section: rawSection, id} = await params;
     const section = adminContentSectionSchema.parse(rawSection);
     await deleteSectionDocument(section, id);
+    await createActivityLog({
+      session: auth.session,
+      action: "content.delete",
+      targetType: "content",
+      targetId: id,
+      targetSection: section,
+    });
 
     return NextResponse.json({success: true}, {status: 200});
   } catch (error) {
@@ -112,6 +127,13 @@ export async function PATCH(
     const payload = workflowSchema.parse(await req.json());
 
     const updated = await applyWorkflowAction(section, id, payload.action);
+    await createActivityLog({
+      session: auth.session,
+      action: `content.${payload.action}`,
+      targetType: "content",
+      targetId: id,
+      targetSection: section,
+    });
 
     return NextResponse.json({success: true, data: updated}, {status: 200});
   } catch (error) {

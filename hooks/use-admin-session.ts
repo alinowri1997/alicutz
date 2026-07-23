@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import {signInAdminWithEmailPassword, signOutAdmin} from "@/lib/firebase/auth";
+import {sendAdminPasswordReset, signInAdminWithEmailPassword, signOutAdmin} from "@/lib/firebase/auth";
 import type {AdminSessionPayload} from "@/types/auth";
 
 interface SessionResponse {
@@ -16,6 +16,7 @@ export interface UseAdminSessionResult {
   isAuthenticated: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
 
@@ -96,12 +97,17 @@ export function useAdminSession(): UseAdminSessionResult {
     setUser(null);
   }, []);
 
+  const forgotPassword = React.useCallback(async (email: string) => {
+    await sendAdminPasswordReset(email);
+  }, []);
+
   return {
     user,
     isLoading,
     isAuthenticated: Boolean(user),
     signIn,
     signOut,
+    forgotPassword,
     refresh,
   };
 }

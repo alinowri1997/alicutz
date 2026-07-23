@@ -12,6 +12,7 @@ const EMPTY_CONTACT: ContactContentFields = {
   whatsapp: "",
   phone: "",
   email: "",
+  address: "",
   googleMaps: "",
   businessHours: "",
 };
@@ -51,20 +52,22 @@ function ContactManagerEditor({
   applyWorkflow,
 }: ContactManagerEditorProps): React.JSX.Element {
   const [draft, setDraft] = React.useState<ContactContentFields>(initialDraft);
+  const autosaveTimeoutRef = React.useRef<number | null>(null);
+  const firstRenderRef = React.useRef(true);
 
-  const ensureDocument = async (): Promise<string> => {
+  const ensureDocument = React.useCallback(async (): Promise<string> => {
     if (documentId) {
       return documentId;
     }
 
     const created = await createItem(EMPTY_CONTACT, "primary");
     return created.id;
-  };
+  }, [documentId, createItem]);
 
-  const saveDraft = async (): Promise<void> => {
+  const saveDraft = React.useCallback(async (): Promise<void> => {
     const id = await ensureDocument();
     await updateItem(id, draft);
-  };
+  }, [draft, ensureDocument, updateItem]);
 
   const publish = async (): Promise<void> => {
     const id = await ensureDocument();
@@ -82,6 +85,27 @@ function ContactManagerEditor({
     setDraft(restored.data);
   };
 
+  React.useEffect(() => {
+    if (firstRenderRef.current) {
+      firstRenderRef.current = false;
+      return;
+    }
+
+    if (autosaveTimeoutRef.current) {
+      window.clearTimeout(autosaveTimeoutRef.current);
+    }
+
+    autosaveTimeoutRef.current = window.setTimeout(() => {
+      void saveDraft();
+    }, 1000);
+
+    return () => {
+      if (autosaveTimeoutRef.current) {
+        window.clearTimeout(autosaveTimeoutRef.current);
+      }
+    };
+  }, [draft, saveDraft]);
+
   return (
     <SectionContainer title="Contact" description="Manage social links and business details.">
       <div className="grid gap-4 xl:grid-cols-[1fr_0.95fr]">
@@ -92,6 +116,7 @@ function ContactManagerEditor({
               ["whatsapp", "WhatsApp"],
               ["phone", "Phone"],
               ["email", "Email"],
+              ["address", "Address"],
               ["googleMaps", "Google Maps"],
               ["businessHours", "Business Hours"],
             ] as const).map(([key, label]) => (
@@ -118,6 +143,7 @@ function ContactManagerEditor({
             <p>WhatsApp: {draft.whatsapp || "-"}</p>
             <p>Phone: {draft.phone || "-"}</p>
             <p>Email: {draft.email || "-"}</p>
+            <p>Address: {draft.address || "-"}</p>
             <p>Google Maps: {draft.googleMaps || "-"}</p>
             <p>Hours: {draft.businessHours || "-"}</p>
           </div>

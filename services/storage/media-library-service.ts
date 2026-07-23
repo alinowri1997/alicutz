@@ -141,6 +141,44 @@ export async function renameMediaAsset(id: string, fileName: string): Promise<Me
   };
 }
 
+export async function replaceMediaAsset(id: string, file: File): Promise<MediaAsset> {
+  const ref = getAdminDb().collection(MEDIA_COLLECTION).doc(id);
+  const snapshot = await ref.get();
+
+  if (!snapshot.exists) {
+    throw new Error("Media asset not found.");
+  }
+
+  const existing = snapshot.data() as MediaAsset;
+  const bucket = getAdminStorage().bucket();
+  const target = bucket.file(existing.storagePath);
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  await target.save(buffer, {
+    resumable: false,
+    metadata: {
+      contentType: file.type || existing.contentType,
+    },
+  });
+
+  await target.makePublic();
+
+  await ref.update({
+    fileName: file.name,
+    contentType: file.type || existing.contentType,
+    size: file.size,
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+
+  return {
+    ...existing,
+    id,
+    fileName: file.name,
+    contentType: file.type || existing.contentType,
+    size: file.size,
+  };
+}
+
 export async function deleteMediaAsset(id: string): Promise<void> {
   const ref = getAdminDb().collection(MEDIA_COLLECTION).doc(id);
   const snapshot = await ref.get();

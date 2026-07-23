@@ -1,4 +1,5 @@
 import {
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
@@ -17,6 +18,10 @@ export async function signInAdminWithEmailPassword(email: string, password: stri
 
 export async function signOutAdmin(): Promise<void> {
   await signOut(getFirebaseAuth());
+}
+
+export async function sendAdminPasswordReset(email: string): Promise<void> {
+  await sendPasswordResetEmail(getFirebaseAuth(), email);
 }
 
 export function subscribeToAdminAuthState(

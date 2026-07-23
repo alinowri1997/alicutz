@@ -15,6 +15,7 @@ export interface UseMediaLibraryResult {
   refresh: (folder?: AdminMediaFolder) => Promise<void>;
   uploadAsset: (folder: AdminMediaFolder, file: File) => Promise<MediaAsset>;
   renameAsset: (id: string, fileName: string) => Promise<MediaAsset>;
+  replaceAsset: (id: string, file: File) => Promise<MediaAsset>;
   deleteAsset: (id: string) => Promise<void>;
 }
 
@@ -110,6 +111,28 @@ export function useMediaLibrary(): UseMediaLibraryResult {
     [refresh],
   );
 
+  const replaceAsset = React.useCallback(
+    async (id: string, file: File) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch(`/api/admin/media/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to replace media.");
+      }
+
+      const body = (await response.json()) as ApiResponse<MediaAsset>;
+      await refresh();
+      return body.data;
+    },
+    [refresh],
+  );
+
   const deleteAsset = React.useCallback(
     async (id: string) => {
       const response = await fetch(`/api/admin/media/${id}`, {
@@ -132,6 +155,7 @@ export function useMediaLibrary(): UseMediaLibraryResult {
     refresh,
     uploadAsset,
     renameAsset,
+    replaceAsset,
     deleteAsset,
   };
 }

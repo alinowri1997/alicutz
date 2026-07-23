@@ -14,6 +14,7 @@ export const FIREBASE_COLLECTIONS = {
   reviews: "reviews",
   contact: "contact",
   siteSettings: "siteSettings",
+  seo: "seo",
   mediaLibrary: "mediaLibrary",
   settings: "settings",
   languages: "languages",

@@ -20,6 +20,8 @@ const SECTION_COLLECTIONS: Record<AdminContentSection, string> = {
   reviews: "reviews",
   contact: "contact",
   siteSettings: "siteSettings",
+  seo: "seo",
+  languages: "languages",
 };
 
 function isSingletonSection(section: AdminContentSection): boolean {

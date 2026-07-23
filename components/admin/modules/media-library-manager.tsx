@@ -10,10 +10,22 @@ import type {AdminMediaFolder} from "@/types/admin-cms";
 const FOLDERS: AdminMediaFolder[] = ["Hero", "Gallery", "Reviews", "Logo", "General"];
 
 export function MediaLibraryManager(): React.JSX.Element {
-  const {assets, uploadAsset, renameAsset, deleteAsset} = useMediaLibrary();
+  const {assets, uploadAsset, renameAsset, replaceAsset, deleteAsset} = useMediaLibrary();
   const [folder, setFolder] = React.useState<AdminMediaFolder>("General");
+  const [search, setSearch] = React.useState("");
 
-  const visible = assets.filter((asset) => asset.folder === folder);
+  const visible = assets.filter((asset) => {
+    if (asset.folder !== folder) {
+      return false;
+    }
+
+    if (!search.trim()) {
+      return true;
+    }
+
+    const query = search.toLowerCase();
+    return asset.fileName.toLowerCase().includes(query) || asset.storagePath.toLowerCase().includes(query);
+  });
 
   return (
     <SectionContainer title="Media Library" description="Reusable assets for Hero, Gallery, Reviews, Logo, and General folders.">
@@ -47,6 +59,13 @@ export function MediaLibraryManager(): React.JSX.Element {
               }}
             />
           </label>
+
+          <input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search media"
+            className="h-8 rounded-lg border border-white/15 bg-[#151515] px-3 text-xs text-[#ececec]"
+          />
         </div>
 
         <div className="space-y-2">
@@ -69,6 +88,19 @@ export function MediaLibraryManager(): React.JSX.Element {
                 >
                   <Pencil className="h-4 w-4" aria-hidden="true" />
                 </button>
+                <label className="inline-flex h-8 cursor-pointer items-center rounded-lg border border-white/10 bg-[#191919] px-2 text-[11px] text-[#d1d1d1]">
+                  Replace
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0];
+                      if (file) {
+                        void replaceAsset(asset.id, file);
+                      }
+                    }}
+                  />
+                </label>
                 <button
                   type="button"
                   onClick={() => void deleteAsset(asset.id)}

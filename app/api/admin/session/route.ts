@@ -5,6 +5,7 @@ import {
   createAdminSession,
   getCurrentAdminSession,
 } from "@/services/auth/admin-session-service";
+import {createActivityLog} from "@/services/firestore/activity-log-service";
 
 interface CreateSessionBody {
   idToken?: string;
@@ -19,6 +20,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     await createAdminSession(body.idToken);
+    const session = await getCurrentAdminSession();
+
+    if (session) {
+      await createActivityLog({
+        session,
+        action: "auth.login",
+        targetType: "auth",
+      });
+    }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
@@ -43,6 +53,16 @@ export async function GET(): Promise<NextResponse> {
 }
 
 export async function DELETE(): Promise<NextResponse> {
+  const session = await getCurrentAdminSession();
+
+  if (session) {
+    await createActivityLog({
+      session,
+      action: "auth.logout",
+      targetType: "auth",
+    });
+  }
+
   await clearAdminSession();
   return NextResponse.json({ success: true }, { status: 200 });
 }

@@ -4,22 +4,42 @@ import * as React from "react";
 
 export interface LoginScreenProps {
   onSubmit: (email: string, password: string) => Promise<void>;
+  onForgotPassword: (email: string) => Promise<void>;
   isLoading?: boolean;
 }
 
-export function LoginScreen({onSubmit, isLoading = false}: LoginScreenProps): React.JSX.Element {
+export function LoginScreen({onSubmit, onForgotPassword, isLoading = false}: LoginScreenProps): React.JSX.Element {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
+  const [message, setMessage] = React.useState<string | null>(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setError(null);
+    setMessage(null);
 
     try {
       await onSubmit(email, password);
     } catch (submissionError) {
       setError(submissionError instanceof Error ? submissionError.message : "Login failed.");
+    }
+  };
+
+  const handleForgotPassword = async (): Promise<void> => {
+    setError(null);
+    setMessage(null);
+
+    if (!email) {
+      setError("Enter your email to reset password.");
+      return;
+    }
+
+    try {
+      await onForgotPassword(email);
+      setMessage("Password reset email sent.");
+    } catch (forgotError) {
+      setError(forgotError instanceof Error ? forgotError.message : "Unable to send reset email.");
     }
   };
 
@@ -67,6 +87,7 @@ export function LoginScreen({onSubmit, isLoading = false}: LoginScreenProps): Re
           </div>
 
           {error ? <p className="text-sm text-red-300">{error}</p> : null}
+          {message ? <p className="text-sm text-emerald-300">{message}</p> : null}
 
           <button
             type="submit"
@@ -77,7 +98,7 @@ export function LoginScreen({onSubmit, isLoading = false}: LoginScreenProps): Re
           </button>
         </form>
 
-        <button type="button" className="mt-4 text-sm text-[#909090] underline-offset-4 hover:underline">
+        <button type="button" onClick={() => void handleForgotPassword()} className="mt-4 text-sm text-[#909090] underline-offset-4 hover:underline">
           Forgot password
         </button>
       </div>
