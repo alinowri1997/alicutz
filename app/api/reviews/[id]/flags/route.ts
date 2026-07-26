@@ -1,63 +1,43 @@
-/**
- * POST /api/reviews/[id]/flags - Flag/report a review
- */
+import {randomUUID} from "node:crypto";
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseBrowser } from '@/lib/supabase/client';
-import { createFlagSchema } from '@/lib/schemas/reviews';
-import type { ApiResponse } from '@/lib/types/reviews';
+import {NextRequest, NextResponse} from "next/server";
+
+import {reportReviewSchema} from "@/lib/schemas/reviews";
+import type {ApiResponse} from "@/lib/types/reviews";
+import {reportReview} from "@/services/firestore/review-service";
+
+export const runtime = "nodejs";
+
+const VISITOR_COOKIE = "ac_review_visitor";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<void>>> {
+  {params}: {params: Promise<{id: string}>},
+): Promise<NextResponse<ApiResponse<null>>> {
   try {
-    const { id: reviewId } = await params;
-    const body = await req.json();
-    const supabase = getSupabaseBrowser();
-    const session = await supabase.auth.getSession();
+    const {id} = await params;
+    const payload = reportReviewSchema.parse(await req.json());
+    const visitorId = req.cookies.get(VISITOR_COOKIE)?.value ?? randomUUID();
 
-    if (!session.data.session) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'UNAUTHORIZED',
-            message: 'You must be logged in to report reviews',
-          },
-        },
-        { status: 401 }
-      );
-    }
+    await reportReview(id, visitorId, payload);
 
-    const validated = createFlagSchema.parse(body);
-
-    const { error } = await supabase.from('review_flags').insert({
-      review_id: reviewId,
-      reason: validated.reason,
-      description: validated.description,
-      reported_by_user_id: session.data.session.user.id,
-      status: 'pending',
+    const response = NextResponse.json({success: true, data: null}, {status: 201});
+    response.cookies.set(VISITOR_COOKIE, visitorId, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
     });
 
-    if (error) throw error;
-
-    return NextResponse.json(
-      {
-        success: true,
-      },
-      { status: 201 }
-    );
+    return response;
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: {
-          code: 'FLAG_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to flag review',
-        },
+        message: error instanceof Error ? error.message : "Failed to report review.",
       },
-      { status: 500 }
+      {status: 400},
     );
   }
 }

@@ -1,130 +1,95 @@
-/**
- * Zod Validation Schemas for Review Platform
- * All validation rules for API inputs and outputs
- */
+import {z} from "zod";
 
-import { z } from 'zod';
+const services = ["Haircut", "Fade", "Color", "Beard", "Home Service", "Other"] as const;
 
-/**
- * Review Rating Schema (1-5)
- */
+const sorts = [
+  "newest",
+  "oldest",
+  "highestRating",
+  "lowestRating",
+  "mostHelpful",
+  "mostLiked",
+] as const;
+
+const booleanFromQuery = z.preprocess((value) => {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === "true" || normalized === "1") {
+      return true;
+    }
+    if (normalized === "false" || normalized === "0") {
+      return false;
+    }
+  }
+
+  return undefined;
+}, z.boolean().optional());
+
 export const reviewRatingSchema = z.number().int().min(1).max(5);
 
-/**
- * Flag Reason Schema
- */
-export const flagReasonSchema = z.enum([
-  'spam',
-  'inappropriate',
-  'harassment',
-  'misinformation',
-  'other',
-]);
-
-/**
- * Media Type Schema
- */
-export const mediaTypeSchema = z.enum(['image', 'video']);
-
-/**
- * Create Review Schema
- */
 export const createReviewSchema = z.object({
-  user_name: z.string().min(2).max(100),
-  user_email: z.string().email(),
-  user_avatar_url: z.string().url().optional().nullable(),
+  customerName: z.string().trim().min(2).max(80),
+  email: z.string().trim().email().max(120),
+  country: z.string().trim().min(2).max(8),
+  language: z.string().trim().min(2).max(32),
+  service: z.enum(services),
   rating: reviewRatingSchema,
-  title: z.string().min(5).max(200),
-  content: z.string().min(20).max(5000),
+  review: z.string().trim().min(20).max(2000),
+  visitDate: z.string().trim().optional(),
 });
 
-export type CreateReviewInput = z.infer<typeof createReviewSchema>;
-
-/**
- * Update Review Schema
- */
 export const updateReviewSchema = z.object({
+  customerName: z.string().trim().min(2).max(80).optional(),
+  email: z.string().trim().email().max(120).optional(),
+  country: z.string().trim().min(2).max(8).optional(),
+  language: z.string().trim().min(2).max(32).optional(),
+  service: z.enum(services).optional(),
   rating: reviewRatingSchema.optional(),
-  title: z.string().min(5).max(200).optional(),
-  content: z.string().min(20).max(5000).optional(),
+  review: z.string().trim().min(20).max(2000).optional(),
+  visitDate: z.string().trim().optional(),
+  featured: z.boolean().optional(),
+  verified: z.boolean().optional(),
+  approved: z.boolean().optional(),
+  hidden: z.boolean().optional(),
+  status: z.enum(["pending", "approved", "hidden", "rejected"]).optional(),
 });
 
-export type UpdateReviewInput = z.infer<typeof updateReviewSchema>;
-
-/**
- * Create Review Reply Schema
- */
-export const createReviewReplySchema = z.object({
-  user_name: z.string().min(2).max(100),
-  user_email: z.string().email(),
-  user_avatar_url: z.string().url().optional().nullable(),
-  content: z.string().min(5).max(1000),
-  is_owner_reply: z.boolean().optional().default(false),
+export const reviewReplySchema = z.object({
+  message: z.string().trim().min(3).max(1000),
 });
 
-export type CreateReviewReplyInput = z.infer<typeof createReviewReplySchema>;
-
-/**
- * Create Flag Schema
- */
-export const createFlagSchema = z.object({
-  reason: flagReasonSchema,
-  description: z.string().max(500).optional(),
+export const reportReviewSchema = z.object({
+  reason: z.string().trim().min(2).max(120),
+  details: z.string().trim().max(500).optional(),
 });
 
-export type CreateFlagInput = z.infer<typeof createFlagSchema>;
-
-/**
- * Upload Media Schema
- */
-export const uploadMediaSchema = z.object({
-  file: z.instanceof(File),
-  position: z.number().int().min(0).optional(),
+export const reviewQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(20).default(8),
+  search: z.string().trim().max(120).optional(),
+  rating: z.coerce.number().int().min(1).max(5).optional(),
+  verified: booleanFromQuery,
+  withPhotos: booleanFromQuery,
+  featured: booleanFromQuery,
+  service: z.enum(services).optional(),
+  sort: z.enum(sorts).default("newest"),
 });
 
-export type UploadMediaInput = z.infer<typeof uploadMediaSchema>;
-
-/**
- * Pagination Query Schema
- */
-export const paginationQuerySchema = z.object({
-  page: z.number().int().min(1).optional().default(1),
-  limit: z.number().int().min(1).max(100).optional().default(10),
+export const adminReviewQuerySchema = z.object({
+  status: z.enum(["pending", "approved", "hidden", "rejected", "all"]).default("all"),
+  search: z.string().trim().max(120).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(50),
 });
 
-export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
-
-/**
- * Filter Reviews Query Schema
- */
-export const filterReviewsSchema = z.object({
-  page: z.number().int().min(1).optional().default(1),
-  limit: z.number().int().min(1).max(100).optional().default(10),
-  rating: reviewRatingSchema.optional(),
-  sort_by: z.enum(['newest', 'oldest', 'highest_rated', 'lowest_rated']).optional().default('newest'),
-  search: z.string().max(200).optional(),
-  featured_only: z.boolean().optional().default(false),
+export const reviewModerationActionSchema = z.object({
+  action: z.enum(["approve", "reject", "delete", "hide", "pin", "verify", "edit", "reply"]),
+  payload: z.record(z.string(), z.unknown()).optional(),
 });
-
-export type FilterReviewsQuery = z.infer<typeof filterReviewsSchema>;
-
-/**
- * Validation helper function
- */
-export function validateInput<T>(schema: z.ZodSchema, data: unknown): T {
-  return schema.parse(data);
-}
-
-/**
- * Safe validation helper - returns error if validation fails
- */
-export function safeValidateInput<T>(
-  schema: z.ZodSchema,
-  data: unknown
-): { success: boolean; data?: T; error?: z.ZodError } {
-  const result = schema.safeParse(data);
-  if (result.success) {
-    return { success: true, data: result.data as T };
-  }
-  return { success: false, error: result.error };
-}

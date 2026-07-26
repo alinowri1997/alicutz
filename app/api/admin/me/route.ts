@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { getCurrentAdminSession } from "@/services/auth/admin-session-service";
 import { hasRequiredRole } from "@/services/auth/rbac";
 
+export const runtime = "nodejs";
+
 export async function GET(): Promise<NextResponse> {
   const session = await getCurrentAdminSession();
 

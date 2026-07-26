@@ -1,35 +1,41 @@
-/**
- * DELETE /api/reviews/[id]/media/[mediaId] - Delete media
- */
+import {NextRequest, NextResponse} from "next/server";
 
-import { NextRequest, NextResponse } from 'next/server';
-import type { ApiResponse } from '@/lib/types/reviews';
+import {deleteReviewImage, getReviewById} from "@/services/firestore/review-service";
+import {requireAdmin} from "@/services/auth/require-admin";
+
+export const runtime = "nodejs";
 
 export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string; mediaId: string }> }
-): Promise<NextResponse<ApiResponse<void>>> {
+  _req: NextRequest,
+  {params}: {params: Promise<{id: string; mediaId: string}>},
+): Promise<NextResponse> {
+  const auth = await requireAdmin();
+  if (!auth.ok) {
+    return auth.response;
+  }
+
   try {
-    await params;
+    const {id, mediaId} = await params;
+    const review = await getReviewById(id);
 
-    // TODO: Delete media from storage and database
+    if (!review) {
+      return NextResponse.json({success: false, message: "Review not found."}, {status: 404});
+    }
 
-    return NextResponse.json(
-      {
-        success: true,
-      },
-      { status: 200 }
-    );
+    const image = review.images[Number(mediaId)];
+    if (!image) {
+      return NextResponse.json({success: false, message: "Image not found."}, {status: 404});
+    }
+
+    await deleteReviewImage(id, image.path);
+    return NextResponse.json({success: true, data: null}, {status: 200});
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: {
-          code: 'DELETE_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to delete media',
-        },
+        message: error instanceof Error ? error.message : "Failed to delete image.",
       },
-      { status: 500 }
+      {status: 400},
     );
   }
 }

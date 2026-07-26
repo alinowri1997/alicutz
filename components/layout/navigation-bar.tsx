@@ -13,7 +13,7 @@ import { setStoredLocalePreference } from "@/lib/locale-preference";
 import { cn } from "@/lib/utils";
 
 export interface NavigationItem {
-  key: "services" | "gallery" | "about" | "reviews" | "contact";
+  key: "services" | "gallery" | "about" | "reviews" | "guides" | "contact";
   href: string;
   target?: string;
   rel?: string;
@@ -32,18 +32,11 @@ const DEFAULT_ITEMS: NavigationItem[] = [
   { key: "gallery", href: "#gallery" },
   { key: "about", href: "#about" },
   { key: "reviews", href: "#reviews" },
+  { key: "guides", href: "/guides" },
   { key: "contact", href: "#contact" },
 ];
 
 const MENU_ID = "mobile-navigation-menu";
-const NAV_LABELS: Record<NavigationItem["key"], string> = {
-  services: "Services",
-  gallery: "Gallery",
-  about: "About",
-  reviews: "Reviews",
-  contact: "Contact",
-};
-
 const LANGUAGE_LABELS: Record<AppLocale, string> = {
   en: "English",
   tr: "Türkçe",
@@ -72,8 +65,12 @@ export function NavigationBar({
   const effectiveLogoText = logoText ?? "ALICUTZ";
   const effectiveBookingLabel = bookingLabel;
   const resolveNavHref = (href: string): string => {
-    if (!href.startsWith("#")) {
+    if (href.startsWith("http")) {
       return href;
+    }
+
+    if (href.startsWith("/")) {
+      return `/${locale}${href}`;
     }
 
     return pathname === "/" ? href : `/${locale}${href}`;
@@ -196,7 +193,7 @@ export function NavigationBar({
                   rel={item.rel}
                   className="type-small relative text-muted transition-colors duration-200 hover:text-text focus-visible:outline-none focus-visible:text-text"
                 >
-                  {NAV_LABELS[item.key]}
+                  {t(`items.${item.key}`)}
                 </a>
               </li>
             ))}
@@ -291,7 +288,7 @@ export function NavigationBar({
                         className="type-h3 text-text transition-colors duration-200 hover:text-accent focus-visible:outline-none focus-visible:text-accent"
                         onClick={closeMenu}
                       >
-                        {NAV_LABELS[item.key]}
+                        {t(`items.${item.key}`)}
                       </a>
                     </li>
                   ))}

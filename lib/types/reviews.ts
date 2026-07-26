@@ -1,213 +1,164 @@
-/**
- * Review Platform Types
- * Comprehensive type definitions for the Ali Cutz review system
- */
-
-/**
- * Review Rating Type - 1 to 5 stars
- */
 export type ReviewRating = 1 | 2 | 3 | 4 | 5;
 
-/**
- * Media Type for Review Attachments
- */
-export type MediaType = 'image' | 'video';
+export type ReviewStatus = "pending" | "approved" | "hidden" | "rejected";
 
-/**
- * Report/Flag Reason Type
- */
-export type FlagReason = 'spam' | 'inappropriate' | 'harassment' | 'misinformation' | 'other';
+export type ReviewService =
+  | "Haircut"
+  | "Fade"
+  | "Color"
+  | "Beard"
+  | "Home Service"
+  | "Other";
 
-/**
- * Flag Status Type
- */
-export type FlagStatus = 'pending' | 'reviewed' | 'resolved' | 'dismissed';
-
-/**
- * Core Review Entity
- */
-export interface Review {
-  id: string;
-  user_id: string;
-  user_name: string;
-  user_email: string;
-  user_avatar_url: string | null;
-  rating: ReviewRating;
-  title: string;
-  content: string;
-  is_verified: boolean;
-  is_featured: boolean;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string | null;
-}
-
-/**
- * Review with Related Data
- */
-export interface ReviewWithRelations extends Review {
-  media: ReviewMedia[];
-  replies: ReviewReply[];
-  likes_count: number;
-  user_liked: boolean;
-}
-
-/**
- * Media Attachment for Review
- */
-export interface ReviewMedia {
-  id: string;
-  review_id: string;
-  media_type: MediaType;
-  storage_path: string;
-  thumbnail_url: string | null;
-  file_size: number;
-  width: number | null;
-  height: number | null;
-  duration_seconds: number | null;
-  position: number;
-  created_at: string;
-}
-
-/**
- * Like/Reaction on Review
- */
-export interface ReviewLike {
-  id: string;
-  review_id: string;
-  user_id: string;
-  created_at: string;
-}
-
-/**
- * Reply/Comment on Review
- */
-export interface ReviewReply {
-  id: string;
-  review_id: string;
-  user_id: string;
-  user_name: string;
-  user_email: string;
-  user_avatar_url: string | null;
-  content: string;
-  is_owner_reply: boolean;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string | null;
-}
-
-/**
- * Flag/Report for Moderation
- */
-export interface ReviewFlag {
-  id: string;
-  review_id: string;
-  reason: FlagReason;
-  description: string | null;
-  reported_by_user_id: string;
-  status: FlagStatus;
-  moderator_notes: string | null;
-  created_at: string;
-  resolved_at: string | null;
-}
-
-/**
- * User Report (separate from flags)
- */
-export interface ReviewReport {
-  id: string;
-  review_id: string;
-  user_id: string;
-  report_type: string;
-  description: string | null;
-  created_at: string;
-}
-
-/**
- * Create Review Input
- */
-export interface CreateReviewInput {
-  user_name: string;
-  user_email: string;
-  user_avatar_url?: string | null;
-  rating: ReviewRating;
-  title: string;
-  content: string;
-}
-
-/**
- * Update Review Input
- */
-export interface UpdateReviewInput {
-  rating?: ReviewRating;
-  title?: string;
-  content?: string;
-}
-
-/**
- * Create Review Reply Input
- */
-export interface CreateReviewReplyInput {
-  user_name: string;
-  user_email: string;
-  user_avatar_url?: string | null;
-  content: string;
-  is_owner_reply?: boolean;
-}
-
-/**
- * Create Flag Input
- */
-export interface CreateFlagInput {
-  reason: FlagReason;
-  description?: string;
-}
-
-/**
- * Upload Media Response
- */
-export interface UploadMediaResponse {
-  id: string;
-  storage_path: string;
-  media_type: MediaType;
-  file_size: number;
+export interface ReviewImage {
+  path: string;
+  url: string;
   width?: number;
   height?: number;
-  duration_seconds?: number;
+  size?: number;
 }
 
-/**
- * Review Statistics
- */
-export interface ReviewStats {
-  total_reviews: number;
-  average_rating: number;
-  rating_distribution: {
-    [key in ReviewRating]: number;
-  };
-  total_media: number;
-  total_replies: number;
+export interface ReviewReply {
+  authorName: string;
+  authorRole: string;
+  message: string;
+  replyDate: string;
 }
 
-/**
- * Paginated Reviews Response
- */
-export interface PaginatedReviews {
-  reviews: ReviewWithRelations[];
-  total_count: number;
+export interface ReviewDocument {
+  id: string;
+  customerName: string;
+  email: string;
+  country: string;
+  language: string;
+  avatar?: string;
+  rating: ReviewRating;
+  service: ReviewService;
+  review: string;
+  images: ReviewImage[];
+  likes: number;
+  verified: boolean;
+  featured: boolean;
+  approved: boolean;
+  hidden: boolean;
+  status: ReviewStatus;
+  recommendation: boolean;
+  visitDate?: string;
+  reply?: ReviewReply;
+  replyDate?: string;
+  reportedCount: number;
+  reports: Array<{
+    reason: string;
+    details?: string;
+    createdAt: string;
+    visitorId: string;
+  }>;
+  spamScore: number;
+  searchText: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PublicReview extends ReviewDocument {
+  userLiked: boolean;
+  timeAgo: string;
+}
+
+export interface ReviewListStats {
+  averageRating: number;
+  totalReviews: number;
+  recommendationPercentage: number;
+  ratingDistribution: Record<ReviewRating, number>;
+  verifiedReviews: number;
+  withPhotos: number;
+}
+
+export interface ReviewListResponse {
+  reviews: PublicReview[];
+  stats: ReviewListStats;
   page: number;
   limit: number;
-  total_pages: number;
+  total: number;
+  totalPages: number;
+  hasMore: boolean;
 }
 
-/**
- * API Response Wrapper
- */
+export type ReviewSort =
+  | "newest"
+  | "oldest"
+  | "highestRating"
+  | "lowestRating"
+  | "mostHelpful"
+  | "mostLiked";
+
+export interface ReviewQuery {
+  page: number;
+  limit: number;
+  search?: string;
+  rating?: ReviewRating;
+  verified?: boolean;
+  withPhotos?: boolean;
+  featured?: boolean;
+  service?: ReviewService;
+  sort: ReviewSort;
+}
+
+export interface CreateReviewInput {
+  customerName: string;
+  email: string;
+  country: string;
+  language: string;
+  service: ReviewService;
+  rating: ReviewRating;
+  review: string;
+  visitDate?: string;
+}
+
+export interface UpdateReviewInput {
+  customerName?: string;
+  email?: string;
+  country?: string;
+  language?: string;
+  service?: ReviewService;
+  rating?: ReviewRating;
+  review?: string;
+  visitDate?: string;
+  featured?: boolean;
+  verified?: boolean;
+  approved?: boolean;
+  hidden?: boolean;
+  status?: ReviewStatus;
+}
+
+export interface ReportReviewInput {
+  reason: string;
+  details?: string;
+}
+
+export interface ReplyReviewInput {
+  message: string;
+}
+
+export interface AdminReviewDashboard {
+  pendingReviews: number;
+  approvedReviews: number;
+  hiddenReviews: number;
+  featuredReviews: number;
+  averageRating: number;
+  reviewGrowth: number;
+  mostPopularService: ReviewService | "N/A";
+  mostActiveMonth: string;
+  customerSatisfaction: number;
+}
+
+export interface AdminReviewListResponse {
+  dashboard: AdminReviewDashboard;
+  reviews: ReviewDocument[];
+  total: number;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
-  error?: {
-    code: string;
-    message: string;
-  };
+  message?: string;
 }

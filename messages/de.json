@@ -18,7 +18,10 @@
       "services": "Leistungen",
       "about": "Über uns",
       "instagram": "Instagram",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "guides": "Guides",
+      "gallery": "Galerie",
+      "reviews": "Bewertungen"
     }
   },
   "Hero": {
@@ -196,7 +199,8 @@
       "services": "Leistungen",
       "about": "Über uns",
       "instagram": "Instagram",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "guides": "Guides"
     },
     "languageNames": {
       "tr": "Türkisch",

@@ -21,14 +21,24 @@ export function getFirebaseAdminApp(): App {
 
   const config = getFirebaseAdminConfig();
 
-  adminApp = initializeApp({
-    credential: cert({
+  try {
+    adminApp = initializeApp({
+      credential: cert({
+        projectId: config.projectId,
+        clientEmail: config.clientEmail,
+        privateKey: config.privateKey,
+      }),
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    });
+  } catch (error) {
+    console.error("[firebase-admin-init] Failed to initialize Firebase Admin SDK", {
       projectId: config.projectId,
-      clientEmail: config.clientEmail,
-      privateKey: config.privateKey,
-    }),
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  });
+      clientEmailDomain: config.clientEmail.split("@")[1] ?? "unknown",
+      hasStorageBucket: Boolean(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET),
+      error: error instanceof Error ? error.stack : String(error),
+    });
+    throw error;
+  }
 
   return adminApp;
 }

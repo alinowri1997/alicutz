@@ -1,97 +1,74 @@
-/**
- * GET /api/reviews
- * Fetch all reviews with pagination
- */
+import {NextRequest, NextResponse} from "next/server";
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseBrowser } from '@/lib/supabase/client';
-import { filterReviewsSchema } from '@/lib/schemas/reviews';
-import type { ApiResponse, PaginatedReviews } from '@/lib/types/reviews';
+import {createReviewSchema, reviewQuerySchema} from "@/lib/schemas/reviews";
+import type {ApiResponse, ReviewListResponse, ReviewRating} from "@/lib/types/reviews";
+import {createReview, listPublicReviews} from "@/services/firestore/review-service";
 
-export async function GET(req: NextRequest): Promise<NextResponse<ApiResponse<PaginatedReviews>>> {
+export const runtime = "nodejs";
+
+const LIKED_COOKIE_NAME = "ac_review_liked";
+
+function parseLikedCookie(raw: string | undefined): Set<string> {
+  if (!raw) {
+    return new Set();
+  }
+
+  return new Set(
+    raw
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean),
+  );
+}
+
+export async function GET(req: NextRequest): Promise<NextResponse<ApiResponse<ReviewListResponse>>> {
   try {
-    const { searchParams } = new URL(req.url);
-    const page = parseInt(searchParams.get('page') || '1', 10);
-    const limit = parseInt(searchParams.get('limit') || '10', 10);
-    const rating = searchParams.get('rating') ? parseInt(searchParams.get('rating')!, 10) : undefined;
-    const sortBy = (searchParams.get('sort_by') || 'newest') as 'newest' | 'oldest' | 'highest_rated' | 'lowest_rated';
-    const search = searchParams.get('search') || undefined;
-    const featuredOnly = searchParams.get('featured_only') === 'true';
+    const parsed = reviewQuerySchema.parse(Object.fromEntries(req.nextUrl.searchParams.entries()));
+    const likedIds = parseLikedCookie(req.cookies.get(LIKED_COOKIE_NAME)?.value);
 
-    const query = filterReviewsSchema.parse({ page, limit, rating, sort_by: sortBy, search, featured_only: featuredOnly });
-
-    const supabase = getSupabaseBrowser();
-    let supabaseQuery = supabase
-      .from('reviews')
-      .select('*, review_media(*), review_replies(*)', { count: 'exact' })
-      .is('deleted_at', null);
-
-    if (query.rating) {
-      supabaseQuery = supabaseQuery.eq('rating', query.rating);
-    }
-
-    if (query.featured_only) {
-      supabaseQuery = supabaseQuery.eq('is_featured', true);
-    }
-
-    if (query.search) {
-      supabaseQuery = supabaseQuery.or(`title.ilike.%${query.search}%,content.ilike.%${query.search}%`);
-    }
-
-    let orderColumn = 'created_at';
-    let ascending = false;
-
-    if (query.sort_by === 'oldest') {
-      ascending = true;
-    } else if (query.sort_by === 'highest_rated') {
-      orderColumn = 'rating';
-      ascending = false;
-    } else if (query.sort_by === 'lowest_rated') {
-      orderColumn = 'rating';
-      ascending = true;
-    }
-
-    const pageNum = Number(query.page);
-    const limitNum = Number(query.limit);
-
-    const { data: reviews, count, error } = await supabaseQuery
-      .order(orderColumn, { ascending })
-      .range((pageNum - 1) * limitNum, pageNum * limitNum - 1);
-
-    if (error) throw error;
-
-    // Enrich with likes and user likes info
-    const enrichedReviews = reviews.map((review) => ({
-      ...review,
-      likes_count: 0, // TODO: count likes
-      user_liked: false, // TODO: check if user liked
-    }));
-
-    const totalPages = Math.ceil((count || 0) / limitNum);
-
-    return NextResponse.json(
+    const data = await listPublicReviews(
       {
-        success: true,
-        data: {
-          reviews: enrichedReviews,
-          total_count: count || 0,
-          page: pageNum,
-          limit: limitNum,
-          total_pages: totalPages,
-        },
+        page: parsed.page,
+        limit: parsed.limit,
+        search: parsed.search,
+        rating: parsed.rating as ReviewRating | undefined,
+        verified: parsed.verified,
+        withPhotos: parsed.withPhotos,
+        featured: parsed.featured,
+        service: parsed.service,
+        sort: parsed.sort,
       },
-      { status: 200 }
+      likedIds,
     );
+
+    return NextResponse.json({success: true, data}, {status: 200});
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: {
-          code: 'FETCH_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to fetch reviews',
-        },
+        message: error instanceof Error ? error.message : "Failed to fetch reviews.",
       },
-      { status: 500 }
+      {status: 400},
+    );
+  }
+}
+
+export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse<{id: string}>>> {
+  try {
+    const payload = createReviewSchema.parse(await req.json());
+    const created = await createReview({
+      ...payload,
+      rating: payload.rating as ReviewRating,
+    });
+
+    return NextResponse.json({success: true, data: created}, {status: 201});
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to create review.",
+      },
+      {status: 400},
     );
   }
 }

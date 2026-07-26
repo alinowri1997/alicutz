@@ -13,6 +13,7 @@ export const LOCALE_PAGE_PATHS = [
   "",
   "/privacy",
   "/terms",
+  "/guides",
   "/services",
   "/services/haircut",
   "/services/fade",

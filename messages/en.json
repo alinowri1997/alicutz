@@ -17,8 +17,11 @@
       "home": "Home",
       "services": "Services",
       "about": "About",
+      "guides": "Guides",
       "instagram": "Instagram",
-      "contact": "Contact"
+      "contact": "Contact",
+      "gallery": "Gallery",
+      "reviews": "Reviews"
     }
   },
   "Hero": {
@@ -195,6 +198,7 @@
       "home": "Home",
       "services": "Services",
       "about": "About",
+      "guides": "Guides",
       "instagram": "Instagram",
       "contact": "Contact"
     },

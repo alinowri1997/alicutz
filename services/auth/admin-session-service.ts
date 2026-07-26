@@ -8,12 +8,62 @@ import type { AdminSessionPayload, UserRole } from "@/types/auth";
 
 const DEFAULT_SESSION_EXPIRES_IN_MS = 60 * 60 * 24 * 5 * 1000;
 
+function toErrorDetails(error: unknown): {
+  code?: string;
+  name?: string;
+  message: string;
+  stack?: string;
+} {
+  if (error instanceof Error) {
+    const withCode = error as Error & { code?: string };
+    return {
+      code: withCode.code,
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    };
+  }
+
+  return {
+    message: String(error),
+  };
+}
+
 export async function createAdminSession(idToken: string): Promise<void> {
   const adminAuth = getAdminAuth();
   const expiresIn = DEFAULT_SESSION_EXPIRES_IN_MS;
-  const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
-  const token = await adminAuth.verifyIdToken(idToken);
-  const role = (token.role as UserRole | undefined) ?? AUTH_ROLES.admin;
+
+  let sessionCookie: string;
+  try {
+    sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
+  } catch (error) {
+    const details = toErrorDetails(error);
+    console.error("[admin-session] createSessionCookie failed", {
+      idTokenLength: idToken.length,
+      expiresIn,
+      errorCode: details.code,
+      errorName: details.name,
+      errorMessage: details.message,
+      errorStack: details.stack,
+    });
+    throw error;
+  }
+
+  let role: UserRole;
+  try {
+    const token = await adminAuth.verifyIdToken(idToken);
+    role = (token.role as UserRole | undefined) ?? AUTH_ROLES.admin;
+  } catch (error) {
+    const details = toErrorDetails(error);
+    console.error("[admin-session] verifyIdToken failed", {
+      idTokenLength: idToken.length,
+      errorCode: details.code,
+      errorName: details.name,
+      errorMessage: details.message,
+      errorStack: details.stack,
+    });
+    throw error;
+  }
 
   const cookieStore = await cookies();
 
@@ -58,7 +108,15 @@ export async function getCurrentAdminSession(): Promise<AdminSessionPayload | nu
       email: decoded.email,
       role,
     };
-  } catch {
+  } catch (error) {
+    const details = toErrorDetails(error);
+    console.error("[admin-session] verifySessionCookie failed", {
+      cookieLength: sessionCookie.length,
+      errorCode: details.code,
+      errorName: details.name,
+      errorMessage: details.message,
+      errorStack: details.stack,
+    });
     return null;
   }
 }

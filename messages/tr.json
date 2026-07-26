@@ -17,8 +17,11 @@
       "home": "Ana Sayfa",
       "services": "Hizmetler",
       "about": "Hakkımızda",
+      "guides": "Rehberler",
       "instagram": "Instagram",
-      "contact": "İletişim"
+      "contact": "İletişim",
+      "gallery": "Galeri",
+      "reviews": "Yorumlar"
     }
   },
   "Hero": {
@@ -195,6 +198,7 @@
       "home": "Ana Sayfa",
       "services": "Hizmetler",
       "about": "Hakkımızda",
+      "guides": "Rehberler",
       "instagram": "Instagram",
       "contact": "İletişim"
     },

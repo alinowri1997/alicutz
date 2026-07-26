@@ -13,10 +13,22 @@ export function getTypedDocumentRef<T>(name: FirebaseCollectionName, id: string)
 }
 
 export const contentCollections = {
-  hero: getTypedCollection<Hero>(FIREBASE_COLLECTIONS.hero),
-  featuredCuts: getTypedCollection<GalleryImage>(FIREBASE_COLLECTIONS.featuredCuts),
-  services: getTypedCollection<Service>(FIREBASE_COLLECTIONS.services),
-  reviews: getTypedCollection<Review>(FIREBASE_COLLECTIONS.reviews),
-  settings: getTypedCollection<Settings>(FIREBASE_COLLECTIONS.settings),
-  languages: getTypedCollection<LanguageEntry>(FIREBASE_COLLECTIONS.languages),
+  get hero(): CollectionReference<Hero> {
+    return getTypedCollection<Hero>(FIREBASE_COLLECTIONS.hero);
+  },
+  get featuredCuts(): CollectionReference<GalleryImage> {
+    return getTypedCollection<GalleryImage>(FIREBASE_COLLECTIONS.featuredCuts);
+  },
+  get services(): CollectionReference<Service> {
+    return getTypedCollection<Service>(FIREBASE_COLLECTIONS.services);
+  },
+  get reviews(): CollectionReference<Review> {
+    return getTypedCollection<Review>(FIREBASE_COLLECTIONS.reviews);
+  },
+  get settings(): CollectionReference<Settings> {
+    return getTypedCollection<Settings>(FIREBASE_COLLECTIONS.settings);
+  },
+  get languages(): CollectionReference<LanguageEntry> {
+    return getTypedCollection<LanguageEntry>(FIREBASE_COLLECTIONS.languages);
+  },
 };

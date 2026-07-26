@@ -32,7 +32,7 @@ export interface CreateActivityLogInput {
 export async function createActivityLog(input: CreateActivityLogInput): Promise<void> {
   await getAdminDb().collection(ACTIVITY_COLLECTION).add({
     actorUid: input.session.uid,
-    actorEmail: input.session.email,
+    actorEmail: input.session.email ?? null,
     action: input.action,
     targetType: input.targetType,
     targetId: input.targetId ?? null,

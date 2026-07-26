@@ -1,10 +1,13 @@
 import type {MetadataRoute} from "next";
 
 import {defaultLocale, locales} from "@/i18n/routing";
+import {getAllGuideSeriesSlugs, getAllGuideSlugs} from "@/lib/guides";
 import {localeToHrefLang, LOCALE_PAGE_PATHS, SITE_URL} from "@/lib/seo";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
+  const guideSlugs = await getAllGuideSlugs();
+  const seriesSlugs = await getAllGuideSeriesSlugs();
 
   for (const locale of locales) {
     for (const path of LOCALE_PAGE_PATHS) {
@@ -41,6 +44,46 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     },
   });
+
+  for (const locale of locales) {
+    for (const slug of guideSlugs) {
+      const path = `/guides/${slug}`;
+
+      entries.push({
+        url: `${SITE_URL}/${locale}${path}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.75,
+        alternates: {
+          languages: {
+            ...Object.fromEntries(
+              locales.map((altLocale) => [localeToHrefLang[altLocale], `${SITE_URL}/${altLocale}${path}`]),
+            ),
+            "x-default": `${SITE_URL}/${defaultLocale}${path}`,
+          },
+        },
+      });
+    }
+
+    for (const slug of seriesSlugs) {
+      const path = `/guides/series/${slug}`;
+
+      entries.push({
+        url: `${SITE_URL}/${locale}${path}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.7,
+        alternates: {
+          languages: {
+            ...Object.fromEntries(
+              locales.map((altLocale) => [localeToHrefLang[altLocale], `${SITE_URL}/${altLocale}${path}`]),
+            ),
+            "x-default": `${SITE_URL}/${defaultLocale}${path}`,
+          },
+        },
+      });
+    }
+  }
 
   return entries;
 }

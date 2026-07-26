@@ -1,76 +1,36 @@
-/**
- * POST /api/reviews/[id]/media - Upload media to review
- */
+import {NextRequest, NextResponse} from "next/server";
 
-import { NextRequest, NextResponse } from 'next/server';
-import type { ApiResponse, UploadMediaResponse } from '@/lib/types/reviews';
+import type {ApiResponse, ReviewImage} from "@/lib/types/reviews";
+import {uploadReviewImage} from "@/services/firestore/review-service";
+
+export const runtime = "nodejs";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<UploadMediaResponse>>> {
+  {params}: {params: Promise<{id: string}>},
+): Promise<NextResponse<ApiResponse<ReviewImage>>> {
   try {
-    const { id: reviewId } = await params;
+    const {id} = await params;
     const formData = await req.formData();
+    const file = formData.get("file");
 
-    const file = formData.get('file') as File;
-
-    if (!file) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'INVALID_INPUT',
-            message: 'File is required',
-          },
-        },
-        { status: 400 }
-      );
+    if (!(file instanceof File)) {
+      return NextResponse.json({success: false, message: "Image file is required."}, {status: 400});
     }
 
-    // Determine media type from file
-    const isImage = file.type.startsWith('image/');
-    const isVideo = file.type.startsWith('video/');
-
-    if (!isImage && !isVideo) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'INVALID_FILE_TYPE',
-            message: 'File must be an image or video',
-          },
-        },
-        { status: 400 }
-      );
+    if (!file.type.startsWith("image/")) {
+      return NextResponse.json({success: false, message: "Only image uploads are allowed."}, {status: 400});
     }
 
-    // TODO: Call uploadMedia utility and store metadata in database
-    // For now, return mock response
-    const mediaResponse: UploadMediaResponse = {
-      id: crypto.randomUUID(),
-      storage_path: `reviews/${reviewId}/${file.name}`,
-      media_type: isImage ? 'image' : 'video',
-      file_size: file.size,
-    };
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: mediaResponse,
-      },
-      { status: 201 }
-    );
+    const uploaded = await uploadReviewImage(id, file);
+    return NextResponse.json({success: true, data: uploaded}, {status: 201});
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: {
-          code: 'UPLOAD_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to upload media',
-        },
+        message: error instanceof Error ? error.message : "Failed to upload review image.",
       },
-      { status: 500 }
+      {status: 400},
     );
   }
 }

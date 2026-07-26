@@ -3,7 +3,7 @@ import {hasLocale, NextIntlClientProvider} from "next-intl";
 import {getMessages, getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 
-import {FloatingBookButton, NavigationBar} from "@/components/layout";
+import {FloatingBookButton, NavigationBar, SiteFooter} from "@/components/layout";
 import {
   buildLanguageAlternates,
   DEFAULT_OG_IMAGE_HEIGHT,
@@ -12,16 +12,14 @@ import {
   localeToLanguageTag,
   SITE_URL,
 } from "@/lib/seo";
-import {defaultLocale, isRtlLocale, locales, routing, type AppLocale} from "@/i18n/routing";
+import {defaultLocale, isRtlLocale, locales, routing} from "@/i18n/routing";
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
   params: Promise<{locale: string}>;
 }
 
-export function generateStaticParams(): Array<{locale: AppLocale}> {
-  return locales.map((locale) => ({locale}));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale: rawLocale} = await params;
@@ -73,6 +71,7 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
   const allMessages = await getMessages({locale});
   const messages = {
     Navigation: allMessages.Navigation,
+    HomeFooter: allMessages.HomeFooter,
     SystemPages: allMessages.SystemPages,
   };
   const t = await getTranslations({locale, namespace: "Layout"});
@@ -88,6 +87,7 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
         <NextIntlClientProvider locale={locale} messages={messages}>
           <NavigationBar />
           <div id="main-content">{children}</div>
+          <SiteFooter />
           <FloatingBookButton />
         </NextIntlClientProvider>
     </div>

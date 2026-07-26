@@ -7,7 +7,7 @@ import {
 } from "firebase/storage";
 
 import { FIREBASE_STORAGE_FOLDERS, type FirebaseStorageFolder } from "@/config/firebase";
-import { getFirebaseStorage } from "@/lib/firebase/client";
+import { getFirebaseStorage } from "@/lib/firebase";
 
 function buildStoragePath(folder: FirebaseStorageFolder, filename: string): string {
   return `${folder}/${filename}`;

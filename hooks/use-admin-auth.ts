@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { subscribeToAdminAuthState } from "@/lib/firebase/auth";
+import { subscribeToAdminAuthState } from "@/lib/firebase";
 import { hasRequiredRole } from "@/services/auth/rbac";
 import type { AuthenticatedUser, UserRole } from "@/types/auth";
 

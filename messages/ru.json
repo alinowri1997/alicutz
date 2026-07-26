@@ -18,7 +18,10 @@
       "services": "Услуги",
       "about": "О нас",
       "instagram": "Инстаграм",
-      "contact": "Контакты"
+      "contact": "Контакты",
+      "guides": "Guides",
+      "gallery": "Gallery",
+      "reviews": "Reviews"
     }
   },
   "Hero": {
@@ -196,7 +199,8 @@
       "services": "Услуги",
       "about": "О нас",
       "instagram": "Инстаграм",
-      "contact": "Контакты"
+      "contact": "Контакты",
+      "guides": "Guides"
     },
     "languageNames": {
       "tr": "Турецкий",

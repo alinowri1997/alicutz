@@ -5,6 +5,7 @@ export const firebaseClientConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 } as const;
 
 export const FIREBASE_COLLECTIONS = {
@@ -43,6 +44,20 @@ export const AUTH_ROLES = {
   admin: "admin",
 } as const;
 
+function normalizeFirebasePrivateKey(rawPrivateKey: string | undefined): string | undefined {
+  if (!rawPrivateKey) {
+    return undefined;
+  }
+
+  const withoutWrappingQuotes = rawPrivateKey.replace(/^['\"]|['\"]$/g, "");
+
+  return withoutWrappingQuotes
+    .replace(/\\r\\n/g, "\n")
+    .replace(/\\n/g, "\n")
+    .replace(/\r\n/g, "\n")
+    .trim();
+}
+
 export function getFirebaseAdminConfig(): {
   projectId: string;
   clientEmail: string;
@@ -50,10 +65,27 @@ export function getFirebaseAdminConfig(): {
 } {
   const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID ?? process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  const privateKey = normalizeFirebasePrivateKey(process.env.FIREBASE_ADMIN_PRIVATE_KEY);
 
   if (!projectId || !clientEmail || !privateKey) {
+    console.error("[firebase-admin-config] Missing required configuration", {
+      hasProjectId: Boolean(projectId),
+      hasClientEmail: Boolean(clientEmail),
+      hasPrivateKey: Boolean(privateKey),
+      nodeEnv: process.env.NODE_ENV,
+      vercelEnv: process.env.VERCEL_ENV,
+    });
+
     throw new Error("Firebase admin configuration is missing. Set FIREBASE_ADMIN_PROJECT_ID, FIREBASE_ADMIN_CLIENT_EMAIL, and FIREBASE_ADMIN_PRIVATE_KEY.");
+  }
+
+  if (!privateKey.includes("BEGIN PRIVATE KEY") || !privateKey.includes("END PRIVATE KEY")) {
+    console.error("[firebase-admin-config] Private key format appears invalid", {
+      privateKeyPrefix: privateKey.slice(0, 32),
+      privateKeyLength: privateKey.length,
+      privateKeyLineCount: privateKey.split("\n").length,
+    });
+    throw new Error("Firebase admin private key format is invalid.");
   }
 
   return {
@@ -70,6 +102,7 @@ export function isFirebaseClientConfigured(): boolean {
       firebaseClientConfig.projectId &&
       firebaseClientConfig.storageBucket &&
       firebaseClientConfig.messagingSenderId &&
-      firebaseClientConfig.appId,
+      firebaseClientConfig.appId &&
+      firebaseClientConfig.measurementId,
   );
 }

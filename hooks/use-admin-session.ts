@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import {sendAdminPasswordReset, signInAdminWithEmailPassword, signOutAdmin} from "@/lib/firebase/auth";
+import {sendAdminPasswordReset, signInAdminWithEmailPassword, signOutAdmin} from "@/lib/firebase";
 import type {AdminSessionPayload} from "@/types/auth";
 
 interface SessionResponse {

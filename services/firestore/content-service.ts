@@ -10,7 +10,7 @@ import {
   type CollectionReference,
 } from "firebase/firestore";
 
-import { contentCollections } from "@/lib/firebase/firestore";
+import { contentCollections } from "@/lib/firebase";
 import type { GalleryImage, Hero, LanguageEntry, Review, Service, Settings } from "@/types/content";
 
 export interface ContentMap {

@@ -1,104 +1,62 @@
-/**
- * POST /api/reviews/[id]/replies - Create a reply
- * GET /api/reviews/[id]/replies - Get replies
- */
+import {NextRequest, NextResponse} from "next/server";
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseBrowser } from '@/lib/supabase/client';
-import { createReviewReplySchema } from '@/lib/schemas/reviews';
-import type { ApiResponse, ReviewReply } from '@/lib/types/reviews';
+import {reviewReplySchema} from "@/lib/schemas/reviews";
+import type {ApiResponse, ReviewReply} from "@/lib/types/reviews";
+import {applyAdminReviewAction, getReviewById} from "@/services/firestore/review-service";
+import {requireAdmin} from "@/services/auth/require-admin";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<void>>> {
+export const runtime = "nodejs";
+
+export async function GET(
+  _req: NextRequest,
+  {params}: {params: Promise<{id: string}>},
+): Promise<NextResponse<ApiResponse<ReviewReply[]>>> {
   try {
-    const { id: reviewId } = await params;
-    const body = await req.json() as Record<string, unknown>;
-    const supabase = getSupabaseBrowser();
-    const session = await supabase.auth.getSession();
+    const {id} = await params;
+    const review = await getReviewById(id);
 
-    if (!session.data.session) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'UNAUTHORIZED',
-            message: 'You must be logged in to reply',
-          },
-        },
-        { status: 401 }
-      );
+    if (!review) {
+      return NextResponse.json({success: false, message: "Review not found."}, {status: 404});
     }
 
-    const validated = createReviewReplySchema.parse(body);
-
-    const { error } = await supabase.from('review_replies').insert({
-      review_id: reviewId,
-      user_id: session.data.session.user.id,
-      user_name: validated.user_name,
-      user_email: validated.user_email,
-      user_avatar_url: validated.user_avatar_url,
-      content: validated.content,
-      is_owner_reply: validated.is_owner_reply,
-    });
-
-    if (error) throw error;
-
-    return NextResponse.json(
-      {
-        success: true,
-      },
-      { status: 201 }
-    );
+    return NextResponse.json({success: true, data: review.reply ? [review.reply] : []}, {status: 200});
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: {
-          code: 'REPLY_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to create reply',
-        },
+        message: error instanceof Error ? error.message : "Failed to fetch replies.",
       },
-      { status: 500 }
+      {status: 400},
     );
   }
 }
 
-export async function GET(
+export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<ReviewReply[]>>> {
+  {params}: {params: Promise<{id: string}>},
+): Promise<NextResponse> {
+  const auth = await requireAdmin();
+  if (!auth.ok) {
+    return auth.response;
+  }
+
   try {
-    const { id: reviewId } = await params;
+    const {id} = await params;
+    const payload = reviewReplySchema.parse(await req.json());
+    const updated = await applyAdminReviewAction(id, "reply", payload);
 
-    const supabase = getSupabaseBrowser();
-    const { data: replies, error } = await supabase
-      .from('review_replies')
-      .select('*')
-      .eq('review_id', reviewId)
-      .is('deleted_at', null)
-      .order('created_at', { ascending: true });
+    if (!updated.reply) {
+      throw new Error("Reply was not saved.");
+    }
 
-    if (error) throw error;
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: replies,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({success: true, data: updated.reply}, {status: 201});
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: {
-          code: 'FETCH_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to fetch replies',
-        },
+        message: error instanceof Error ? error.message : "Failed to create reply.",
       },
-      { status: 500 }
+      {status: 400},
     );
   }
 }

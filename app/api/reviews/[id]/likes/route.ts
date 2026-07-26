@@ -1,109 +1,104 @@
-/**
- * POST /api/reviews/[id]/likes - Like a review
- * DELETE /api/reviews/[id]/likes - Unlike a review
- */
+import {randomUUID} from "node:crypto";
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseBrowser } from '@/lib/supabase/client';
-import type { ApiResponse } from '@/lib/types/reviews';
+import {NextRequest, NextResponse} from "next/server";
+
+import type {ApiResponse} from "@/lib/types/reviews";
+import {likeReview, unlikeReview} from "@/services/firestore/review-service";
+
+export const runtime = "nodejs";
+
+const VISITOR_COOKIE = "ac_review_visitor";
+const LIKED_COOKIE = "ac_review_liked";
+
+function parseLiked(raw: string | undefined): Set<string> {
+  if (!raw) {
+    return new Set();
+  }
+
+  return new Set(raw.split(",").map((item) => item.trim()).filter(Boolean));
+}
+
+function serializeLiked(set: Set<string>): string {
+  return Array.from(set).join(",");
+}
+
+function getOrCreateVisitorId(req: NextRequest): string {
+  return req.cookies.get(VISITOR_COOKIE)?.value ?? randomUUID();
+}
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<void>>> {
+  {params}: {params: Promise<{id: string}>},
+): Promise<NextResponse<ApiResponse<{likes: number}>>> {
   try {
-    const { id: reviewId } = await params;
+    const {id} = await params;
+    const visitorId = getOrCreateVisitorId(req);
+    const likes = await likeReview(id, visitorId);
 
-    const supabase = getSupabaseBrowser();
-    const session = await supabase.auth.getSession();
+    const likedSet = parseLiked(req.cookies.get(LIKED_COOKIE)?.value);
+    likedSet.add(id);
 
-    if (!session.data.session) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'UNAUTHORIZED',
-            message: 'You must be logged in to like reviews',
-          },
-        },
-        { status: 401 }
-      );
-    }
-
-    const { error } = await supabase.from('review_likes').insert({
-      review_id: reviewId,
-      user_id: session.data.session.user.id,
+    const response = NextResponse.json({success: true, data: {likes}}, {status: 200});
+    response.cookies.set(VISITOR_COOKIE, visitorId, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    response.cookies.set(LIKED_COOKIE, serializeLiked(likedSet), {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
     });
 
-    if (error && error.code !== 'PGRST116') throw error;
-
-    return NextResponse.json(
-      {
-        success: true,
-      },
-      { status: 201 }
-    );
+    return response;
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: {
-          code: 'LIKE_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to like review',
-        },
+        message: error instanceof Error ? error.message : "Failed to like review.",
       },
-      { status: 500 }
+      {status: 400},
     );
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<void>>> {
+  {params}: {params: Promise<{id: string}>},
+): Promise<NextResponse<ApiResponse<{likes: number}>>> {
   try {
-    const { id: reviewId } = await params;
+    const {id} = await params;
+    const visitorId = req.cookies.get(VISITOR_COOKIE)?.value;
 
-    const supabase = getSupabaseBrowser();
-    const session = await supabase.auth.getSession();
-
-    if (!session.data.session) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'UNAUTHORIZED',
-            message: 'You must be logged in',
-          },
-        },
-        { status: 401 }
-      );
+    if (!visitorId) {
+      return NextResponse.json({success: true, data: {likes: 0}}, {status: 200});
     }
 
-    const { error } = await supabase
-      .from('review_likes')
-      .delete()
-      .eq('review_id', reviewId)
-      .eq('user_id', session.data.session.user.id);
+    const likes = await unlikeReview(id, visitorId);
+    const likedSet = parseLiked(req.cookies.get(LIKED_COOKIE)?.value);
+    likedSet.delete(id);
 
-    if (error) throw error;
+    const response = NextResponse.json({success: true, data: {likes}}, {status: 200});
+    response.cookies.set(LIKED_COOKIE, serializeLiked(likedSet), {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
 
-    return NextResponse.json(
-      {
-        success: true,
-      },
-      { status: 200 }
-    );
+    return response;
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: {
-          code: 'UNLIKE_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to unlike review',
-        },
+        message: error instanceof Error ? error.message : "Failed to unlike review.",
       },
-      { status: 500 }
+      {status: 400},
     );
   }
 }
