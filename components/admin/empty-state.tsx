@@ -1,22 +1,24 @@
 import {FileText} from "lucide-react";
 
-import {AdminCard} from "@/components/admin/admin-card";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
 export interface EmptyStateProps {
   title: string;
   message: string;
+  action?: React.ReactNode;
 }
 
-export function EmptyState({title, message}: EmptyStateProps): React.JSX.Element {
+export function EmptyState({title, message, action}: EmptyStateProps): React.JSX.Element {
   return (
-    <AdminCard className="py-12 text-center">
-      <div className="mx-auto flex max-w-sm flex-col items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-[#171717]">
+    <Card className="border-dashed">
+      <CardHeader className="items-center text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background">
           <FileText className="h-5 w-5 text-[#a0a0a0]" aria-hidden="true" />
         </div>
-        <h3 className="text-sm font-medium text-[#f2f2f2]">{title}</h3>
-        <p className="text-sm text-[#9a9a9a]">{message}</p>
-      </div>
-    </AdminCard>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription className="max-w-[42ch]">{message}</CardDescription>
+      </CardHeader>
+      {action ? <CardContent className="flex justify-center pt-0">{action}</CardContent> : null}
+    </Card>
   );
 }

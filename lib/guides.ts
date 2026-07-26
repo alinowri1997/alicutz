@@ -6,6 +6,15 @@ import matter from "gray-matter";
 import readingTime from "reading-time";
 
 import {defaultLocale, locales, type AppLocale} from "@/i18n/routing";
+import {
+  buildGuideBlueprintAuditSummary,
+  buildGuideSeoBlueprint,
+  createGuideEditorialChecklist,
+  normalizeGuideSeoBlueprintInput,
+  type GuideEditorialChecklist,
+  type GuideSeoBlueprint,
+  type GuideSeoBlueprintInput,
+} from "@/lib/guides-blueprint";
 
 const GUIDES_ROOT = path.join(process.cwd(), "content", "guides");
 const PAGE_SIZE = 9;
@@ -44,6 +53,7 @@ export interface GuideFrontmatter {
   searchIntent?: string[];
   audience?: string[];
   series?: GuideSeriesReference;
+  seoBlueprint?: GuideSeoBlueprintInput;
 }
 
 export interface GuideListItem extends GuideFrontmatter {
@@ -51,6 +61,8 @@ export interface GuideListItem extends GuideFrontmatter {
   locale: AppLocale;
   readingMinutes: number;
   headings: Array<{id: string; text: string}>;
+  seoBlueprint: GuideSeoBlueprint;
+  editorialChecklist: GuideEditorialChecklist;
 }
 
 export interface GuidesQuery {
@@ -231,6 +243,7 @@ function normalizeFrontmatter(frontmatter: Partial<GuideFrontmatter>): GuideFron
     searchIntent: normalizeTokenList(frontmatter.searchIntent),
     audience: normalizeTokenList(frontmatter.audience),
     series: normalizeSeries(frontmatter.series),
+    seoBlueprint: normalizeGuideSeoBlueprintInput(frontmatter.seoBlueprint),
   };
 }
 
@@ -348,6 +361,7 @@ export const getGuideBySlug = cache(async (locale: AppLocale, slug: string): Pro
             ? frontmatter.audience
             : englishFrontmatter.audience,
         series: frontmatter.series ?? englishFrontmatter.series,
+        seoBlueprint: frontmatter.seoBlueprint ?? englishFrontmatter.seoBlueprint,
       };
     }
   }
@@ -358,14 +372,39 @@ export const getGuideBySlug = cache(async (locale: AppLocale, slug: string): Pro
 
   const reading = readingTime(parsed.content);
   const headings = parseHeadings(parsed.content);
+  const readingMinutes = Math.max(1, Math.ceil(reading.minutes));
+  const seoBlueprint = buildGuideSeoBlueprint({
+    locale: guideSource.locale,
+    slug: normalizedSlug,
+    title: mergedFrontmatter.title,
+    description: mergedFrontmatter.description,
+    excerpt: mergedFrontmatter.excerpt,
+    category: mergedFrontmatter.category,
+    tags: mergedFrontmatter.tags,
+    searchIntentTokens: mergedFrontmatter.searchIntent,
+    audienceTokens: mergedFrontmatter.audience,
+    relatedSlugs: mergedFrontmatter.related,
+    faqQuestions: (mergedFrontmatter.faq ?? []).map((item) => item.question),
+    readingMinutes,
+    series: mergedFrontmatter.series
+      ? {
+          title: mergedFrontmatter.series.title,
+          slug: mergedFrontmatter.series.slug,
+        }
+      : undefined,
+    input: mergedFrontmatter.seoBlueprint,
+  });
+  const editorialChecklist = createGuideEditorialChecklist(seoBlueprint);
 
   return {
     item: {
       ...mergedFrontmatter,
       slug: normalizedSlug,
       locale: guideSource.locale,
-      readingMinutes: Math.max(1, Math.ceil(reading.minutes)),
+      readingMinutes,
       headings,
+      seoBlueprint,
+      editorialChecklist,
     },
     source: parsed.content,
   };
@@ -567,6 +606,44 @@ export const getAllGuideSeriesSlugs = cache(async (): Promise<string[]> => {
 
   return [...slugSet].sort();
 });
+
+export interface GuideBlueprintAuditItem {
+  slug: string;
+  locale: AppLocale;
+  checklist: GuideEditorialChecklist;
+  category: string;
+  series?: string;
+}
+
+export async function getGuideBlueprintAudit(locale: AppLocale): Promise<{
+  items: GuideBlueprintAuditItem[];
+  summary: ReturnType<typeof buildGuideBlueprintAuditSummary>;
+}> {
+  const guides = await getAllGuides(locale);
+  const items = guides.map((guide) => ({
+    slug: guide.slug,
+    locale: guide.locale,
+    checklist: guide.editorialChecklist,
+    category: guide.seoBlueprint.category,
+    series: guide.seoBlueprint.series?.slug,
+  }));
+
+  return {
+    items,
+    summary: buildGuideBlueprintAuditSummary(items.map((item) => item.checklist)),
+  };
+}
+
+export async function getGuideBlueprintAuditAllLocales(): Promise<Record<AppLocale, Awaited<ReturnType<typeof getGuideBlueprintAudit>>>> {
+  const results = await Promise.all(
+    locales.map(async (locale) => {
+      const audit = await getGuideBlueprintAudit(locale);
+      return [locale, audit] as const;
+    }),
+  );
+
+  return Object.fromEntries(results) as Record<AppLocale, Awaited<ReturnType<typeof getGuideBlueprintAudit>>>;
+}
 
 export function formatGuideDate(date: string, locale: AppLocale): string {
   const parsed = Date.parse(date);

@@ -33,29 +33,36 @@ export async function generateMetadata({params}: GuideArticlePageProps): Promise
     };
   }
 
+  const blueprint = guide.item.seoBlueprint;
+
   return {
-    title: `${guide.item.title} | Ali Cutz Guides`,
-    description: guide.item.description,
+    title: blueprint.metaTitle,
+    description: blueprint.metaDescription,
     alternates: {
-      canonical: `${SITE_URL}/${locale}/guides/${guide.item.slug}`,
+      canonical: blueprint.canonicalUrl,
       languages: buildLanguageAlternates(`/guides/${guide.item.slug}`),
     },
     openGraph: {
-      title: `${guide.item.title} | Ali Cutz Guides`,
-      description: guide.item.description,
+      title: blueprint.metaTitle,
+      description: blueprint.metaDescription,
       url: `${SITE_URL}/${locale}/guides/${guide.item.slug}`,
       type: "article",
       locale: localeToLanguageTag[locale],
       alternateLocale: locales.filter((entry) => entry !== locale).map((entry) => localeToLanguageTag[entry]),
       publishedTime: guide.item.publishedAt,
       modifiedTime: guide.item.updatedAt ?? guide.item.publishedAt,
-      tags: guide.item.tags,
+      tags: blueprint.secondaryKeywords,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${guide.item.title} | Ali Cutz Guides`,
-      description: guide.item.description,
+      title: blueprint.metaTitle,
+      description: blueprint.metaDescription,
     },
+    keywords: [
+      blueprint.primaryKeyword,
+      ...blueprint.secondaryKeywords,
+      ...blueprint.semanticKeywords,
+    ],
   };
 }
 
@@ -74,6 +81,8 @@ export default async function GuideArticlePage({params}: GuideArticlePageProps):
   if (!guide) {
     notFound();
   }
+
+  const blueprint = guide.item.seoBlueprint;
 
   const [continueReading, series, compiled] = await Promise.all([
     getContinueReadingGuides(locale, guide.item, 3),
@@ -148,7 +157,7 @@ export default async function GuideArticlePage({params}: GuideArticlePageProps):
   };
 
   const faqSchema =
-    guide.item.faq && guide.item.faq.length > 0
+    blueprint.jsonLdSupport.includes("FAQPage") && guide.item.faq && guide.item.faq.length > 0
       ? {
           "@context": "https://schema.org",
           "@type": "FAQPage",
