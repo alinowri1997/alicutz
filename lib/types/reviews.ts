@@ -10,6 +10,19 @@ export type ReviewService =
   | "Home Service"
   | "Other";
 
+export type ReviewTag =
+  | "Haircut"
+  | "Fade"
+  | "Beard"
+  | "Color"
+  | "Friendly"
+  | "Fast Service"
+  | "Home Service"
+  | "Professional"
+  | "Clean Environment";
+
+export type ReviewVote = "helpful" | "notHelpful";
+
 export interface ReviewImage {
   path: string;
   url: string;
@@ -29,14 +42,17 @@ export interface ReviewDocument {
   id: string;
   customerName: string;
   email: string;
-  country: string;
+  languageCode: string;
   language: string;
   avatar?: string;
   rating: ReviewRating;
   service: ReviewService;
   review: string;
+  tags: ReviewTag[];
   images: ReviewImage[];
   likes: number;
+  helpfulVotes: number;
+  notHelpfulVotes: number;
   verified: boolean;
   featured: boolean;
   approved: boolean;
@@ -61,6 +77,7 @@ export interface ReviewDocument {
 
 export interface PublicReview extends ReviewDocument {
   userLiked: boolean;
+  userVote: ReviewVote | null;
   timeAgo: string;
 }
 
@@ -106,23 +123,25 @@ export interface ReviewQuery {
 export interface CreateReviewInput {
   customerName: string;
   email: string;
-  country: string;
+  languageCode: string;
   language: string;
   service: ReviewService;
   rating: ReviewRating;
   review: string;
   visitDate?: string;
+  tags: ReviewTag[];
 }
 
 export interface UpdateReviewInput {
   customerName?: string;
   email?: string;
-  country?: string;
+  languageCode?: string;
   language?: string;
   service?: ReviewService;
   rating?: ReviewRating;
   review?: string;
   visitDate?: string;
+  tags?: ReviewTag[];
   featured?: boolean;
   verified?: boolean;
   approved?: boolean;

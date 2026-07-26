@@ -106,14 +106,17 @@ function mapReviewDocument(id: string, raw: FirebaseFirestore.DocumentData | und
     id,
     customerName: source.customerName ?? "Anonymous",
     email: source.email ?? "",
-    country: source.country ?? "",
+    languageCode: source.languageCode ?? source.language ?? "",
     language: source.language ?? "",
     avatar: source.avatar,
     rating: source.rating ?? 5,
     service: source.service ?? "Other",
     review: source.review ?? "",
+    tags: Array.isArray(source.tags) ? source.tags : [],
     images: Array.isArray(source.images) ? source.images : [],
     likes: typeof source.likes === "number" ? source.likes : 0,
+    helpfulVotes: typeof source.helpfulVotes === "number" ? source.helpfulVotes : typeof source.likes === "number" ? source.likes : 0,
+    notHelpfulVotes: typeof source.notHelpfulVotes === "number" ? source.notHelpfulVotes : 0,
     verified: Boolean(source.verified),
     featured: Boolean(source.featured),
     approved: Boolean(source.approved),
@@ -366,6 +369,7 @@ export async function listPublicReviews(query: ReviewQuery, likedIds: Set<string
   const reviews: PublicReview[] = paged.map((review) => ({
     ...review,
     userLiked: likedIds.has(review.id),
+    userVote: likedIds.has(review.id) ? "helpful" : null,
     timeAgo: buildTimeAgo(review.createdAt),
   }));
 
@@ -402,13 +406,16 @@ export async function createReview(input: CreateReviewInput): Promise<{id: strin
   const docRef = await getAdminDb().collection(REVIEWS_COLLECTION).add({
     customerName: input.customerName,
     email: input.email.toLowerCase(),
-    country: input.country,
+    languageCode: input.languageCode,
     language: input.language,
     rating: input.rating,
     service: input.service,
     review: input.review,
+    tags: input.tags,
     images: [],
     likes: 0,
+    helpfulVotes: 0,
+    notHelpfulVotes: 0,
     verified: false,
     featured: false,
     approved: false,
@@ -509,6 +516,7 @@ export async function likeReview(reviewId: string, visitorId: string): Promise<n
 
     transaction.update(reviewRef, {
       likes: FieldValue.increment(1),
+      helpfulVotes: FieldValue.increment(1),
       updatedAt: FieldValue.serverTimestamp(),
     });
   });
@@ -541,6 +549,7 @@ export async function unlikeReview(reviewId: string, visitorId: string): Promise
     transaction.delete(likeRef);
     transaction.update(reviewRef, {
       likes: FieldValue.increment(-1),
+      helpfulVotes: FieldValue.increment(-1),
       updatedAt: FieldValue.serverTimestamp(),
     });
   });

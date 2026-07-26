@@ -2,6 +2,18 @@ import {z} from "zod";
 
 const services = ["Haircut", "Fade", "Color", "Beard", "Home Service", "Other"] as const;
 
+const reviewTags = [
+  "Haircut",
+  "Fade",
+  "Beard",
+  "Color",
+  "Friendly",
+  "Fast Service",
+  "Home Service",
+  "Professional",
+  "Clean Environment",
+] as const;
+
 const sorts = [
   "newest",
   "oldest",
@@ -38,23 +50,25 @@ export const reviewRatingSchema = z.number().int().min(1).max(5);
 export const createReviewSchema = z.object({
   customerName: z.string().trim().min(2).max(80),
   email: z.string().trim().email().max(120),
-  country: z.string().trim().min(2).max(8),
+  languageCode: z.string().trim().min(2).max(12),
   language: z.string().trim().min(2).max(32),
   service: z.enum(services),
   rating: reviewRatingSchema,
   review: z.string().trim().min(20).max(2000),
   visitDate: z.string().trim().optional(),
+  tags: z.array(z.enum(reviewTags)).max(9).default([]),
 });
 
 export const updateReviewSchema = z.object({
   customerName: z.string().trim().min(2).max(80).optional(),
   email: z.string().trim().email().max(120).optional(),
-  country: z.string().trim().min(2).max(8).optional(),
+  languageCode: z.string().trim().min(2).max(12).optional(),
   language: z.string().trim().min(2).max(32).optional(),
   service: z.enum(services).optional(),
   rating: reviewRatingSchema.optional(),
   review: z.string().trim().min(20).max(2000).optional(),
   visitDate: z.string().trim().optional(),
+  tags: z.array(z.enum(reviewTags)).max(9).optional(),
   featured: z.boolean().optional(),
   verified: z.boolean().optional(),
   approved: z.boolean().optional(),

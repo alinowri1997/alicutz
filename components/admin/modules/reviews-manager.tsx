@@ -210,7 +210,7 @@ function ReviewRow({
         <div>
           <p className="text-sm text-[#f1f1f1]">{review.customerName}</p>
           <p className="text-xs text-[#9a9a9a]">
-            {review.country} • {review.language} • {review.service} • {review.rating}/5 • {review.status}
+            {review.language} • {review.service} • {review.rating}/5 • {review.status}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
