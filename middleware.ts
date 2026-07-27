@@ -1,7 +1,7 @@
 import createMiddleware from "next-intl/middleware";
 import {NextRequest, NextResponse} from "next/server";
 
-import {AUTH_COOKIE_NAMES, AUTH_ROLES} from "@/config/firebase";
+import {AUTH_COOKIE_NAMES, AUTH_ROLES, isAdminAuthDisabled} from "@/config/firebase";
 import {locales, routing} from "@/i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
@@ -43,6 +43,10 @@ export default function middleware(request: NextRequest): NextResponse {
   }
 
   if (isAdminPath(pathname)) {
+    if (isAdminAuthDisabled()) {
+      return NextResponse.next();
+    }
+
     const sessionCookie = request.cookies.get(AUTH_COOKIE_NAMES.session)?.value;
     const roleCookie = request.cookies.get(AUTH_COOKIE_NAMES.role)?.value;
     const isAuthenticated = Boolean(sessionCookie && roleCookie === AUTH_ROLES.admin);

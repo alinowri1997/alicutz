@@ -29,6 +29,7 @@ export interface ReviewImage {
   width?: number;
   height?: number;
   size?: number;
+  approved?: boolean;
 }
 
 export interface ReviewReply {
@@ -142,6 +143,7 @@ export interface UpdateReviewInput {
   review?: string;
   visitDate?: string;
   tags?: ReviewTag[];
+  reply?: ReviewReply | null;
   featured?: boolean;
   verified?: boolean;
   approved?: boolean;

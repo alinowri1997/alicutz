@@ -2,7 +2,7 @@ import "server-only";
 
 import { cookies } from "next/headers";
 
-import { AUTH_COOKIE_NAMES, AUTH_ROLES } from "@/config/firebase";
+import { AUTH_COOKIE_NAMES, AUTH_ROLES, isAdminAuthDisabled } from "@/config/firebase";
 import { getAdminAuth } from "@/lib/firebase/admin";
 import type { AdminSessionPayload, UserRole } from "@/types/auth";
 
@@ -30,6 +30,10 @@ function toErrorDetails(error: unknown): {
 }
 
 export async function createAdminSession(idToken: string): Promise<void> {
+  if (isAdminAuthDisabled()) {
+    return;
+  }
+
   const adminAuth = getAdminAuth();
   const expiresIn = DEFAULT_SESSION_EXPIRES_IN_MS;
 
@@ -85,12 +89,24 @@ export async function createAdminSession(idToken: string): Promise<void> {
 }
 
 export async function clearAdminSession(): Promise<void> {
+  if (isAdminAuthDisabled()) {
+    return;
+  }
+
   const cookieStore = await cookies();
   cookieStore.delete(AUTH_COOKIE_NAMES.session);
   cookieStore.delete(AUTH_COOKIE_NAMES.role);
 }
 
 export async function getCurrentAdminSession(): Promise<AdminSessionPayload | null> {
+  if (isAdminAuthDisabled()) {
+    return {
+      uid: "local-admin",
+      email: "admin@alicutz.local",
+      role: AUTH_ROLES.admin,
+    };
+  }
+
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get(AUTH_COOKIE_NAMES.session)?.value;
 

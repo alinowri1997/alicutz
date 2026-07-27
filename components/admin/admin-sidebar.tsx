@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {LayoutDashboard, LucideIcon, Settings, Store, Images, Clock3, LogOut, X} from "lucide-react";
+import {LayoutDashboard, LucideIcon, Settings, Store, Images, Clock3, LogOut, X, MessageSquare} from "lucide-react";
 import {usePathname} from "next/navigation";
 
 import {Button} from "@/components/ui/button";
@@ -11,6 +11,7 @@ import {ADMIN_NAV_ITEMS, type AdminNavKey} from "@/lib/admin-dashboard";
 
 const NAV_ICONS: Record<AdminNavKey, LucideIcon> = {
   dashboard: LayoutDashboard,
+  reviews: MessageSquare,
   services: Store,
   hours: Clock3,
   gallery: Images,
@@ -19,6 +20,7 @@ const NAV_ICONS: Record<AdminNavKey, LucideIcon> = {
 
 const NAV_COPY: Record<AdminNavKey, string> = {
   dashboard: "Overview",
+  reviews: "Reviews",
   services: "Services",
   hours: "Hours",
   gallery: "Gallery",

@@ -106,3 +106,15 @@ export function isFirebaseClientConfigured(): boolean {
       firebaseClientConfig.measurementId,
   );
 }
+
+export function isAdminAuthDisabled(): boolean {
+  if (process.env.ADMIN_AUTH_DISABLED === "true" || process.env.NEXT_PUBLIC_ADMIN_AUTH_DISABLED === "true") {
+    return true;
+  }
+
+  const hasAdminProjectId = Boolean(process.env.FIREBASE_ADMIN_PROJECT_ID ?? process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID);
+  const hasAdminClientEmail = Boolean(process.env.FIREBASE_ADMIN_CLIENT_EMAIL);
+  const hasAdminPrivateKey = Boolean(process.env.FIREBASE_ADMIN_PRIVATE_KEY);
+
+  return !isFirebaseClientConfigured() || !hasAdminProjectId || !hasAdminClientEmail || !hasAdminPrivateKey;
+}

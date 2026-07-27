@@ -69,6 +69,15 @@ export const updateReviewSchema = z.object({
   review: z.string().trim().min(20).max(2000).optional(),
   visitDate: z.string().trim().optional(),
   tags: z.array(z.enum(reviewTags)).max(9).optional(),
+  reply: z
+    .object({
+      authorName: z.string().trim().min(1).max(80),
+      authorRole: z.string().trim().min(1).max(80),
+      message: z.string().trim().min(1).max(1000),
+      replyDate: z.string().trim().min(1).max(64),
+    })
+    .nullable()
+    .optional(),
   featured: z.boolean().optional(),
   verified: z.boolean().optional(),
   approved: z.boolean().optional(),
@@ -100,10 +109,10 @@ export const reviewQuerySchema = z.object({
 export const adminReviewQuerySchema = z.object({
   status: z.enum(["pending", "approved", "hidden", "rejected", "all"]).default("all"),
   search: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(200).default(50),
 });
 
 export const reviewModerationActionSchema = z.object({
-  action: z.enum(["approve", "reject", "delete", "hide", "pin", "verify", "edit", "reply"]),
+  action: z.enum(["approve", "reject", "delete", "hide", "pin", "verify", "edit", "reply", "deletePhoto"]),
   payload: z.record(z.string(), z.unknown()).optional(),
 });

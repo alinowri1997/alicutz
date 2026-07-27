@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import {isAdminAuthDisabled} from "@/config/firebase";
 import {sendAdminPasswordReset, signInAdminWithEmailPassword, signOutAdmin} from "@/lib/firebase";
 import type {AdminSessionPayload} from "@/types/auth";
 
@@ -35,8 +36,17 @@ async function fetchSession(): Promise<AdminSessionPayload | null> {
 }
 
 export function useAdminSession(): UseAdminSessionResult {
-  const [user, setUser] = React.useState<AdminSessionPayload | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const adminAuthDisabled = isAdminAuthDisabled();
+  const [user, setUser] = React.useState<AdminSessionPayload | null>(() =>
+    adminAuthDisabled
+      ? {
+          uid: "local-admin",
+          email: "admin@alicutz.local",
+          role: "admin",
+        }
+      : null,
+  );
+  const [isLoading, setIsLoading] = React.useState(!adminAuthDisabled);
 
   const refresh = React.useCallback(async () => {
     const nextUser = await fetchSession();
@@ -44,6 +54,10 @@ export function useAdminSession(): UseAdminSessionResult {
   }, []);
 
   React.useEffect(() => {
+    if (adminAuthDisabled) {
+      return;
+    }
+
     let isMounted = true;
 
     const load = async () => {
@@ -64,9 +78,18 @@ export function useAdminSession(): UseAdminSessionResult {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [adminAuthDisabled]);
 
   const signIn = React.useCallback(async (email: string, password: string) => {
+    if (adminAuthDisabled) {
+      setUser({
+        uid: "local-admin",
+        email: email || "admin@alicutz.local",
+        role: "admin",
+      });
+      return;
+    }
+
     const userCredential = await signInAdminWithEmailPassword(email, password);
     const idToken = await userCredential.getIdToken();
 
@@ -84,9 +107,13 @@ export function useAdminSession(): UseAdminSessionResult {
     }
 
     await refresh();
-  }, [refresh]);
+  }, [adminAuthDisabled, refresh]);
 
   const signOut = React.useCallback(async () => {
+    if (adminAuthDisabled) {
+      return;
+    }
+
     await signOutAdmin();
 
     await fetch("/api/admin/session", {
@@ -95,11 +122,15 @@ export function useAdminSession(): UseAdminSessionResult {
     });
 
     setUser(null);
-  }, []);
+  }, [adminAuthDisabled]);
 
   const forgotPassword = React.useCallback(async (email: string) => {
+    if (adminAuthDisabled) {
+      return;
+    }
+
     await sendAdminPasswordReset(email);
-  }, []);
+  }, [adminAuthDisabled]);
 
   return {
     user,

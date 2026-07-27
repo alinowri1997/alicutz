@@ -452,6 +452,7 @@ export async function uploadReviewImage(reviewId: string, file: File): Promise<R
     path: fullPath,
     url: `https://storage.googleapis.com/${bucketName}/${fullPath}`,
     size: file.size,
+    approved: true,
   };
 
   await getAdminDb().collection(REVIEWS_COLLECTION).doc(reviewId).update({
@@ -606,7 +607,7 @@ export async function deleteReview(id: string): Promise<void> {
 
 export async function applyAdminReviewAction(
   id: string,
-  action: "approve" | "reject" | "hide" | "pin" | "verify" | "edit" | "reply",
+  action: "approve" | "reject" | "hide" | "pin" | "verify" | "edit" | "reply" | "deletePhoto",
   payload?: Record<string, unknown>,
 ): Promise<ReviewDocument> {
   const reviewRef = getAdminDb().collection(REVIEWS_COLLECTION).doc(id);
@@ -675,6 +676,13 @@ export async function applyAdminReviewAction(
       replyDate: new Date().toISOString(),
       updatedAt: FieldValue.serverTimestamp(),
     });
+  } else if (action === "deletePhoto") {
+    const photoPayload = payload as {path?: string} | undefined;
+    if (!photoPayload?.path) {
+      throw new Error("Photo path is required.");
+    }
+
+    await deleteReviewImage(id, photoPayload.path);
   }
 
   const updated = await reviewRef.get();

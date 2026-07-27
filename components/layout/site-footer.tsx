@@ -95,6 +95,9 @@ export function SiteFooter(): React.JSX.Element {
             <Link href="/terms" className="type-small text-muted transition-colors hover:text-text">
               {t("terms")}
             </Link>
+            <Link href="/admin" className="type-small text-muted transition-colors hover:text-text">
+              Management
+            </Link>
           </div>
         </div>
       </div>

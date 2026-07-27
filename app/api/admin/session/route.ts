@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import {isAdminAuthDisabled} from "@/config/firebase";
 import {
   clearAdminSession,
   createAdminSession,
@@ -15,6 +16,10 @@ interface CreateSessionBody {
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    if (isAdminAuthDisabled()) {
+      return NextResponse.json({ success: true }, { status: 200 });
+    }
+
     const body = (await req.json()) as CreateSessionBody;
 
     if (!body.idToken) {
@@ -67,6 +72,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function GET(): Promise<NextResponse> {
+  if (isAdminAuthDisabled()) {
+    return NextResponse.json(
+      {
+        success: true,
+        user: {
+          uid: "local-admin",
+          email: "admin@alicutz.local",
+          role: "admin",
+        },
+      },
+      { status: 200 },
+    );
+  }
+
   const session = await getCurrentAdminSession();
 
   if (!session) {
@@ -77,6 +96,10 @@ export async function GET(): Promise<NextResponse> {
 }
 
 export async function DELETE(): Promise<NextResponse> {
+  if (isAdminAuthDisabled()) {
+    return NextResponse.json({ success: true }, { status: 200 });
+  }
+
   const session = await getCurrentAdminSession();
 
   if (session) {
