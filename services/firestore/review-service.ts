@@ -106,6 +106,7 @@ function mapReviewDocument(id: string, raw: FirebaseFirestore.DocumentData | und
     id,
     customerName: source.customerName ?? "Anonymous",
     email: source.email ?? "",
+    countryCode: source.countryCode ?? undefined,
     languageCode: source.languageCode ?? source.language ?? "",
     language: source.language ?? "",
     avatar: source.avatar,
@@ -406,6 +407,7 @@ export async function createReview(input: CreateReviewInput): Promise<{id: strin
   const docRef = await getAdminDb().collection(REVIEWS_COLLECTION).add({
     customerName: input.customerName,
     email: input.email.toLowerCase(),
+    countryCode: input.countryCode?.toUpperCase() ?? null,
     languageCode: input.languageCode,
     language: input.language,
     rating: input.rating,

@@ -275,9 +275,9 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
 
         <HeroSection />
         <LatestWorkSection />
+        <ReviewsSection />
         <ServicesSection />
         <AboutSection />
-        <ReviewsSection />
         <LocationSection />
       </main>
     </Intro>

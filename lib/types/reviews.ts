@@ -43,6 +43,7 @@ export interface ReviewDocument {
   id: string;
   customerName: string;
   email: string;
+  countryCode?: string;
   languageCode: string;
   language: string;
   avatar?: string;
@@ -124,6 +125,7 @@ export interface ReviewQuery {
 export interface CreateReviewInput {
   customerName: string;
   email: string;
+  countryCode?: string;
   languageCode: string;
   language: string;
   service: ReviewService;
@@ -136,6 +138,7 @@ export interface CreateReviewInput {
 export interface UpdateReviewInput {
   customerName?: string;
   email?: string;
+  countryCode?: string;
   languageCode?: string;
   language?: string;
   service?: ReviewService;
