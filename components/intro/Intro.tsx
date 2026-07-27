@@ -3,7 +3,6 @@
 import * as React from "react";
 import {Cormorant_Garamond, Inter} from "next/font/google";
 import {AnimatePresence, motion, useReducedMotion} from "framer-motion";
-import {X} from "lucide-react";
 
 import {
   createCinematicZoomTransition,
@@ -13,9 +12,11 @@ import {
   HOMEPAGE_ENTER_TRANSITION,
 } from "@/components/intro/animations";
 import {IntroContent} from "@/components/intro/IntroContent";
+import {IntroCursor} from "@/components/intro/IntroCursor";
 import {IntroImage} from "@/components/intro/IntroImage";
 import {introStyles} from "@/components/intro/styles";
 import {useIntro} from "@/hooks/useIntro";
+import {cn} from "@/lib/utils";
 
 const logoFont = Inter({subsets: ["latin"], weight: ["700"], display: "swap"});
 const headlineFont = Cormorant_Garamond({subsets: ["latin"], weight: ["500"], display: "swap"});
@@ -27,6 +28,21 @@ interface IntroProps {
 export function Intro({children}: IntroProps): React.JSX.Element {
   const reduceMotion = useReducedMotion();
   const {phase, showIntro, enter, skip} = useIntro();
+  const [cursorEnabled, setCursorEnabled] = React.useState(false);
+
+  React.useEffect(() => {
+    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const apply = (): void => {
+      setCursorEnabled(media.matches);
+    };
+
+    apply();
+    media.addEventListener("change", apply);
+
+    return () => {
+      media.removeEventListener("change", apply);
+    };
+  }, []);
 
   const isExiting = phase === "exiting";
   const imageVariants = React.useMemo(() => createImageRevealVariants(Boolean(reduceMotion)), [reduceMotion]);
@@ -52,7 +68,7 @@ export function Intro({children}: IntroProps): React.JSX.Element {
       <motion.div
         initial={false}
         animate={
-          phase === "visible" || phase === "checking"
+          phase === "visible"
             ? {y: "100vh"}
             : {y: 0}
         }
@@ -65,7 +81,7 @@ export function Intro({children}: IntroProps): React.JSX.Element {
         {showIntro ? (
           <motion.section
             key="intro-overlay"
-            className={introStyles.overlay}
+            className={cn(introStyles.overlay, cursorEnabled ? "cursor-none" : undefined)}
             initial={{opacity: 1}}
             animate={{opacity: 1}}
             exit={{opacity: 0}}
@@ -77,18 +93,6 @@ export function Intro({children}: IntroProps): React.JSX.Element {
             onTouchStart={enter}
             onKeyDown={handleKeyDown}
           >
-            <button
-              type="button"
-              aria-label="Skip intro"
-              className={introStyles.closeButton}
-              onClick={(event) => {
-                event.stopPropagation();
-                skip();
-              }}
-            >
-              <X className="h-4 w-4" aria-hidden="true" />
-            </button>
-
             <div className={introStyles.frame}>
               <IntroContent
                 logoClassName={`${logoFont.className} ${introStyles.logo}`}
@@ -106,6 +110,8 @@ export function Intro({children}: IntroProps): React.JSX.Element {
                 reduceMotion={Boolean(reduceMotion)}
               />
             </div>
+
+            <IntroCursor active={cursorEnabled} />
           </motion.section>
         ) : null}
       </AnimatePresence>

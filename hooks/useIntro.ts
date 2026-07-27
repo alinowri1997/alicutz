@@ -2,40 +2,9 @@
 
 import * as React from "react";
 
-const INTRO_STORAGE_KEY = "alicutz.intro.lastSeenAt";
-const REAPPEAR_DAYS = 30;
 const ENTER_TRANSITION_MS = 700;
 
-type IntroPhase = "checking" | "visible" | "exiting" | "hidden";
-
-function shouldShowIntroNow(): boolean {
-  try {
-    const stored = window.localStorage.getItem(INTRO_STORAGE_KEY);
-    if (!stored) {
-      return true;
-    }
-
-    const lastSeen = Number(stored);
-    if (!Number.isFinite(lastSeen) || lastSeen <= 0) {
-      return true;
-    }
-
-    const elapsedMs = Date.now() - lastSeen;
-    const maxAgeMs = REAPPEAR_DAYS * 24 * 60 * 60 * 1000;
-
-    return elapsedMs >= maxAgeMs;
-  } catch {
-    return true;
-  }
-}
-
-function persistSeenNow(): void {
-  try {
-    window.localStorage.setItem(INTRO_STORAGE_KEY, String(Date.now()));
-  } catch {
-    // Ignore storage failures in restricted environments.
-  }
-}
+type IntroPhase = "visible" | "exiting" | "hidden";
 
 export interface UseIntroResult {
   phase: IntroPhase;
@@ -45,22 +14,11 @@ export interface UseIntroResult {
 }
 
 export function useIntro(): UseIntroResult {
-  const [phase, setPhase] = React.useState<IntroPhase>("checking");
+  const [phase, setPhase] = React.useState<IntroPhase>("visible");
   const hasTransitionStartedRef = React.useRef(false);
 
   React.useEffect(() => {
-    const timer = window.setTimeout(() => {
-      const next = shouldShowIntroNow() ? "visible" : "hidden";
-      setPhase(next);
-    }, 0);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, []);
-
-  React.useEffect(() => {
-    if (phase !== "visible" && phase !== "exiting" && phase !== "checking") {
+    if (phase !== "visible" && phase !== "exiting") {
       return;
     }
 
@@ -81,7 +39,6 @@ export function useIntro(): UseIntroResult {
     setPhase("exiting");
 
     window.setTimeout(() => {
-      persistSeenNow();
       setPhase("hidden");
       hasTransitionStartedRef.current = false;
     }, ENTER_TRANSITION_MS);
@@ -92,7 +49,6 @@ export function useIntro(): UseIntroResult {
       return;
     }
 
-    persistSeenNow();
     hasTransitionStartedRef.current = false;
     setPhase("hidden");
   }, [phase]);

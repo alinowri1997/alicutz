@@ -25,8 +25,8 @@ export function IntroImage({variants, isExiting, zoomTransition, reduceMotion}: 
         variants={variants}
       >
         <motion.div
-          className="relative h-full w-full"
-          animate={isExiting || reduceMotion ? {scale: 1} : {scale: [1, 1.05]}}
+          className={introStyles.imageFrame}
+          animate={isExiting || reduceMotion ? {scale: 1} : {scale: [1, 1.03]}}
           transition={zoomTransition}
         >
           <Image
@@ -40,6 +40,13 @@ export function IntroImage({variants, isExiting, zoomTransition, reduceMotion}: 
           <div className={introStyles.cinematicShade} />
           <div className={introStyles.leftGradient} />
           <div className={introStyles.vignette} />
+          {reduceMotion ? null : (
+            <motion.div
+              className={introStyles.lightSweep}
+              animate={{x: ["-18%", "132%"]}}
+              transition={{duration: 12, repeat: Infinity, repeatDelay: 2, ease: "linear"}}
+            />
+          )}
         </motion.div>
       </motion.div>
     </div>

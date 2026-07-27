@@ -14,6 +14,7 @@ export function IntroButton({onClick, className}: IntroButtonProps): React.JSX.E
     <button
       type="button"
       onClick={onClick}
+      data-intro-interactive="true"
       className={cn(
         "inline-flex min-h-11 items-center justify-center rounded-full border border-white/80 px-6 py-3 text-sm font-medium text-white",
         "transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.02] hover:bg-white hover:text-black",
@@ -22,7 +23,7 @@ export function IntroButton({onClick, className}: IntroButtonProps): React.JSX.E
       )}
       aria-label="Enter Alicutz website"
     >
-      Book Appointment
+      BOOK APPOINTMENT
     </button>
   );
 }

@@ -2,8 +2,9 @@ import type {Transition, Variants} from "framer-motion";
 
 export const INTRO_ANIMATION = {
   blackScreenSeconds: 0.5,
+  logoRevealSeconds: 0.7,
   imageRevealSeconds: 1.4,
-  cinematicZoomSeconds: 8,
+  cinematicZoomSeconds: 10,
   contentRevealSeconds: 0.7,
   contentStaggerSeconds: 0.12,
   enterTransitionSeconds: 0.7,
@@ -12,6 +13,10 @@ export const INTRO_ANIMATION = {
 const STANDARD_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export function createImageRevealVariants(reduceMotion: boolean): Variants {
+  const imageDelay = reduceMotion
+    ? 0
+    : INTRO_ANIMATION.blackScreenSeconds + INTRO_ANIMATION.logoRevealSeconds;
+
   return {
     hidden: {
       opacity: 0,
@@ -24,7 +29,7 @@ export function createImageRevealVariants(reduceMotion: boolean): Variants {
       scale: 1,
       transition: {
         duration: reduceMotion ? 0 : INTRO_ANIMATION.imageRevealSeconds,
-        delay: reduceMotion ? 0 : INTRO_ANIMATION.blackScreenSeconds,
+        delay: imageDelay,
         ease: STANDARD_EASE,
       },
     },
@@ -42,12 +47,12 @@ export function createImageRevealVariants(reduceMotion: boolean): Variants {
 
 export function createLogoVariants(reduceMotion: boolean): Variants {
   return {
-    hidden: {opacity: 0, scale: reduceMotion ? 1 : 0.96},
+    hidden: {opacity: 0, scale: reduceMotion ? 1 : 0.98},
     visible: {
       opacity: 1,
       scale: 1,
       transition: {
-        duration: reduceMotion ? 0 : 0.6,
+        duration: reduceMotion ? 0 : INTRO_ANIMATION.logoRevealSeconds,
         delay: reduceMotion ? 0 : INTRO_ANIMATION.blackScreenSeconds,
         ease: STANDARD_EASE,
       },
