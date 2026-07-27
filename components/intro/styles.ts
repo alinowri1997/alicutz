@@ -1,0 +1,17 @@
+export const introStyles = {
+  overlay: "fixed inset-0 z-[120] bg-[#050505] text-white",
+  frame: "relative grid h-full w-full overflow-hidden md:grid-cols-[1fr_1.25fr]",
+  contentWrap: "relative z-20 flex h-full items-end md:items-center px-6 py-10 sm:px-10 lg:px-16",
+  contentInner: "max-w-xl space-y-5 md:space-y-6",
+  logo: "text-sm tracking-[0.36em] uppercase text-white/88",
+  headline: "text-balance text-4xl leading-[1.02] sm:text-5xl md:text-6xl",
+  description: "max-w-[52ch] text-sm leading-relaxed text-white/72 sm:text-base",
+  hint: "pt-4 text-xs uppercase tracking-[0.2em] text-white/40",
+  imagePane: "relative h-[48vh] min-h-[21rem] md:h-full",
+  imageSurface: "relative h-full w-full overflow-hidden md:rounded-l-[2rem]",
+  image: "object-cover object-[62%_center]",
+  cinematicShade: "pointer-events-none absolute inset-0 bg-black/22",
+  leftGradient: "pointer-events-none absolute inset-0 bg-gradient-to-r from-[#050505] via-black/36 to-transparent",
+  vignette: "pointer-events-none absolute inset-0 shadow-[inset_0_0_220px_rgba(0,0,0,0.34)]",
+  closeButton: "absolute right-4 top-4 z-30 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/35 text-white/80 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
+} as const;

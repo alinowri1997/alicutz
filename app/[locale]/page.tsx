@@ -11,6 +11,7 @@ import {
   ReviewsSection,
   ServicesSection,
 } from "@/components/sections";
+import {Intro} from "@/components/intro";
 import {
   CONTACT_INFO,
   CORE_SERVICE_LABELS,
@@ -247,36 +248,38 @@ export default async function HomePage({params}: HomePageProps): Promise<React.J
   };
 
   return (
-    <main id="home">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(localBusinessSchema)}}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(breadcrumbSchema)}}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(organizationSchema)}}
-      />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(websiteSchema)}} />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(contactPointSchema)}}
-      />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(serviceSchema)}} />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(imageObjectSchema)}}
-      />
+    <Intro>
+      <main id="home">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(localBusinessSchema)}}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(breadcrumbSchema)}}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(organizationSchema)}}
+        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(websiteSchema)}} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(contactPointSchema)}}
+        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(serviceSchema)}} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(imageObjectSchema)}}
+        />
 
-      <HeroSection />
-      <LatestWorkSection />
-      <ServicesSection />
-      <AboutSection />
-      <ReviewsSection />
-      <LocationSection />
-    </main>
+        <HeroSection />
+        <LatestWorkSection />
+        <ServicesSection />
+        <AboutSection />
+        <ReviewsSection />
+        <LocationSection />
+      </main>
+    </Intro>
   );
 }
