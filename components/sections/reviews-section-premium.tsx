@@ -9,6 +9,8 @@ import {Container} from "@/components/ui/container";
 import {Heading} from "@/components/ui/heading";
 import type {PublicReview, ReviewListResponse} from "@/lib/types/reviews";
 
+const STAR_LABELS = [5, 4, 3, 2, 1] as const;
+
 function buildQuery(page: number): string {
   const params = new URLSearchParams();
   params.set("page", String(page));
@@ -115,23 +117,50 @@ export function ReviewsSection(): React.JSX.Element {
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html: schemaJson}} />
 
       <Container className="space-y-6">
-        <header className="space-y-2">
-          <p className="text-sm tracking-[0.08em] text-[#d7b36a]">★★★★★ 4.9</p>
-          <p className="text-sm text-muted">Based on {stats.totalReviews} reviews</p>
-          <Heading id="reviews-heading" as="h2" size="h3" className="text-balance text-text">
-            Read what our clients say
-          </Heading>
-        </header>
+        <header className="space-y-3">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="space-y-2">
+              <p className="text-sm tracking-[0.08em] text-[#d7b36a]">★★★★★ 4.9</p>
+              <p className="text-sm text-muted">Based on {stats.totalReviews} reviews</p>
+              <Heading id="reviews-heading" as="h2" size="h3" className="text-balance text-text">
+                Read what our clients say
+              </Heading>
+            </div>
 
-        <div className="grid gap-4 rounded-3xl border border-border/70 bg-white/[0.02] p-4 sm:p-5 lg:grid-cols-[1fr_auto] lg:items-start">
-          <ReviewsList reviews={reviews} isLoading={isLoading} />
-
-          <div className="flex lg:justify-end">
             <Button variant="secondary" size="md" onClick={() => setFormOpen(true)}>
-              Leave a review
+              Write a review
             </Button>
           </div>
-        </div>
+
+          <div className="grid gap-4 rounded-3xl border border-border/70 bg-white/[0.02] p-4 sm:p-5 lg:grid-cols-[260px_1fr] lg:items-start">
+            <div className="space-y-3 rounded-2xl border border-border/70 bg-background/60 p-4">
+              <div className="flex items-end gap-2">
+                <span className="text-4xl font-semibold tracking-[-0.04em] text-text">{stats.averageRating.toFixed(1)}</span>
+                <span className="pb-1 text-sm text-muted">/ 5</span>
+              </div>
+              <p className="text-sm text-muted">{stats.totalReviews} Google-style client reviews</p>
+              <div className="space-y-1.5">
+                {STAR_LABELS.map((star) => {
+                  const total = Math.max(1, stats.totalReviews);
+                  const count = stats.ratingDistribution[star];
+                  const width = `${Math.max(4, Math.round((count / total) * 100))}%`;
+
+                  return (
+                    <div key={star} className="flex items-center gap-2 text-xs text-muted">
+                      <span className="w-3 text-right">{star}</span>
+                      <span className="h-2 flex-1 overflow-hidden rounded-full bg-white/8">
+                        <span className="block h-full rounded-full bg-[#d7b36a]" style={{width}} />
+                      </span>
+                      <span className="w-8 text-right tabular-nums">{count}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <ReviewsList reviews={reviews} isLoading={isLoading} />
+          </div>
+        </header>
 
         {hasMore ? (
           <Button

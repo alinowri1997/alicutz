@@ -15,22 +15,6 @@ interface ReviewFormProps {
   onReviewSubmitted: () => void;
 }
 
-interface CountryOption {
-  code: string;
-  label: string;
-}
-
-const COUNTRY_OPTIONS: CountryOption[] = [
-  {code: "TR", label: "Turkey"},
-  {code: "GB", label: "United Kingdom"},
-  {code: "DE", label: "Germany"},
-  {code: "AE", label: "United Arab Emirates"},
-  {code: "SA", label: "Saudi Arabia"},
-  {code: "IR", label: "Iran"},
-  {code: "RU", label: "Russia"},
-  {code: "US", label: "United States"},
-];
-
 const LANGUAGE_NAMES: Record<string, string> = {
   en: "English",
   tr: "Turkish",
@@ -140,12 +124,10 @@ export function ReviewForm({open, onOpenChange, onReviewSubmitted}: ReviewFormPr
   const [name, setName] = React.useState("");
   const [review, setReview] = React.useState("");
   const [rating, setRating] = React.useState<ReviewRating>(5);
-  const [countryCode, setCountryCode] = React.useState(() => detectCountryCode());
+  const [countryCode] = React.useState(() => detectCountryCode());
   const [language] = React.useState<{code: string; label: string}>(() => detectLanguage());
-  const [imageFile, setImageFile] = React.useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [countryOpen, setCountryOpen] = React.useState(false);
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
 
   React.useEffect(() => {
@@ -167,20 +149,6 @@ export function ReviewForm({open, onOpenChange, onReviewSubmitted}: ReviewFormPr
     nameLength >= 2 &&
     reviewLength >= MIN_REVIEW_LENGTH &&
     reviewLength <= MAX_REVIEW_LENGTH;
-
-  async function uploadOptionalImage(reviewId: string): Promise<void> {
-    if (!imageFile) {
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", imageFile);
-
-    await fetch(`/api/reviews/${reviewId}/media`, {
-      method: "POST",
-      body: formData,
-    });
-  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -223,12 +191,9 @@ export function ReviewForm({open, onOpenChange, onReviewSubmitted}: ReviewFormPr
         throw new Error(payload.message ?? "Failed to submit review.");
       }
 
-      await uploadOptionalImage(payload.data.id);
-
       setName("");
       setReview("");
       setRating(5);
-      setImageFile(null);
       onReviewSubmitted();
       onOpenChange(false);
     } catch (submitError) {
@@ -292,61 +257,17 @@ export function ReviewForm({open, onOpenChange, onReviewSubmitted}: ReviewFormPr
         </div>
 
         <div className="flex items-center justify-between gap-3 rounded-xl border border-border/70 bg-white/[0.02] px-3 py-2">
-          <p className="text-xs uppercase tracking-[0.12em] text-muted">Country</p>
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setCountryOpen((value) => !value)}
-              className="flex h-8 w-8 items-center justify-center rounded-md border border-border/70 bg-background text-base"
-              aria-label="Select country"
-              aria-haspopup="listbox"
-              aria-expanded={countryOpen}
-            >
-              {countryToFlag(countryCode)}
-            </button>
-
-            {countryOpen ? (
-              <div className="absolute right-0 top-10 z-20 grid grid-cols-4 gap-1 rounded-lg border border-border/70 bg-surface p-2 shadow-[0_18px_40px_rgba(0,0,0,0.35)]" role="listbox" aria-label="Country list">
-                {COUNTRY_OPTIONS.map((option) => (
-                  <button
-                    key={option.code}
-                    type="button"
-                    title={option.label}
-                    className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-md border text-base transition",
-                      option.code === countryCode
-                        ? "border-[#d7b36a]/60 bg-[#d7b36a]/10"
-                        : "border-border/70 bg-background hover:border-border",
-                    )}
-                    onClick={() => {
-                      setCountryCode(option.code);
-                      setCountryOpen(false);
-                    }}
-                  >
-                    {countryToFlag(option.code)}
-                  </button>
-                ))}
-              </div>
-            ) : null}
+          <div>
+            <p className="text-xs uppercase tracking-[0.12em] text-muted">Country</p>
+            <p className="mt-1 text-sm text-text">{countryToFlag(countryCode)} {countryCode}</p>
           </div>
-        </div>
-
-        <div className="space-y-1.5">
-          <label htmlFor="review-image" className="text-xs uppercase tracking-[0.14em] text-muted">
-            Photo (optional)
-          </label>
-          <Input
-            id="review-image"
-            type="file"
-            accept="image/*"
-            onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
-          />
+          <p className="text-xs text-muted">Detected automatically</p>
         </div>
 
         {error ? <p className="text-sm text-rose-200">{error}</p> : null}
 
         <div className="flex items-center justify-between gap-3 pt-1">
-          <p className="text-[11px] uppercase tracking-[0.12em] text-muted">Language: {language.code.toUpperCase()}</p>
+          <p className="text-[11px] uppercase tracking-[0.12em] text-muted">Language detected internally</p>
           <Button type="submit" variant="accent" size="md" isLoading={isSubmitting} disabled={!canSubmit}>
             {isSubmitting ? "Submitting..." : "Submit review"}
           </Button>
