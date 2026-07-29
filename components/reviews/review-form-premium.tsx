@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import {createPortal} from "react-dom";
+import {AnimatePresence, motion, useReducedMotion} from "framer-motion";
+import {Star} from "lucide-react";
 
 import {Button} from "@/components/ui/button";
-import {Dialog} from "@/components/ui/dialog";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import type {ReviewRating} from "@/lib/types/reviews";
@@ -12,145 +14,134 @@ import {cn} from "@/lib/utils";
 interface ReviewFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onReviewSubmitted: () => void;
+  onSubmitted: () => void;
 }
 
-const LANGUAGE_NAMES: Record<string, string> = {
-  en: "English",
-  tr: "Turkish",
-  de: "German",
-  ar: "Arabic",
-  fa: "Persian",
-  ru: "Russian",
+const RATING_LABELS: Record<ReviewRating, string> = {
+  5: "Excellent",
+  4: "Very Good",
+  3: "Good",
+  2: "Needs Improvement",
+  1: "Poor",
 };
 
 const MIN_REVIEW_LENGTH = 20;
 const MAX_REVIEW_LENGTH = 500;
+const SHEET_BREAKPOINT = 768;
 
-function toIsoDate(value: Date): string {
-  const year = value.getFullYear();
-  const month = String(value.getMonth() + 1).padStart(2, "0");
-  const day = String(value.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function initialsToEmailSeed(name: string): string {
-  const normalized = name
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-  return normalized || "guest";
-}
-
-function countryToFlag(countryCode: string): string {
-  const normalized = countryCode.toUpperCase();
-  const first = normalized.codePointAt(0);
-  const second = normalized.codePointAt(1);
-
-  if (!first || !second) {
-    return "🌍";
-  }
-
-  const regionalIndicatorA = 0x1f1e6;
-  const asciiA = 65;
-
-  return String.fromCodePoint(
-    regionalIndicatorA + (first - asciiA),
-    regionalIndicatorA + (second - asciiA),
-  );
-}
-
-function detectCountryCode(): string {
-  const locale = typeof navigator !== "undefined" ? navigator.language : "tr-TR";
-  const localeRegion = locale.split("-")[1]?.toUpperCase();
-
-  if (localeRegion && /^[A-Z]{2}$/.test(localeRegion)) {
-    return localeRegion;
-  }
-
-  const resolvedLocale = Intl.DateTimeFormat().resolvedOptions().locale;
-  const resolvedRegion = resolvedLocale.split("-")[1]?.toUpperCase();
-
-  if (resolvedRegion && /^[A-Z]{2}$/.test(resolvedRegion)) {
-    return resolvedRegion;
-  }
-
-  return "TR";
-}
-
-function detectLanguage(): {code: string; label: string} {
-  const locale = typeof navigator !== "undefined" ? navigator.language : "en";
-  const code = locale.split("-")[0]?.toLowerCase() ?? "en";
-
-  if (code in LANGUAGE_NAMES) {
-    return {code, label: LANGUAGE_NAMES[code]};
-  }
-
-  return {code: "en", label: LANGUAGE_NAMES.en};
-}
-
-function StarRating({
-  value,
-  onChange,
-}: {
-  value: ReviewRating;
-  onChange: (value: ReviewRating) => void;
-}): React.JSX.Element {
-  return (
-    <div className="flex items-center gap-1" role="radiogroup" aria-label="Rating">
-      {[1, 2, 3, 4, 5].map((star) => {
-        const isActive = value >= star;
-        return (
-          <button
-            key={star}
-            type="button"
-            role="radio"
-            aria-checked={value === star}
-            aria-label={`${star} stars`}
-            className="rounded-md p-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            onClick={() => onChange(star as ReviewRating)}
-          >
-            <span className={cn("text-xl", isActive ? "text-[#d7b36a]" : "text-white/25")}>★</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-export function ReviewForm({open, onOpenChange, onReviewSubmitted}: ReviewFormProps): React.JSX.Element {
-  const [name, setName] = React.useState("");
-  const [review, setReview] = React.useState("");
-  const [rating, setRating] = React.useState<ReviewRating>(5);
-  const [countryCode] = React.useState(() => detectCountryCode());
-  const [language] = React.useState<{code: string; label: string}>(() => detectLanguage());
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
-  const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
+function useViewportIsMobile(): boolean {
+  const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
-    const node = textareaRef.current;
+    const media = window.matchMedia(`(max-width: ${SHEET_BREAKPOINT - 1}px)`);
+    const update = (): void => setIsMobile(media.matches);
 
+    update();
+    media.addEventListener("change", update);
+
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
+}
+
+function buildSyntheticEmail(customerName: string, review: string): string {
+  const signature = `${customerName}:${review}`.trim().toLowerCase();
+  let hash = 0;
+  for (let index = 0; index < signature.length; index += 1) {
+    hash = (hash * 31 + signature.charCodeAt(index)) >>> 0;
+  }
+
+  const safeName = customerName.toLowerCase().replace(/[^a-z0-9]+/g, ".").replace(/^\.+|\.+$/g, "");
+  return `${safeName || "guest"}.${hash.toString(36)}@alicutz.review`;
+}
+
+function useTextareaAutoSize(value: string): React.RefObject<HTMLTextAreaElement | null> {
+  const ref = React.useRef<HTMLTextAreaElement | null>(null);
+
+  React.useEffect(() => {
+    const node = ref.current;
     if (!node) {
       return;
     }
 
     node.style.height = "0px";
-    node.style.height = `${Math.max(110, node.scrollHeight)}px`;
-  }, [review]);
+    node.style.height = `${Math.max(132, node.scrollHeight)}px`;
+  }, [value]);
+
+  return ref;
+}
+
+function RatingStars({value, onChange}: {value: ReviewRating; onChange: (value: ReviewRating) => void}): React.JSX.Element {
+  const reducedMotion = useReducedMotion();
+
+  return (
+    <div className="flex flex-wrap items-center gap-2" role="radiogroup" aria-label="How was your experience?">
+      {[1, 2, 3, 4, 5].map((rating) => {
+        const active = value >= rating;
+
+        return (
+          <motion.button
+            key={rating}
+            type="button"
+            role="radio"
+            aria-checked={value === rating}
+            aria-label={`${rating} stars, ${RATING_LABELS[rating as ReviewRating]}`}
+            onClick={() => onChange(rating as ReviewRating)}
+            className={cn(
+              "group inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border px-2.5 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b36a]/70",
+              active ? "border-[#d7b36a]/60 bg-[#d7b36a]/10 text-[#e8c97c]" : "border-border/70 bg-white/[0.02] text-white/30 hover:border-[#d7b36a]/35 hover:bg-white/[0.04]",
+            )}
+            whileHover={reducedMotion ? undefined : {scale: 1.04}}
+            whileTap={reducedMotion ? undefined : {scale: 0.96}}
+          >
+            <Star className={cn("h-9 w-9 transition-colors", active ? "fill-current" : "")} aria-hidden="true" />
+          </motion.button>
+        );
+      })}
+      <div className="min-w-0 flex-1 pl-1">
+        <p className="text-sm font-medium text-text">{RATING_LABELS[value]}</p>
+        <p className="text-xs text-muted">Choose the rating that best matches your visit.</p>
+      </div>
+    </div>
+  );
+}
+
+export function ReviewForm({open, onOpenChange, onSubmitted}: ReviewFormProps): React.ReactElement | null {
+  const isMobile = useViewportIsMobile();
+  const reducedMotion = useReducedMotion();
+  const [name, setName] = React.useState("");
+  const [review, setReview] = React.useState("");
+  const [rating, setRating] = React.useState<ReviewRating>(5);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const textareaRef = useTextareaAutoSize(review);
+
+  React.useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") {
+        onOpenChange(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [onOpenChange, open]);
 
   const reviewLength = review.trim().length;
   const nameLength = name.trim().length;
+  const canSubmit = !isSubmitting && nameLength >= 2 && reviewLength >= MIN_REVIEW_LENGTH && reviewLength <= MAX_REVIEW_LENGTH;
 
-  const canSubmit =
-    !isSubmitting &&
-    nameLength >= 2 &&
-    reviewLength >= MIN_REVIEW_LENGTH &&
-    reviewLength <= MAX_REVIEW_LENGTH;
-
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
     if (!canSubmit) {
@@ -164,37 +155,25 @@ export function ReviewForm({open, onOpenChange, onReviewSubmitted}: ReviewFormPr
       const trimmedName = name.trim();
       const response = await fetch("/api/reviews", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
           customerName: trimmedName,
-          review: review.trim(),
           rating,
-          email: `${initialsToEmailSeed(trimmedName)}.${Date.now()}@alicutz.review`,
-          languageCode: language.code,
-          language: language.label,
-          countryCode,
-          service: "Home Service",
-          visitDate: toIsoDate(new Date()),
-          tags: [],
+          review: review.trim(),
+          email: buildSyntheticEmail(trimmedName, review.trim()),
         }),
       });
 
-      const payload = (await response.json()) as {
-        success: boolean;
-        data?: {id: string};
-        message?: string;
-      };
+      const payload = (await response.json()) as {success: boolean; message?: string};
 
-      if (!response.ok || !payload.success || !payload.data) {
+      if (!response.ok || !payload.success) {
         throw new Error(payload.message ?? "Failed to submit review.");
       }
 
       setName("");
       setReview("");
       setRating(5);
-      onReviewSubmitted();
+      onSubmitted();
       onOpenChange(false);
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Failed to submit review.");
@@ -203,76 +182,142 @@ export function ReviewForm({open, onOpenChange, onReviewSubmitted}: ReviewFormPr
     }
   }
 
-  return (
-    <Dialog
-      open={open}
-      onOpenChange={onOpenChange}
-      title="Share your review"
-      description="Only your name, rating, and review are required."
-    >
-      <form className="space-y-4" onSubmit={(event) => void onSubmit(event)}>
-        <div className="space-y-1.5">
-          <label htmlFor="review-rating" className="text-xs uppercase tracking-[0.14em] text-muted">
-            Rating
-          </label>
-          <div id="review-rating">
-            <StarRating value={rating} onChange={setRating} />
+  if (!open || typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(
+    <AnimatePresence>
+      <div className="fixed inset-0 z-[120]">
+        <motion.button
+          type="button"
+          aria-label="Close review form"
+          className="absolute inset-0 bg-black/75 backdrop-blur-sm"
+          initial={{opacity: 0}}
+          animate={{opacity: 1}}
+          exit={{opacity: 0}}
+          onClick={() => onOpenChange(false)}
+        />
+
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="review-form-title"
+          aria-describedby="review-form-description"
+          className={cn(
+            "relative mx-auto w-full overflow-hidden border border-border/70 bg-surface shadow-[0_32px_90px_rgba(0,0,0,0.6)]",
+            isMobile
+              ? "mt-auto max-h-[92vh] rounded-t-[30px] border-b-0"
+              : "top-1/2 flex max-w-[640px] -translate-x-1/2 -translate-y-1/2 rounded-[30px]",
+          )}
+          initial={reducedMotion ? {opacity: 1} : isMobile ? {y: "100%", opacity: 1} : {scale: 0.96, y: 16, opacity: 0}}
+          animate={reducedMotion ? {opacity: 1} : isMobile ? {y: 0, opacity: 1} : {scale: 1, y: 0, opacity: 1}}
+          exit={reducedMotion ? {opacity: 0} : isMobile ? {y: "100%", opacity: 1} : {scale: 0.98, y: 10, opacity: 0}}
+          transition={{duration: 0.25, ease: [0.16, 1, 0.3, 1]}}
+          style={isMobile ? {position: "absolute", left: 0, right: 0, bottom: 0} : {position: "absolute", left: "50%"}}
+        >
+          {!isMobile ? (
+            <div className="hidden w-full max-w-[5px] rounded-l-[30px] bg-gradient-to-b from-[#d7b36a]/50 via-[#d7b36a]/20 to-transparent md:block" />
+          ) : null}
+
+          <div className="max-h-[92vh] w-full overflow-y-auto p-5 sm:p-6" style={isMobile ? {paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)"} : undefined}>
+            <div className="mx-auto mb-5 h-1.5 w-12 rounded-full bg-white/12" />
+            <div className="space-y-2">
+              <p className="text-xs uppercase tracking-[0.2em] text-muted">Client Review</p>
+              <h2 id="review-form-title" className="type-h3 text-text">
+                Share your experience
+              </h2>
+              <p id="review-form-description" className="type-small max-w-[48ch] text-muted">
+                A simple review takes less than a minute.
+              </p>
+            </div>
+
+            <form className="mt-6 space-y-5" onSubmit={(event) => void handleSubmit(event)}>
+              <section className="space-y-3 rounded-[28px] border border-border/70 bg-white/[0.02] p-4 sm:p-5">
+                <div className="space-y-2">
+                  <p className="text-xs uppercase tracking-[0.16em] text-muted">How was your experience?</p>
+                  <RatingStars value={rating} onChange={setRating} />
+                </div>
+              </section>
+
+              <section className="space-y-4 rounded-[28px] border border-border/70 bg-white/[0.02] p-4 sm:p-5">
+                <div className="space-y-1.5">
+                  <label htmlFor="review-name" className="text-xs uppercase tracking-[0.16em] text-muted">
+                    Your name
+                  </label>
+                  <Input
+                    id="review-name"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Your name"
+                    autoComplete="name"
+                    maxLength={80}
+                    required
+                    className="h-12 rounded-[24px] border-border/70 bg-background/70 px-4 text-sm transition focus:border-[#d7b36a]/60 focus:ring-[#d7b36a]/20"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="review-text" className="text-xs uppercase tracking-[0.16em] text-muted">
+                    Review
+                  </label>
+                  <Textarea
+                    id="review-text"
+                    ref={textareaRef}
+                    value={review}
+                    onChange={(event) => setReview(event.target.value.slice(0, MAX_REVIEW_LENGTH))}
+                    placeholder="Tell us what you liked about your haircut..."
+                    minLength={MIN_REVIEW_LENGTH}
+                    maxLength={MAX_REVIEW_LENGTH}
+                    required
+                    className="min-h-[150px] resize-none rounded-[24px] border-border/70 bg-background/70 px-4 py-3 text-sm leading-6 transition focus:border-[#d7b36a]/60 focus:ring-[#d7b36a]/20"
+                  />
+                  <div className="flex items-center justify-between text-xs text-muted">
+                    <span>Minimum {MIN_REVIEW_LENGTH} characters</span>
+                    <span>{reviewLength}/{MAX_REVIEW_LENGTH}</span>
+                  </div>
+                </div>
+              </section>
+
+              <AnimatePresence>
+                {error ? (
+                  <motion.div
+                    className="rounded-[22px] border border-rose-300/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-100"
+                    initial={{opacity: 0, y: 8}}
+                    animate={{opacity: 1, y: 0}}
+                    exit={{opacity: 0, y: 8}}
+                  >
+                    {error}
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+
+              <div className="flex justify-center pt-1">
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  size="lg"
+                  isLoading={isSubmitting}
+                  disabled={!canSubmit}
+                  className={cn(
+                    "min-h-12 w-full max-w-[320px] rounded-full border transition-all duration-300",
+                    canSubmit
+                      ? "border-[#d7b36a]/60 bg-[#d7b36a] text-black shadow-[0_12px_30px_rgba(215,179,106,0.28)] hover:border-[#e6ca84] hover:bg-[#e6ca84]"
+                      : "border-border/70 bg-transparent text-muted",
+                  )}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit review"}
+                </Button>
+              </div>
+
+              <p className="text-center text-xs text-muted">
+                Your review will appear after approval.
+              </p>
+            </form>
           </div>
-        </div>
-
-        <div className="space-y-1.5">
-          <label htmlFor="review-name" className="text-xs uppercase tracking-[0.14em] text-muted">
-            Name
-          </label>
-          <Input
-            id="review-name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            placeholder="Your name"
-            autoComplete="name"
-            maxLength={80}
-            required
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label htmlFor="review-text" className="text-xs uppercase tracking-[0.14em] text-muted">
-            Review
-          </label>
-          <Textarea
-            id="review-text"
-            ref={textareaRef}
-            value={review}
-            onChange={(event) => setReview(event.target.value.slice(0, MAX_REVIEW_LENGTH))}
-            placeholder="Tell us about your experience"
-            minLength={MIN_REVIEW_LENGTH}
-            maxLength={MAX_REVIEW_LENGTH}
-            required
-            className="resize-none"
-          />
-          <div className="flex items-center justify-between text-xs text-muted">
-            <span>Min {MIN_REVIEW_LENGTH} characters</span>
-            <span>{reviewLength}/{MAX_REVIEW_LENGTH}</span>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-border/70 bg-white/[0.02] px-3 py-2">
-          <div>
-            <p className="text-xs uppercase tracking-[0.12em] text-muted">Country</p>
-            <p className="mt-1 text-sm text-text">{countryToFlag(countryCode)} {countryCode}</p>
-          </div>
-          <p className="text-xs text-muted">Detected automatically</p>
-        </div>
-
-        {error ? <p className="text-sm text-rose-200">{error}</p> : null}
-
-        <div className="flex items-center justify-between gap-3 pt-1">
-          <p className="text-[11px] uppercase tracking-[0.12em] text-muted">Language detected internally</p>
-          <Button type="submit" variant="accent" size="md" isLoading={isSubmitting} disabled={!canSubmit}>
-            {isSubmitting ? "Submitting..." : "Submit review"}
-          </Button>
-        </div>
-      </form>
-    </Dialog>
+        </motion.div>
+      </div>
+    </AnimatePresence>,
+    document.body,
   );
 }

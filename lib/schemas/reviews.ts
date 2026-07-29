@@ -49,13 +49,13 @@ export const reviewRatingSchema = z.number().int().min(1).max(5);
 
 export const createReviewSchema = z.object({
   customerName: z.string().trim().min(2).max(80),
-  email: z.string().trim().email().max(120),
-  countryCode: z.string().trim().min(2).max(2).optional(),
-  languageCode: z.string().trim().min(2).max(12),
-  language: z.string().trim().min(2).max(32),
-  service: z.enum(services),
   rating: reviewRatingSchema,
   review: z.string().trim().min(20).max(2000),
+  email: z.string().trim().email().max(120).optional(),
+  countryCode: z.string().trim().min(2).max(2).optional(),
+  languageCode: z.string().trim().min(2).max(12).optional(),
+  language: z.string().trim().min(2).max(32).optional(),
+  service: z.enum(services).optional(),
   visitDate: z.string().trim().optional(),
   tags: z.array(z.enum(reviewTags)).max(9).default([]),
 });

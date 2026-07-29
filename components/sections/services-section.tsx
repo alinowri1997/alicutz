@@ -46,6 +46,14 @@ export async function ServicesSection(): Promise<React.JSX.Element> {
           <p className="type-body max-w-[60ch] text-muted">
             {t("description")}
           </p>
+          <a
+            href="#reviews"
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/[0.02] px-4 py-2 text-sm text-text transition-all duration-300 hover:border-[#d7b36a]/45 hover:bg-[#d7b36a]/8 hover:text-[#f0d28c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b36a]/70"
+          >
+            <span className="text-[#d7b36a]">★★★★★ 4.9</span>
+            <span>Read Client Reviews</span>
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
       </div>
 
