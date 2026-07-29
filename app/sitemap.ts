@@ -45,6 +45,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   });
 
+  entries.push({
+    url: `${SITE_URL}/review`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+    alternates: {
+      languages: {
+        "x-default": `${SITE_URL}/review`,
+      },
+    },
+  });
+
   for (const locale of locales) {
     for (const slug of guideSlugs) {
       const path = `/guides/${slug}`;

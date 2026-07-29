@@ -268,7 +268,12 @@ function Header({stats, isLoading}: {stats: ReviewListResponse["stats"]; isLoadi
   );
 }
 
-export function ReviewsSection(): React.JSX.Element {
+interface ReviewsSectionProps {
+  initialFormOpen?: boolean;
+  onReviewSubmitted?: () => void;
+}
+
+export function ReviewsSection({initialFormOpen = false, onReviewSubmitted}: ReviewsSectionProps = {}): React.JSX.Element {
   const [reviews, setReviews] = React.useState<PublicReview[]>([]);
   const [stats, setStats] = React.useState<ReviewListResponse["stats"]>({
     averageRating: 0,
@@ -282,7 +287,7 @@ export function ReviewsSection(): React.JSX.Element {
   const [hasMore, setHasMore] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isLoadingMore, setIsLoadingMore] = React.useState(false);
-  const [formOpen, setFormOpen] = React.useState(false);
+  const [formOpen, setFormOpen] = React.useState(initialFormOpen);
   const [toastMessage, setToastMessage] = React.useState<string | null>(null);
 
   const loadReviews = React.useCallback(async (targetPage: number, append: boolean): Promise<void> => {
@@ -366,6 +371,7 @@ export function ReviewsSection(): React.JSX.Element {
         onOpenChange={setFormOpen}
         onSubmitted={() => {
           setToastMessage("Your review has been submitted. It will appear after approval.");
+          onReviewSubmitted?.();
           void loadReviews(1, false);
         }}
       />

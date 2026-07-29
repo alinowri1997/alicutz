@@ -44,6 +44,7 @@ export interface ReviewDocument {
   customerName: string;
   email: string;
   countryCode?: string;
+  reviewFingerprint?: string;
   languageCode: string;
   language: string;
   avatar?: string;

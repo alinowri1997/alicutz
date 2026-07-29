@@ -28,6 +28,20 @@ const RATING_LABELS: Record<ReviewRating, string> = {
 const MIN_REVIEW_LENGTH = 20;
 const MAX_REVIEW_LENGTH = 500;
 const SHEET_BREAKPOINT = 768;
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+type TurnstileWidget = {
+  render: (container: Element, options: {sitekey: string; size?: string; callback: (token: string) => void; "error-callback"?: () => void; "expired-callback"?: () => void}) => string;
+  execute: (widgetId: string) => void;
+  reset: (widgetId: string) => void;
+  remove: (widgetId: string) => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileWidget;
+  }
+}
 
 function useViewportIsMobile(): boolean {
   const [isMobile, setIsMobile] = React.useState(false);
@@ -70,6 +84,30 @@ function useTextareaAutoSize(value: string): React.RefObject<HTMLTextAreaElement
   }, [value]);
 
   return ref;
+}
+
+function loadTurnstileScript(): Promise<void> {
+  if (typeof window === "undefined" || window.turnstile) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector<HTMLScriptElement>('script[data-turnstile="true"]');
+    if (existing) {
+      existing.addEventListener("load", () => resolve(), {once: true});
+      existing.addEventListener("error", () => reject(new Error("Failed to load Turnstile.")), {once: true});
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.async = true;
+    script.defer = true;
+    script.dataset.turnstile = "true";
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("Failed to load Turnstile."));
+    document.head.appendChild(script);
+  });
 }
 
 function RatingStars({value, onChange}: {value: ReviewRating; onChange: (value: ReviewRating) => void}): React.JSX.Element {
@@ -115,7 +153,19 @@ export function ReviewForm({open, onOpenChange, onSubmitted}: ReviewFormProps): 
   const [rating, setRating] = React.useState<ReviewRating>(5);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null);
+  const [turnstileReady, setTurnstileReady] = React.useState(!TURNSTILE_SITE_KEY);
   const textareaRef = useTextareaAutoSize(review);
+  const honeypotRef = React.useRef<HTMLInputElement | null>(null);
+  const turnstileRef = React.useRef<HTMLDivElement | null>(null);
+  const widgetIdRef = React.useRef<string | null>(null);
+  const turnstileResolveRef = React.useRef<((token: string) => void) | null>(null);
+  const turnstileTimeoutRef = React.useRef<number | null>(null);
+
+  const closeForm = React.useCallback(() => {
+    setTurnstileToken(null);
+    onOpenChange(false);
+  }, [onOpenChange]);
 
   React.useEffect(() => {
     if (!open) {
@@ -124,7 +174,7 @@ export function ReviewForm({open, onOpenChange, onSubmitted}: ReviewFormProps): 
 
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.key === "Escape") {
-        onOpenChange(false);
+        closeForm();
       }
     };
 
@@ -135,11 +185,103 @@ export function ReviewForm({open, onOpenChange, onSubmitted}: ReviewFormProps): 
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = "";
     };
-  }, [onOpenChange, open]);
+  }, [closeForm, open]);
+
+  React.useEffect(() => {
+    if (!open || !TURNSTILE_SITE_KEY || !turnstileRef.current || widgetIdRef.current) {
+      return;
+    }
+
+    let cancelled = false;
+
+    void loadTurnstileScript()
+      .then(() => {
+        if (cancelled || !turnstileRef.current || !window.turnstile) {
+          return;
+        }
+
+        widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+          sitekey: TURNSTILE_SITE_KEY,
+          size: "invisible",
+          callback: (token: string) => {
+            setTurnstileToken(token);
+            if (turnstileTimeoutRef.current) {
+              window.clearTimeout(turnstileTimeoutRef.current);
+              turnstileTimeoutRef.current = null;
+            }
+            turnstileResolveRef.current?.(token);
+            turnstileResolveRef.current = null;
+          },
+          "error-callback": () => {
+            setTurnstileReady(false);
+            turnstileResolveRef.current = null;
+            if (turnstileTimeoutRef.current) {
+              window.clearTimeout(turnstileTimeoutRef.current);
+              turnstileTimeoutRef.current = null;
+            }
+          },
+          "expired-callback": () => {
+            setTurnstileToken(null);
+            if (widgetIdRef.current && window.turnstile) {
+              window.turnstile.reset(widgetIdRef.current);
+            }
+            turnstileResolveRef.current = null;
+            if (turnstileTimeoutRef.current) {
+              window.clearTimeout(turnstileTimeoutRef.current);
+              turnstileTimeoutRef.current = null;
+            }
+          },
+        });
+
+        setTurnstileReady(true);
+      })
+      .catch(() => {
+        setTurnstileReady(false);
+      });
+
+    return () => {
+      cancelled = true;
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
+    };
+  }, [open]);
 
   const reviewLength = review.trim().length;
   const nameLength = name.trim().length;
-  const canSubmit = !isSubmitting && nameLength >= 2 && reviewLength >= MIN_REVIEW_LENGTH && reviewLength <= MAX_REVIEW_LENGTH;
+  const canSubmit = !isSubmitting && turnstileReady && nameLength >= 2 && reviewLength >= MIN_REVIEW_LENGTH && reviewLength <= MAX_REVIEW_LENGTH;
+
+  async function getTurnstileToken(): Promise<string | null> {
+    if (!TURNSTILE_SITE_KEY) {
+      return null;
+    }
+
+    if (turnstileToken) {
+      return turnstileToken;
+    }
+
+    if (!widgetIdRef.current || !window.turnstile) {
+      return null;
+    }
+
+    return new Promise<string>((resolve) => {
+      turnstileResolveRef.current = resolve;
+      turnstileTimeoutRef.current = window.setTimeout(() => {
+        turnstileResolveRef.current = null;
+        resolve("");
+        turnstileTimeoutRef.current = null;
+      }, 6000);
+
+      const widgetId = widgetIdRef.current;
+      if (!window.turnstile || !widgetId) {
+        resolve("");
+        return;
+      }
+
+      window.turnstile.execute(widgetId);
+    });
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -153,6 +295,9 @@ export function ReviewForm({open, onOpenChange, onSubmitted}: ReviewFormProps): 
 
     try {
       const trimmedName = name.trim();
+      const token = await getTurnstileToken();
+      const honeypotValue = honeypotRef.current?.value?.trim() ?? "";
+
       const response = await fetch("/api/reviews", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -160,6 +305,8 @@ export function ReviewForm({open, onOpenChange, onSubmitted}: ReviewFormProps): 
           customerName: trimmedName,
           rating,
           review: review.trim(),
+          honeypot: honeypotValue,
+          turnstileToken: token ?? undefined,
           email: buildSyntheticEmail(trimmedName, review.trim()),
         }),
       });
@@ -174,7 +321,7 @@ export function ReviewForm({open, onOpenChange, onSubmitted}: ReviewFormProps): 
       setReview("");
       setRating(5);
       onSubmitted();
-      onOpenChange(false);
+      closeForm();
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Failed to submit review.");
     } finally {
@@ -196,7 +343,7 @@ export function ReviewForm({open, onOpenChange, onSubmitted}: ReviewFormProps): 
           initial={{opacity: 0}}
           animate={{opacity: 1}}
           exit={{opacity: 0}}
-          onClick={() => onOpenChange(false)}
+          onClick={() => closeForm()}
         />
 
         <motion.div
@@ -278,6 +425,11 @@ export function ReviewForm({open, onOpenChange, onSubmitted}: ReviewFormProps): 
                   </div>
                 </div>
               </section>
+
+              <div className="pointer-events-none absolute left-[-9999px] top-auto h-px w-px overflow-hidden opacity-0" aria-hidden="true">
+                <input ref={honeypotRef} type="text" name="company" tabIndex={-1} autoComplete="off" />
+                <div ref={turnstileRef} />
+              </div>
 
               <AnimatePresence>
                 {error ? (

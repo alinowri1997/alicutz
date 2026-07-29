@@ -1,5 +1,5 @@
-import {ReviewsSection} from "@/components/sections/reviews-section-premium";
+import {permanentRedirect} from "next/navigation";
 
-export default function ReviewsPage(): React.JSX.Element {
-  return <ReviewsSection />;
+export default function ReviewsPage(): never {
+  permanentRedirect("/review");
 }

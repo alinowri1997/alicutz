@@ -52,6 +52,8 @@ export const createReviewSchema = z.object({
   rating: reviewRatingSchema,
   review: z.string().trim().min(20).max(2000),
   email: z.string().trim().email().max(120).optional(),
+  honeypot: z.string().trim().max(120).optional(),
+  turnstileToken: z.string().trim().max(4096).optional(),
   countryCode: z.string().trim().min(2).max(2).optional(),
   languageCode: z.string().trim().min(2).max(12).optional(),
   language: z.string().trim().min(2).max(32).optional(),

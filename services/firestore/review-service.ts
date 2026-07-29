@@ -1,6 +1,6 @@
 import "server-only";
 
-import {randomUUID} from "node:crypto";
+import {createHash, randomUUID} from "node:crypto";
 
 import {FieldValue, Timestamp} from "firebase-admin/firestore";
 
@@ -61,8 +61,20 @@ function normalizeText(value: string): string {
     .trim();
 }
 
+function sanitizeText(value: string): string {
+  return value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/[\u0000-\u001f\u007f]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildReviewFingerprint(input: Pick<CreateReviewInput, "review">): string {
+  return createHash("sha256").update(normalizeText(sanitizeText(input.review))).digest("hex");
+}
+
 function buildSearchText(input: Pick<CreateReviewInput, "customerName" | "review" | "service">): string {
-  return normalizeText(`${input.customerName} ${input.review} ${input.service}`);
+  return normalizeText(`${sanitizeText(input.customerName)} ${sanitizeText(input.review)} ${input.service}`);
 }
 
 function buildTimeAgo(createdAt: string): string {
@@ -107,6 +119,7 @@ function mapReviewDocument(id: string, raw: FirebaseFirestore.DocumentData | und
     customerName: source.customerName ?? "Anonymous",
     email: source.email ?? "",
     countryCode: source.countryCode ?? undefined,
+    reviewFingerprint: source.reviewFingerprint ?? undefined,
     languageCode: source.languageCode ?? source.language ?? "",
     language: source.language ?? "",
     avatar: source.avatar,
@@ -137,25 +150,26 @@ function mapReviewDocument(id: string, raw: FirebaseFirestore.DocumentData | und
 }
 
 function computeSpamRejectionReason(input: CreateReviewInput): string | null {
-  const normalized = normalizeText(input.review);
+  const sanitizedReview = sanitizeText(input.review);
+  const normalized = normalizeText(sanitizedReview);
 
   if (normalized.length === 0) {
     return "Review content cannot be empty.";
   }
 
-  if (LINK_PATTERN.test(input.review)) {
+  if (LINK_PATTERN.test(sanitizedReview)) {
     return "External links are not allowed in reviews.";
   }
 
-  if (PROFANITY_PATTERNS.some((pattern) => pattern.test(input.review))) {
+  if (PROFANITY_PATTERNS.some((pattern) => pattern.test(sanitizedReview))) {
     return "Review contains language that is not allowed.";
   }
 
-  if (AD_PATTERNS.some((pattern) => pattern.test(input.review))) {
+  if (AD_PATTERNS.some((pattern) => pattern.test(sanitizedReview))) {
     return "Promotional content is not allowed.";
   }
 
-  const compact = input.review.replace(/\s/g, "");
+  const compact = sanitizedReview.replace(/\s/g, "");
   if (/^(\p{Emoji_Presentation}|\p{Extended_Pictographic})+$/u.test(compact)) {
     return "Review cannot contain only emojis.";
   }
@@ -386,34 +400,57 @@ export async function listPublicReviews(query: ReviewQuery, likedIds: Set<string
 }
 
 export async function createReview(input: CreateReviewInput): Promise<{id: string}> {
-  const rejectionReason = computeSpamRejectionReason(input);
+  const sanitizedInput: CreateReviewInput = {
+    ...input,
+    customerName: sanitizeText(input.customerName),
+    review: sanitizeText(input.review),
+    countryCode: input.countryCode?.toUpperCase(),
+    languageCode: input.languageCode?.toLowerCase(),
+    language: sanitizeText(input.language),
+    email: input.email.trim().toLowerCase(),
+    service: input.service,
+    rating: input.rating,
+    visitDate: input.visitDate?.trim(),
+    tags: input.tags,
+  };
+
+  const rejectionReason = computeSpamRejectionReason(sanitizedInput);
   if (rejectionReason) {
     throw new Error(rejectionReason);
   }
 
-  const normalized = normalizeText(input.review);
+  const normalized = normalizeText(sanitizedInput.review);
+  const reviewFingerprint = buildReviewFingerprint(sanitizedInput);
 
   const duplicateSnapshot = await getAdminDb()
     .collection(REVIEWS_COLLECTION)
-    .where("email", "==", input.email.toLowerCase())
-    .where("searchText", "==", buildSearchText(input))
+    .where("reviewFingerprint", "==", reviewFingerprint)
     .limit(1)
     .get();
 
-  if (!duplicateSnapshot.empty) {
+  const duplicateContentSnapshot = duplicateSnapshot.empty
+    ? await getAdminDb()
+        .collection(REVIEWS_COLLECTION)
+        .where("review", "==", sanitizedInput.review)
+        .limit(1)
+        .get()
+    : duplicateSnapshot;
+
+  if (!duplicateContentSnapshot.empty) {
     throw new Error("Duplicate review detected.");
   }
 
   const docRef = await getAdminDb().collection(REVIEWS_COLLECTION).add({
-    customerName: input.customerName,
-    email: input.email.toLowerCase(),
-    countryCode: input.countryCode?.toUpperCase() ?? null,
-    languageCode: input.languageCode,
-    language: input.language,
-    rating: input.rating,
-    service: input.service,
-    review: input.review,
-    tags: input.tags,
+    customerName: sanitizedInput.customerName,
+    email: sanitizedInput.email,
+    countryCode: sanitizedInput.countryCode ?? null,
+    reviewFingerprint,
+    languageCode: sanitizedInput.languageCode,
+    language: sanitizedInput.language,
+    rating: sanitizedInput.rating,
+    service: sanitizedInput.service,
+    review: sanitizedInput.review,
+    tags: sanitizedInput.tags,
     images: [],
     likes: 0,
     helpfulVotes: 0,
@@ -423,19 +460,19 @@ export async function createReview(input: CreateReviewInput): Promise<{id: strin
     approved: false,
     hidden: false,
     status: "pending",
-    recommendation: input.rating >= 4,
-    visitDate: input.visitDate ?? null,
+    recommendation: sanitizedInput.rating >= 4,
+    visitDate: sanitizedInput.visitDate ?? null,
     reply: null,
     replyDate: null,
     reportedCount: 0,
     reports: [],
     spamScore: normalized.length < 30 ? 25 : 0,
-    searchText: buildSearchText(input),
+    searchText: buildSearchText(sanitizedInput),
     createdAt: FieldValue.serverTimestamp(),
     updatedAt: FieldValue.serverTimestamp(),
   });
 
-  await createNotification("new_review", docRef.id, `${input.customerName} submitted a new review`);
+  await createNotification("new_review", docRef.id, `${sanitizedInput.customerName} submitted a new review`);
   await createNotification("pending_review", docRef.id, "A review is pending approval");
 
   return {id: docRef.id};
